@@ -1,4 +1,4 @@
-package com.tms.GoBike;
+package tms.GoBike;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
