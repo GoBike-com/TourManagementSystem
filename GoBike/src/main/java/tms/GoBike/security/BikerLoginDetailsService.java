@@ -6,11 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public class BikerLoginDetailsService implements UserDetailsService {
     /**
-     * Locates the user based on the username. In the actual implementation, the search
-     * may possibly be case sensitive, or case insensitive depending on how the
-     * implementation instance is configured. In this case, the `UserDetails`
-     * object that comes back may have a username that is of a different case than what
-     * was actually requested..
+     * Locates the user based on the username.
      *
      * @param s the username identifying the user whose data is required.
      *
@@ -21,6 +17,7 @@ public class BikerLoginDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return new BikerLoginDetails(s, "");
+        throw new UsernameNotFoundException("No user with username " + s + " was found.");
+//        return new BikerLoginDetails("username", "password"); //can have more parameters. Look at BikerLoginDetails.
     }
 }
