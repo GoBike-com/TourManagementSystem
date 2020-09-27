@@ -1,4 +1,4 @@
-package tms.GoBike.security;
+package tms.gobike.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +18,6 @@ public class BikerLoginDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         throw new UsernameNotFoundException("No user with username " + s + " was found.");
-//        return new BikerLoginDetails("username", "password"); //can have more parameters. Look at BikerLoginDetails.
+     // return new BikerLoginDetails("username", "password"); //can have more parameters. Look at BikerLoginDetails.
     }
 }

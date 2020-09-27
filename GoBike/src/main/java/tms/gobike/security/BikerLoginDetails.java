@@ -1,4 +1,4 @@
-package tms.GoBike.security;
+package tms.gobike.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
