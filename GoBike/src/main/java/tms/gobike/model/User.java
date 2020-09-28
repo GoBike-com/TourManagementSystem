@@ -38,9 +38,9 @@ public class User {
     private String email;
 
     @Column
-    private int securityQuestion;
+    private int securityQuestionID;
 
     @Column
-    private String securityAnswer;
+    private String securityQuestionAnswer;
 
 }

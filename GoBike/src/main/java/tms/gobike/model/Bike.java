@@ -19,7 +19,4 @@ public class Bike {
     @Column
     private String model;
 
-    @Column
-    private Long count;
-
 }

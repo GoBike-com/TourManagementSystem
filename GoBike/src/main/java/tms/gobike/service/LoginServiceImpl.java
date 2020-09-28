@@ -23,8 +23,8 @@ public class LoginServiceImpl implements LoginService{
         log.info("Request for password reset");
         // TODO: Jyoti
         User user = userRepository.findByUserName(request.getUserName());
-        if(user!=null){
-            if(user.getSecurityQuestion() == request.getQuestion().getId()){
+        if(user != null){
+            if(user.getSecurityQuestionID() == request.getQuestion().getId()){
 
             }
         }
