@@ -2,31 +2,19 @@ package tms.gobike.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import tms.gobike.model.User;
 
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * @author woboland
+ */
 public class BikerLoginDetails implements UserDetails {
-    private String username;
-    private String password;
-    private boolean isEnabled;
-    private boolean isAccountNonExpired;
-    private boolean isAccountNonLocked;
-    private boolean isCredentialsNonExpired;
-    private Collection<? extends GrantedAuthority> authorities;
+    private User user;
 
-    public BikerLoginDetails(String username, String password, boolean isEnabled, boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialsNonExpired, Collection<? extends GrantedAuthority> authorities) {
-        this.username = username;
-        this.password = password;
-        this.isEnabled = isEnabled;
-        this.isAccountNonExpired = isAccountNonExpired;
-        this.isAccountNonLocked = isAccountNonLocked;
-        this.isCredentialsNonExpired = isCredentialsNonExpired;
-        this.authorities = authorities;
-    }
-
-    public BikerLoginDetails(String username, String password) {
-        this(username, password, true, true, true, true, Collections.emptySet());
+    public BikerLoginDetails(User user) {
+        this.user = user;
     }
 
     /**
@@ -36,7 +24,7 @@ public class BikerLoginDetails implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return Collections.emptySet();
     }
 
     /**
@@ -46,7 +34,7 @@ public class BikerLoginDetails implements UserDetails {
      */
     @Override
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     /**
@@ -56,7 +44,7 @@ public class BikerLoginDetails implements UserDetails {
      */
     @Override
     public String getUsername() {
-        return username;
+        return user.getUserName();
     }
 
     /**
@@ -68,7 +56,7 @@ public class BikerLoginDetails implements UserDetails {
      */
     @Override
     public boolean isAccountNonExpired() {
-        return isAccountNonExpired;
+        return true;
     }
 
     /**
@@ -79,7 +67,7 @@ public class BikerLoginDetails implements UserDetails {
      */
     @Override
     public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
+        return true;
     }
 
     /**
@@ -91,7 +79,7 @@ public class BikerLoginDetails implements UserDetails {
      */
     @Override
     public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpired;
+        return true;
     }
 
     /**
@@ -102,6 +90,6 @@ public class BikerLoginDetails implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return true;
     }
 }
