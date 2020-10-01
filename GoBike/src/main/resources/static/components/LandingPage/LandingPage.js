@@ -181,3 +181,6 @@ const LandingPage = (props) => {
         )}
 
 export default LandingPage;
+
+let domContainer = document.querySelector('#index_container');
+ReactDOM.render(<LandingPage />, domContainer);
