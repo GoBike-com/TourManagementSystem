@@ -32,7 +32,7 @@ public class User {
     private String password;
 
     @Column
-    private Long phone;
+    private String phone;
 
     @Column
     private String email;
@@ -43,4 +43,15 @@ public class User {
     @Column
     private String securityQuestionAnswer;
 
+    public User(String name, String city, String state, String userName, String password, String phone, String email, int securityQuestionID, String securityQuestionAnswer) {
+        this.name = name;
+        this.city = city;
+        this.state = state;
+        this.userName = userName;
+        this.password = password;
+        this.phone = phone;
+        this.email = email;
+        this.securityQuestionID = securityQuestionID;
+        this.securityQuestionAnswer = securityQuestionAnswer;
+    }
 }
