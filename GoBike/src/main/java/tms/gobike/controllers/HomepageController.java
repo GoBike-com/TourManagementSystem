@@ -11,13 +11,13 @@ import tms.gobike.repository.UserRepository;
  */
 @Controller
 public class HomepageController {
-    @Autowired
-    UserRepository userRepository;
+//    @Autowired
+//    UserRepository userRepository;
 
     @GetMapping("/")
     public String index() {
-        User currentUser = new User("Will Boland", "Bloomington", "IN", "woboland", "password", "3174456668", "woboland@iu.edu", 1, "test");
-        userRepository.save(currentUser);
+//        User currentUser = new User("Will Boland", "Bloomington", "IN", "woboland", "password", "3174456668", "woboland@iu.edu", 1, "test");
+//        userRepository.save(currentUser);
         return "index";
     }
 }
