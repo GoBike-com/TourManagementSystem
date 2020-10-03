@@ -1,4 +1,4 @@
-package tms.gobike.model;
+package com.iu.gobike.enums;
 
 public enum City {
     Bloomington,

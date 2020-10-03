@@ -1,7 +1,6 @@
-package tms.gobike.model;
+package com.iu.gobike.enums;
 
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author jbhushan
