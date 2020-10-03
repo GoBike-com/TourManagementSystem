@@ -1,7 +1,6 @@
-package tms.gobike.dto;
+package com.iu.gobike.dto;
 
 import lombok.*;
-import tms.gobike.model.SecurityQuestion;
 
 /**
  * @author jbhushan
@@ -13,7 +12,7 @@ import tms.gobike.model.SecurityQuestion;
 @Builder
 public class ResetPasswordRequest {
 
-    private SecurityQuestion question;
+    private int question;
     private String answer;
     private String userName;
     private String newPassword;

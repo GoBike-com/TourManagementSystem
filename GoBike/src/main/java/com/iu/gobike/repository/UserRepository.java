@@ -1,11 +1,13 @@
-package tms.gobike.repository;
+package com.iu.gobike.repository;
 
+import com.iu.gobike.model.User;
 import org.springframework.data.repository.CrudRepository;
-import tms.gobike.model.User;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author jbhushan
  */
+@Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByUserName(String userName);

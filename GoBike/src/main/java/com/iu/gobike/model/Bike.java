@@ -1,4 +1,4 @@
-package tms.gobike.model;
+package com.iu.gobike.model;
 
 import lombok.*;
 
@@ -8,8 +8,10 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 @Builder
 @Entity
+@Table
 public class Bike {
 
     @Id

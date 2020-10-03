@@ -1,4 +1,4 @@
-package tms.gobike.controllers;
+package com.iu.gobike.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 /**
  * @author woboland
  */
-@Controller
+//@Controller
 public class HomepageController {
-    @GetMapping("/")
+   // @GetMapping("/")
     public String index() {
         return "index";
     }

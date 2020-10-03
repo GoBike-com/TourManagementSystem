@@ -1,4 +1,4 @@
-package tms.gobike.exception;
+package com.iu.gobike.exception;
 
 /**
  * @author jbhushan
