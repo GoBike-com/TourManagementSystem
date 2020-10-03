@@ -15,27 +15,18 @@ import java.time.Instant;
 @Builder
 @Entity
 @Table
-public class Booking {
+public class Review {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "BOOKING_NUMBER")
-    private Long bookingNumber;
+    @Column(name = "comment")
+    private String comment;
 
-    @JoinColumn(name = "USER")
+    @JoinColumn(name = "Trip")
     @ManyToOne
-    private User user;
-
-    @Column(name = "START_DATE")
-    @NonNull
-    private Instant startDate;
-
-    @Column(name = "END_DATE")
-    @NonNull
-    private Instant endDate;
+    private Trip trip;
 
     @Column(name="CREATED_DATE", updatable = false)
     @CreatedDate

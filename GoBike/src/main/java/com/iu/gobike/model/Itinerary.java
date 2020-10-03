@@ -11,31 +11,24 @@ import java.time.Instant;
 @Setter
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
 @Builder
 @Entity
 @Table
-public class Booking {
+public class Itinerary {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "BOOKING_NUMBER")
-    private Long bookingNumber;
-
-    @JoinColumn(name = "USER")
+    @JoinColumn(name = "TRIP")
     @ManyToOne
-    private User user;
+    private Trip trip;
 
-    @Column(name = "START_DATE")
-    @NonNull
-    private Instant startDate;
+    @Column(name = "DAY")
+    private Integer day;
 
-    @Column(name = "END_DATE")
-    @NonNull
-    private Instant endDate;
+    @Column(name = "DESCRIPTION")
+    private String description;
 
     @Column(name="CREATED_DATE", updatable = false)
     @CreatedDate

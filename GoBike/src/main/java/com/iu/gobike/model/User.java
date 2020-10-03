@@ -11,6 +11,7 @@ import java.time.Instant;
 @Setter
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 @Builder
 @Entity
 @Table
@@ -50,7 +51,7 @@ public class User {
     @Column(name = "SECURITY_ANSWER")
     private String securityQuestionAnswer;
 
-    @Column(name="CREATED_DATE")
+    @Column(name="CREATED_DATE", updatable = false)
     @CreatedDate
     private Instant createdDate;
 
