@@ -21,7 +21,8 @@ import javax.naming.AuthenticationException;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(String userName, String password) throws AuthenticationException{
         log.info("Request for login");
-        User user = userRepository.findByUserNameAndPassword(userName,password);
+        User user = userRepository.findByUserNameAndPassword(userName,passwordEncoder.encode(password));
         if(user == null){
             throw new AuthenticationException();
         }

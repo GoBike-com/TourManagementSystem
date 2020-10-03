@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.naming.AuthenticationException;
+
 import static org.mockito.Mockito.doThrow;
 
 /**
@@ -41,8 +43,8 @@ public class UserServiceTest {
     @Before
     public void setUp(){
         userService = new UserServiceImpl(userRepository,passwordEncoder);
-        user = User.builder().firstName("Aa").lastName("Bb").password("jo")
-                .securityQuestionId(1).securityQuestionAnswer("ans").build();
+        user = User.builder().id(1L).firstName("Aa").lastName("Bb").password("jo")
+                .userName("user").securityQuestionId(1).securityQuestionAnswer("ans").build();
         request = ResetPasswordRequest.builder().userName("A").question(1).answer("ans").newPassword("kp").build();
 
     }
@@ -58,5 +60,18 @@ public class UserServiceTest {
     @Test(expected = ResetPasswordException.class)
     public void resetPassword_invalidRequest() throws ResetPasswordException {
          userService.resetPassword(request);
+    }
+
+//    @Test
+//    public void login() throws AuthenticationException {
+//        Mockito.when(userRepository.findByUserNameAndPassword(Mockito.anyString(),Mockito.anyString())).thenReturn(user);
+//        User user1 = userService.login("user","jo");
+//        Assert.assertEquals(user.getId(), user1.getId());
+//    }
+
+    @Test(expected = AuthenticationException.class)
+    public void login_failure() throws AuthenticationException {
+        Mockito.when(userRepository.findByUserNameAndPassword(Mockito.anyString(),Mockito.anyString())).thenReturn(null);
+        userService.login("user","hhu");
     }
 }
