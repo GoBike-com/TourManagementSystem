@@ -24,10 +24,11 @@ public class UserController {
     @PostMapping(path = "/register", consumes = "application/json")
     public ResponseEntity<String> register(@RequestBody ResetPasswordRequest request) {
         ResponseEntity<String> responseEntity= null;
+        // TODO: Jyoti
         try {
-            userService.resetPassword(request);
+           // userService.resetPassword(request);
             responseEntity = ResponseEntity.ok().build();
-        } catch (ResetPasswordException e) {
+        } catch (Exception e) {
             responseEntity = ResponseEntity.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).build();
         }
         return responseEntity;
