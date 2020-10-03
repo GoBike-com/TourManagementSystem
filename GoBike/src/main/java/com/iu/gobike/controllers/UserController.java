@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/login", consumes = "application/json")
-    public ResponseEntity<User> login(@RequestParam String userName, @RequestParam String password) {
+    public ResponseEntity<User> login(@RequestParam("username") String userName, @RequestParam("password") String password) {
         ResponseEntity<User> responseEntity= null;
         try {
             User user = userService.login(userName,password);
