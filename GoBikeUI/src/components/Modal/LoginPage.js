@@ -18,6 +18,8 @@ import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props
 import FacebookIcon from '@material-ui/icons/Facebook';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import ReCAPTCHA from "react-google-recaptcha";
+import DialogTitle from "@material-ui/core/DialogTitle";
+
 
 
 
@@ -31,7 +33,8 @@ class LoginPage extends React.Component {
       cardAnimaton: "cardHidden",
       jsonResponse: "",
       captchavalue: null,
-      showPassword: false
+      showPassword: false,
+      phoneNumber:"",
     };
     let currentURLPath = window.location.pathname;
 
@@ -40,6 +43,8 @@ class LoginPage extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
     this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
+    this.onSignInSubmit = this.onSignInSubmit.bind(this);
+    this.getPhoneNumberFromUserInput = this.getPhoneNumberFromUserInput.bind(this);
   }
 
   handleUsernameChange = event => {
@@ -51,7 +56,26 @@ class LoginPage extends React.Component {
   };
 
   handleSubmit = () => {
-    this.fireAndGetResponseInJSON();
+    console.log("handleSubmit")
+      fetch("https://gorest.co.in/public-api/users", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+          Accept: 'application/json',
+          'Authorization': 'Bearer e4267e0897e3f80ee6b50eb1592ef7aed446b1f87caa91eae3cbb194ac20cf88',
+        },
+        body: JSON.stringify({
+          name: "Tenali Ramakrishna",
+          gender: "Male",
+          email:"tenn.ramakrishnda@15ce.commm",
+          status:"Active",
+        })
+      })
+      .then(response => 
+      {
+        this.props.history.push("/traveller/success");
+      }
+      )
   };
 
     handleClickShowPassword = event => {
@@ -61,6 +85,10 @@ class LoginPage extends React.Component {
    handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  
+  
+
 
   render() {
 
@@ -101,7 +129,7 @@ class LoginPage extends React.Component {
           />
           <CustomInput
             labelText="Password"
-            id="password"
+            id="gender"
             formControlProps={{
               fullWidth: true
             }}
