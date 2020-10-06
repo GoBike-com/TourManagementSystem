@@ -1,13 +1,13 @@
 package com.iu.gobike.controllers;
 
+import com.iu.gobike.dto.ResetPasswordRequest;
 import com.iu.gobike.exception.ResetPasswordException;
+import com.iu.gobike.model.User;
+import com.iu.gobike.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.iu.gobike.dto.ResetPasswordRequest;
-import com.iu.gobike.model.User;
-import com.iu.gobike.service.UserService;
 
 import javax.naming.AuthenticationException;
 
@@ -34,6 +34,7 @@ public class UserController {
         return responseEntity;
     }
 
+    @CrossOrigin
     @GetMapping(path = "/login", consumes = "application/json")
     public ResponseEntity<User> login(@RequestParam("username") String userName, @RequestParam("password") String password) {
         ResponseEntity<User> responseEntity= null;
