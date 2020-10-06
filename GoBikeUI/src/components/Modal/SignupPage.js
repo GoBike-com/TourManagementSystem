@@ -17,6 +17,7 @@ import logo from "../../assets/img/OurLogo.jpg";
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import classNames from "classnames";
 import CssBaseline from '@material-ui/core/CssBaseline';
+import MainLoginForm from "./MainLoginForm.js";
 
 
 
@@ -81,6 +82,7 @@ export default function SignupPage(props) {
           </GridContainer>
         </div>
       </div>
+      {/* <MainLoginForm /> */}
     </div>
   );
 }
