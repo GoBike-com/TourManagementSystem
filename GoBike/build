@@ -1,5 +1,0 @@
-#!/bin/bash
-
-clear
-echo 'Remember to change version in pom.xml.'
-./mvnw package
