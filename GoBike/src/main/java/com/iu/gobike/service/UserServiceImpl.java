@@ -1,6 +1,7 @@
 package com.iu.gobike.service;
 
 import com.iu.gobike.constant.GoBikeConstant;
+import com.iu.gobike.dto.RegisterUserRequest;
 import com.iu.gobike.dto.ResetPasswordRequest;
 import com.iu.gobike.exception.ResetPasswordException;
 import com.iu.gobike.model.User;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.naming.AuthenticationException;
+import javax.persistence.EntityExistsException;
 
 /**
  * @author jbhushan
@@ -26,6 +28,31 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Override
+    public void register(RegisterUserRequest request, String password) throws EntityExistsException {
+        String email = request.getEmail();
+        String userName = request.getUserName();
+        Long phone = Long.parseLong(request.getPhone());
+        User user = userRepository.findByUserNameOrEmailOrPhone(request.getUserName(), request.getEmail(), Long.parseLong(request.getPhone()));
+        if(user == null) {
+            user = User.builder().userName(userName).email(email).password(password)
+                    .phone(phone).lastName(request.getLastName()).firstName(request.getLastName())
+                    .city(request.getCity()).securityQuestionId(request.getQuestion()).securityQuestionAnswer(request.getAnswer())
+                    .build();
+            userRepository.save(user);
+        } else {
+            String attribute = null;
+            if(email.equalsIgnoreCase(user.getEmail())){
+                attribute = "email";
+            } else if(userName.equalsIgnoreCase(user.getUserName())){
+                attribute = "userName";
+            }else{
+                attribute ="phone";
+            }
+            throw new EntityExistsException(attribute);
+        }
+    }
 
     @Override
     public User login(String userName, String password) throws AuthenticationException{

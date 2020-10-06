@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.time.Instant;
 
 @Getter
@@ -15,7 +16,7 @@ import java.time.Instant;
 @Builder
 @Entity
 @Table
-public class Booking {
+public class Travel {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -29,13 +30,9 @@ public class Booking {
     @ManyToOne
     private User user;
 
-    @Column(name = "START_DATE")
+    @Column(name = "TRAVEL_DATE")
     @NonNull
-    private Instant startDate;
-
-    @Column(name = "END_DATE")
-    @NonNull
-    private Instant endDate;
+    private Instant travelDate;
 
     @Column(name="CREATED_DATE", updatable = false)
     @CreatedDate
@@ -50,5 +47,8 @@ public class Booking {
 
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
+
+    @Column(name="E_TICKET")
+    private Blob eTicket;
 
 }
