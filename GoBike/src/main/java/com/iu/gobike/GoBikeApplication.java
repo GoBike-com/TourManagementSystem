@@ -7,10 +7,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
-public class GobikeApplication {
+public class GoBikeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GobikeApplication.class, args);
+		SpringApplication.run(GoBikeApplication.class, args);
 	}
 
 	@Bean
