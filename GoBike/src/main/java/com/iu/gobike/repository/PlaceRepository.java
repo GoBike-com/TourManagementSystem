@@ -15,4 +15,6 @@ public interface PlaceRepository extends CrudRepository<Place, Long> {
 
     @Query("select p.name from Place p where p.name like ?1%")
     List<String> findAllName(String searchStr);
+
+    Place findByName(String name);
 }

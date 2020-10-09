@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.Blob;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public class PlaceServiceTest {
     @Before
     public void setUp(){
         placeService = new PlaceServiceImpl(placeRepository);
-        place = Place.builder().build();
+        place = Place.builder().id(1l).name("boston").country("A").build();
     }
 
     @Test
@@ -50,7 +51,13 @@ public class PlaceServiceTest {
         Mockito.when(placeRepository.findAllName(Mockito.anyString())).thenReturn(null);
         List<String> places = placeService.search("ch");
         Assert.assertEquals(0,places.size());
-       // Assert.assertEquals("Chicago", places.get(0));
+    }
+
+    @Test
+    public void getDetails() {
+        Mockito.when(placeRepository.findByName(Mockito.anyString())).thenReturn(place);
+        Place place = placeService.getDetails("boston");
+        Assert.assertEquals(1l, place.getId().longValue());
     }
 
 }

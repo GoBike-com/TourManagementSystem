@@ -1,5 +1,6 @@
 package com.iu.gobike.service;
 
+import com.iu.gobike.model.Place;
 import com.iu.gobike.repository.PlaceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,10 @@ public class PlaceServiceImpl implements PlaceService{
             places.addAll(result);
         }
         return places;
+    }
+
+    @Override
+    public Place getDetails(String name) {
+        return placeRepository.findByName(name);
     }
 }
