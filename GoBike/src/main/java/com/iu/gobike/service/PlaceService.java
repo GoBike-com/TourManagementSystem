@@ -12,4 +12,6 @@ public interface PlaceService {
     List<String> search(String searchStr);
 
     Place getDetails(String name);
+
+    Place save(Place place);
 }

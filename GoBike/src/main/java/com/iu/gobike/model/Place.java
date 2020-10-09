@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @EqualsAndHashCode
 @Builder
@@ -39,7 +40,7 @@ public class Place {
     private List<Image> image;
 
     @Column(name = "ratings")
-    private String ratings;
+    private Integer ratings;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
