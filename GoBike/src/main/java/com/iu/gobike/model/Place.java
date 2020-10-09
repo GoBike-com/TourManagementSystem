@@ -42,11 +42,18 @@ public class Place {
     private String ratings;
 
     @Column(name="CREATED_DATE", updatable = false)
-    @CreatedDate
     private Instant createdDate;
 
     @Column(name="LAST_MODIFIED_DATE")
-    @LastModifiedDate
     private Instant lastModifiedDate;
 
+    @PrePersist
+    void onCreate() {
+        this.createdDate = this.lastModifiedDate = Instant.now();
+    }
+
+    @PreUpdate
+    void onUpdate() {
+         this.lastModifiedDate = Instant.now();
+    }
 }

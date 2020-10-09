@@ -16,6 +16,7 @@ import javax.naming.AuthenticationException;
 import javax.persistence.EntityExistsException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
 /**
  * @author jbhushan
@@ -28,17 +29,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-
     @Override
-    public void register(RegisterUserRequest request, String password) throws EntityExistsException {
+    public void register(RegisterUserRequest request, String password) throws EntityExistsException, InvalidKeySpecException, NoSuchAlgorithmException {
         String email = request.getEmail();
         String userName = request.getUserName();
         Long phone = Long.parseLong(request.getPhone());
         User user = userRepository.findByUserNameOrEmailOrPhone(request.getUserName(), request.getEmail(), Long.parseLong(request.getPhone()));
         if(user == null) {
-            user = User.builder().userName(userName).email(email).password(password)
+            user = User.builder().userName(userName).email(email).password(EncryptionUtil.encrypt(password))
                     .phone(phone).lastName(request.getLastName()).firstName(request.getLastName())
                     .city(request.getCity()).securityQuestionId(request.getQuestion()).securityQuestionAnswer(request.getAnswer())
                     .build();
@@ -79,5 +77,15 @@ public class UserServiceImpl implements UserService {
             }
         }
         throw new ResetPasswordException();
+    }
+
+    @Override
+    public Iterable<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User findByUserName(String userName) {
+        return userRepository.findByUserName(userName);
     }
 }

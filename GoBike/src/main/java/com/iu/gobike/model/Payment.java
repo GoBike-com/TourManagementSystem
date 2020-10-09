@@ -50,4 +50,14 @@ public class Payment {
     @Column(name="AMOUNT")
     private Integer amount;
 
+    @PrePersist
+    void onCreate() {
+        this.createdDate = this.lastModifiedDate = Instant.now();
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        this.lastModifiedDate = Instant.now();
+    }
+
 }

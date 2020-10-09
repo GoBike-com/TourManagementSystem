@@ -41,11 +41,9 @@ public class Accomodation {
     private Integer amount;
 
     @Column(name="CREATED_DATE", updatable = false)
-    @CreatedDate
     private Instant createdDate;
 
     @Column(name="LAST_MODIFIED_DATE")
-    @LastModifiedDate
     private Instant lastModifiedDate;
 
     @Column(name="CREATED_BY")
@@ -53,5 +51,15 @@ public class Accomodation {
 
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
+
+    @PrePersist
+    void onCreate() {
+        this.createdDate = this.lastModifiedDate = Instant.now();
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        this.lastModifiedDate = Instant.now();
+    }
 
 }

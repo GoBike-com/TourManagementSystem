@@ -23,6 +23,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping
+    public ResponseEntity<Iterable<User>> users() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping(path = "/{username}")
+    public ResponseEntity<User> findUser(@PathVariable String username) {
+        return ResponseEntity.ok(userService.findByUserName(username));
+    }
+
     /**
      * This API is responsible for registering New User to the system
      * @param request
@@ -39,6 +49,8 @@ public class UserController {
             responseEntity = ResponseEntity.ok().build();
         }catch(EntityExistsException e){
             responseEntity = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage()+" already exists");
+        }catch (Exception e) {
+            responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         return responseEntity;
     }
