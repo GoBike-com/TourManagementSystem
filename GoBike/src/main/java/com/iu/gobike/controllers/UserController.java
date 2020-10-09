@@ -58,6 +58,8 @@ public class UserController {
             responseEntity = ResponseEntity.ok(user);
         } catch (AuthenticationException e) {
             responseEntity = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (Exception e) {
+            responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         return responseEntity;
     }
@@ -76,6 +78,8 @@ public class UserController {
             responseEntity = ResponseEntity.ok().build();
         } catch (ResetPasswordException e) {
             responseEntity = ResponseEntity.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).build();
+        } catch (Exception e) {
+            responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         return responseEntity;
     }
