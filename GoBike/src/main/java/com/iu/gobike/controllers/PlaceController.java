@@ -4,10 +4,7 @@ import com.iu.gobike.model.Place;
 import com.iu.gobike.service.PlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,6 +35,12 @@ public class PlaceController {
     @GetMapping(path = "/details/{name}", produces = "application/json")
     public ResponseEntity<Place> details(@PathVariable String name) {
         Place place = placeService.getDetails(name);
+        return ResponseEntity.ok(place);
+    }
+
+    @PostMapping( produces = "application/json")
+    public ResponseEntity<Place> create(@RequestBody Place pla) {
+        Place place = placeService.save(pla);
         return ResponseEntity.ok(place);
     }
 

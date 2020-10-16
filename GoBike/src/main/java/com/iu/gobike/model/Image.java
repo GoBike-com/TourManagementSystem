@@ -11,6 +11,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @EqualsAndHashCode
 @Builder
@@ -30,11 +31,19 @@ public class Image {
     private Place place;
 
     @Column(name="CREATED_DATE", updatable = false)
-    @CreatedDate
     private Instant createdDate;
 
     @Column(name="LAST_MODIFIED_DATE")
-    @LastModifiedDate
     private Instant lastModifiedDate;
+
+    @PrePersist
+    void onCreate() {
+        this.createdDate = this.lastModifiedDate = Instant.now();
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        this.lastModifiedDate = Instant.now();
+    }
 
 }

@@ -10,6 +10,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Builder
 @Entity
@@ -31,11 +32,9 @@ public class Itinerary {
     private String description;
 
     @Column(name="CREATED_DATE", updatable = false)
-    @CreatedDate
     private Instant createdDate;
 
     @Column(name="LAST_MODIFIED_DATE")
-    @LastModifiedDate
     private Instant lastModifiedDate;
 
     @Column(name="CREATED_BY")
@@ -43,5 +42,15 @@ public class Itinerary {
 
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
+
+    @PrePersist
+    void onCreate() {
+        this.createdDate = this.lastModifiedDate = Instant.now();
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        this.lastModifiedDate = Instant.now();
+    }
 
 }
