@@ -153,7 +153,7 @@ class LoginPage extends React.Component {
             }}
           />
           <div >
-            <Link style={{textDecorationLine:"none",textAlign:'left'}} to={"forgotpassword/email"}>
+            <Link style={{textDecorationLine:"none",textAlign:'left'}} to={"/traveller/forgetpassword"}>
               <Button style={{ font:'inherit',fontSize:'16px', fontWeight:'30px',textAlign:'left',margin:'0 0 10 0' }}  color="primary" simple>
                 Forgot password?
                 </Button>

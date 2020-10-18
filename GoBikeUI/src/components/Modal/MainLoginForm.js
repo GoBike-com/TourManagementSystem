@@ -25,6 +25,8 @@ import { DesktopWindows } from "@material-ui/icons";
 import FormDialog from "./FormDialog";
 import FacebookLogin from "react-facebook-login";
 import Icon from '@material-ui/core/Icon';
+import { Alert, AlertTitle } from "@material-ui/lab";
+
 
 
 const CLIENT_ID = "194e95dcd20fa2f8e523";
@@ -85,6 +87,8 @@ class MainLoginForm extends React.Component {
       open: false,
       phoneNumber: "",
       isLoggedIn: "false",
+      isUserAvailable: false,
+      hasErr: false,
     };
     let currentURLPath = window.location.pathname;
 
@@ -112,26 +116,71 @@ class MainLoginForm extends React.Component {
     this.setState({ phoneNumber: event.target.value });
   };
 
+  myalert = (props) => {
+    if(this.state.hasErr === true){
+      return(
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          <strong>{props}!</strong>
+        </Alert>
+      );
+    }
+    
+    return (
+      <Alert severity="error">
+        <AlertTitle>Error</AlertTitle>
+        <strong>Entered username is not registered with us!</strong>
+      </Alert>
+    );
+  };
+
+
   handleSubmit = () => {
     console.log("handleSubmit");
-    if(this.state.username !== "" && this.state.password !== "" ){
-    fetch('http://localhost:8080/login?username=' + this.state.username + '&password=' + this.state.password)
-        .then(async response => {
-            const data = await response.json();
 
+    if(this.state.username === "" || this.state.password ===""){
+      return this.setState({ hasErr : true })
+    }
+
+    if(this.state.username !== "" && this.state.password !== "" ){
+    var targetUrl = "http://localhost:8080/traveller/login";
+
+    fetch(targetUrl, 
+      {
+        method:'post',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+        body: JSON.stringify({ 
+            username: this.state.username,
+            password:this.state.password,
+         })
+    }
+    ).then(response =>response.json())
+    .then(
+     data => {
             // check for error response
-            if (response.status == "200") {
-                this.state.isLoggedIn = "True";
-                if(this.state.isLoggedIn == "True"){
-                  this.props.history.push("/traveller/success");
+            console.log(data)
+            console.log(data.isUserAvailable)
+            // if (data.status == "200") {
+              if(data.isUserAvailable === false)
+              {
+                return this.setState({ isVerifiedUser : false})
+              }
+              else{
+
+                this.state.isVerifiedUser = "True";
+                if(this.state.isVerifiedUser == "True"){
+                    console.log("redirecting to home page.....");
+                    this.props.history.push('/traveller/otpverify')
+                    // <Redirect to={'/traveller/success'} />
                 }
-                // get error message from body or default to response statusText
+              }
+            //     // get error message from body or default to response statusText
                 
-            }
+            // }
 
             // this.setState({ totalReactPackages: data.total })
-        })
-        .catch(error => {
+        })        .catch(error => {
             // this.setState({ errorMessage: error.toString() });
             console.error('There was an error!', error);
         });
@@ -284,6 +333,8 @@ class MainLoginForm extends React.Component {
                 </div>
               </Typography>
               <form className={classes.form} noValidate>
+              {this.state.hasErr === true ? this.myalert("username and password are mandatory") : null}
+              {this.state.isVerifiedUser === false ? this.myalert() : null}
                 <TextField
                   variant="outlined"
                   margin="normal"
@@ -324,12 +375,12 @@ class MainLoginForm extends React.Component {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    {/* <Link href="#" variant="body2"> */}
+                  <Link style={{textDecorationLine:"none",textAlign:'left'}} to={"/traveller/forgetpassword"}>
                     Forgot password?
-                    {/* </Link> */}
+                    </Link>
                   </Grid>
                   <Grid item>
-                    <Link to="/traveller/register" variant="body2">
+                    <Link to={"/traveller/register"} style={{textDecorationLine:"none",textAlign:'right'}}>
                       {"Don't have an account? Sign Up"}
                     </Link>
                   </Grid>

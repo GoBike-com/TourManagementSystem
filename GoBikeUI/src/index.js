@@ -10,6 +10,9 @@ import MainLoginForm from './components/Modal/MainLoginForm';
 // import SignupPage from './components/Modal/SignupPage';
 import Test from './components/Utility/Test';
 import Dashboard from './components/Dashboard/Dashboard';
+import ForgetPassword from './components/ForgetPassword/EmailPage';
+import OTPVerify from './components/OTP/OTPVerify';
+import NewPassword from './components/ForgetPassword/NewPassword';
 
 // pages
 
@@ -24,6 +27,9 @@ ReactDOM.render(
         <Route path="/traveller/signin" exact component={MainLoginForm} />
         <Route path="/traveller/register" exact component={UserRegistrationPage} />
         <Route path="/traveller/success" exact component={Dashboard} />
+        <Route path="/traveller/forgetpassword" exact component={ForgetPassword} />
+        <Route path="/traveller/otpverify" component={OTPVerify} />
+        <Route path="/traveller/resetpassword" exact component={NewPassword} />
       </Switch>
     </Router>,
   document.getElementById("root")
