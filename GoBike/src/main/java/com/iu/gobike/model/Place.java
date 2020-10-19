@@ -1,8 +1,6 @@
 package com.iu.gobike.model;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Blob;
@@ -33,7 +31,8 @@ public class Place {
     @Column(name = "COUNTRY")
     private String country;
 
-    @Column(name = "DESCRIPTION")
+    @Lob
+    @Column(name = "DESCRIPTION", columnDefinition="BLOB")
     private Blob description;
 
     @OneToMany(mappedBy="place")

@@ -44,4 +44,10 @@ public class PlaceController {
         return ResponseEntity.ok(place);
     }
 
+    @GetMapping( produces = "application/json")
+    public ResponseEntity<List<Place> > findAll() {
+        List<Place> places = placeService.findAll();
+        return ResponseEntity.ok(places);
+    }
+
 }
