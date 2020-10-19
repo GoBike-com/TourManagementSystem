@@ -14,4 +14,6 @@ public interface PlaceService {
     Place getDetails(String name);
 
     Place save(Place place);
+
+    List<Place> findAll();
 }
