@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.time.Instant;
 
 @Getter
@@ -12,24 +13,27 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@EqualsAndHashCode
 @Builder
 @Entity
 @Table
-public class Itinerary {
+public class Travel {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @JoinColumn(name = "TRIP")
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "BOOKING_NUMBER")
+    private Long bookingNumber;
+
+    @JoinColumn(name = "USER")
     @ManyToOne
-    private Trip trip;
+    private User user;
 
-    @Column(name = "DAY")
-    private Integer day;
-
-    @Column(name = "DESCRIPTION")
-    private String description;
+    @Column(name = "TRAVEL_DATE")
+    @NonNull
+    private Instant travelDate;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
@@ -43,6 +47,9 @@ public class Itinerary {
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
 
+    @Column(name="E_TICKET")
+    private Blob eTicket;
+
     @PrePersist
     void onCreate() {
         this.createdDate = this.lastModifiedDate = Instant.now();
@@ -50,7 +57,7 @@ public class Itinerary {
 
     @PreUpdate
     void onUpdate() {
-        this.lastModifiedDate = Instant.now();
+         this.lastModifiedDate = Instant.now();
     }
 
 }

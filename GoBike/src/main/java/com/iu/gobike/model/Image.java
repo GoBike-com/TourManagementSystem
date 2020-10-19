@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.time.Instant;
 
 @Getter
@@ -12,36 +13,28 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@EqualsAndHashCode
 @Builder
 @Entity
 @Table
-public class Itinerary {
+public class Image {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @JoinColumn(name = "TRIP")
-    @ManyToOne
-    private Trip trip;
+    @Column(name = "IMAGE")
+    private Blob image;
 
-    @Column(name = "DAY")
-    private Integer day;
-
-    @Column(name = "DESCRIPTION")
-    private String description;
+    @JoinColumn(name = "PLACE_ID")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Place place;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
 
     @Column(name="LAST_MODIFIED_DATE")
     private Instant lastModifiedDate;
-
-    @Column(name="CREATED_BY")
-    private String createdBy;
-
-    @Column(name="MODIFIED_BY")
-    private String modifiedBy;
 
     @PrePersist
     void onCreate() {

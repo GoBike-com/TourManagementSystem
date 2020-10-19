@@ -10,12 +10,13 @@ import java.time.Instant;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @EqualsAndHashCode
 @Builder
 @Entity
 @Table
-public class Booking {
+public class Accomodation {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -29,20 +30,21 @@ public class Booking {
     @ManyToOne
     private User user;
 
-    @Column(name = "START_DATE")
+    @Column(name = "CHECK_IN")
     @NonNull
-    private Instant startDate;
+    private Instant checkIn;
 
-    @Column(name = "END_DATE")
+    @Column(name = "CHECK_OUT")
     @NonNull
-    private Instant endDate;
+    private Instant checkOut;
+
+    @Column(name = "Amount")
+    private Integer amount;
 
     @Column(name="CREATED_DATE", updatable = false)
-    @CreatedDate
     private Instant createdDate;
 
     @Column(name="LAST_MODIFIED_DATE")
-    @LastModifiedDate
     private Instant lastModifiedDate;
 
     @Column(name="CREATED_BY")
@@ -50,5 +52,15 @@ public class Booking {
 
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
+
+    @PrePersist
+    void onCreate() {
+        this.createdDate = this.lastModifiedDate = Instant.now();
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        this.lastModifiedDate = Instant.now();
+    }
 
 }

@@ -12,29 +12,34 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@EqualsAndHashCode
 @Builder
 @Entity
 @Table
-public class Itinerary {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @JoinColumn(name = "TRIP")
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "TRANSACTION_NUMBER")
+    private Long transactionNumber;
+
+    @JoinColumn(name = "USER")
     @ManyToOne
-    private Trip trip;
+    private User user;
 
-    @Column(name = "DAY")
-    private Integer day;
-
-    @Column(name = "DESCRIPTION")
-    private String description;
+    @Column(name = "TRANSACTION_DATE")
+    @NonNull
+    private Instant TransactionDate;
 
     @Column(name="CREATED_DATE", updatable = false)
+    @CreatedDate
     private Instant createdDate;
 
     @Column(name="LAST_MODIFIED_DATE")
+    @LastModifiedDate
     private Instant lastModifiedDate;
 
     @Column(name="CREATED_BY")
@@ -42,6 +47,9 @@ public class Itinerary {
 
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
+
+    @Column(name="AMOUNT")
+    private Integer amount;
 
     @PrePersist
     void onCreate() {

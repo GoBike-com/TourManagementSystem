@@ -17,6 +17,7 @@ import img from '../../assets/img/image15.jpg';
 import UserRegistrationForm from './UserRegistrationForm';
 
 
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),

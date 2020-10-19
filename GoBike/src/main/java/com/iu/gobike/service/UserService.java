@@ -1,14 +1,24 @@
 package com.iu.gobike.service;
 
+import com.iu.gobike.dto.RegisterUserRequest;
 import com.iu.gobike.dto.ResetPasswordRequest;
 import com.iu.gobike.exception.ResetPasswordException;
 import com.iu.gobike.model.User;
 
 import javax.naming.AuthenticationException;
+import javax.persistence.EntityExistsException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 public interface UserService {
 
-    User login(String userName, String password) throws AuthenticationException;
+    void register(RegisterUserRequest registerUserRequest, String password) throws EntityExistsException, InvalidKeySpecException, NoSuchAlgorithmException;
 
-    String resetPassword(ResetPasswordRequest request) throws ResetPasswordException;
+    User login(String userName, String password) throws AuthenticationException, InvalidKeySpecException, NoSuchAlgorithmException;
+
+    String resetPassword(ResetPasswordRequest request) throws ResetPasswordException, InvalidKeySpecException, NoSuchAlgorithmException;
+
+    Iterable<User> getAllUsers();
+
+    User findByUserName(String userName);
 }

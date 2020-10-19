@@ -28,7 +28,6 @@ import Icon from '@material-ui/core/Icon';
 import { Alert, AlertTitle } from "@material-ui/lab";
 
 
-
 const CLIENT_ID = "194e95dcd20fa2f8e523";
 const REDIRECT_URI = "http://localhost:3000/traveller/success";
 
@@ -286,7 +285,6 @@ class MainLoginForm extends React.Component {
             console.log("user is signed in");
             this.props.history.push("/traveller/success");
             // ...
-
             console.log("user is signed in");
           })
           .catch(function (error) {
@@ -333,6 +331,7 @@ class MainLoginForm extends React.Component {
                 </div>
               </Typography>
               <form className={classes.form} noValidate>
+
               {this.state.hasErr === true ? this.myalert("username and password are mandatory") : null}
               {this.state.isVerifiedUser === false ? this.myalert() : null}
                 <TextField
@@ -340,6 +339,7 @@ class MainLoginForm extends React.Component {
                   margin="normal"
                   required
                   fullWidth
+
                   id="username"
                   label="Enter your username"
                   name="username"
