@@ -130,4 +130,11 @@ public class UserServiceImpl implements UserService {
         result.put("TerminateSession", "true");
         return ResponseEntity.ok(result);
     }
+
+    @Override
+    public void resetPassword(String email, String password) {
+        User user = userRepository.findByEmail(email);
+        user.setPassword(EncryptDecryptUtil.encrypt(password,secretKey));
+        userRepository.save(user);
+    }
 }

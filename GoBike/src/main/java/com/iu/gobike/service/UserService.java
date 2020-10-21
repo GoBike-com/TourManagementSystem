@@ -33,4 +33,6 @@ public interface UserService {
     boolean verifyOtp(String userName, String otp);
 
     ResponseEntity<?> signOut(HttpServletRequest req, HttpServletResponse res);
+
+    void resetPassword(String userName, String password);
 }
