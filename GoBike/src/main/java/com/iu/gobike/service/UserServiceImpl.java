@@ -10,6 +10,7 @@ import com.iu.gobike.util.EncryptDecryptUtil;
 import com.iu.gobike.util.GoBikeUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.UnknownProfileException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -102,7 +103,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void generateOtp(String email) throws ResetPasswordException {
+    public String generateOtp(String email) throws UnknownProfileException {
         if(email != null){
            User user = userRepository.findByEmail(email);
            if(user != null){
@@ -110,9 +111,10 @@ public class UserServiceImpl implements UserService {
                MailService.sendMail(user.getEmail(),"OTP for password reset",otp);
                user.setOtp(otp);
                userRepository.save(user);
+               return otp;
            }
         }
-        throw new ResetPasswordException();
+        throw new UnknownProfileException("Email Id is not registered");
     }
 
     @Override
@@ -124,7 +126,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> signOut(HttpServletRequest req, HttpServletResponse res) {
         Map<String, Object> result = new HashMap<>();
-//        HttpSession session=req.getSession();
         System.out.println("terminating session for " + req.getSession().getAttribute("username"));
         req.getSession().invalidate();
         result.put("TerminateSession", "true");

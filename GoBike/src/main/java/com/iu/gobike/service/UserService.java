@@ -4,6 +4,7 @@ import com.iu.gobike.dto.RegisterUserRequest;
 import com.iu.gobike.dto.ResetPasswordRequest;
 import com.iu.gobike.exception.ResetPasswordException;
 import com.iu.gobike.model.User;
+import org.hibernate.UnknownProfileException;
 import org.springframework.http.ResponseEntity;
 
 import javax.crypto.BadPaddingException;
@@ -28,7 +29,8 @@ public interface UserService {
     Iterable<User> getAllUsers();
 
     User findByUserName(String userName);
-    void generateOtp(String username) throws ResetPasswordException;
+
+    String generateOtp(String username) throws UnknownProfileException;
 
     boolean verifyOtp(String userName, String otp);
 

@@ -5,6 +5,7 @@ import com.iu.gobike.dto.ResetPasswordRequest;
 import com.iu.gobike.exception.ResetPasswordException;
 import com.iu.gobike.model.User;
 import com.iu.gobike.service.UserService;
+import org.hibernate.UnknownProfileException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -108,9 +109,8 @@ public class UserController {
     public ResponseEntity<String> generateOtp(@PathVariable String email) {
         ResponseEntity<String> responseEntity= null;
         try {
-            userService.generateOtp(email);
-            responseEntity = ResponseEntity.ok().build();
-        } catch (ResetPasswordException e) {
+            responseEntity = ResponseEntity.ok(userService.generateOtp(email));
+        } catch (UnknownProfileException e) {
             responseEntity = ResponseEntity.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).build();
         }
         return responseEntity;
