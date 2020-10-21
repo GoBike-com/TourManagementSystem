@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUserNameOrEmail(request.getUserName(), request.getEmail());
         if(user == null) {
             user = User.builder().userName(userName).email(email).password(EncryptDecryptUtil.encrypt(password,secretKey))
-                    .lastName(request.getLastName()).firstName(request.getLastName())
+                    .lastName(request.getLastName()).firstName(request.getFirstName())
                     .city(request.getCity()).build();
             userRepository.save(user);
         } else {
