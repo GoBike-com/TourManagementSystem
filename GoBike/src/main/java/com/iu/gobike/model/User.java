@@ -51,7 +51,6 @@ public class User {
     private String email;
 
     @Column(name = "SECURITY_QUESTION")
-    @NotNull
     private int securityQuestionId;
 
     @Column(name = "SECURITY_ANSWER")

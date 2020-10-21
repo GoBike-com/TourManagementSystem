@@ -22,4 +22,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Lock(LockModeType.NONE)
     User findByUserNameOrEmailOrPhone(String userName, String email,Long phone);
 
+    @Lock(LockModeType.NONE)
+    User findByUserNameOrEmail(String userName, String email);
+
 }

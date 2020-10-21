@@ -18,6 +18,7 @@ import javax.persistence.EntityExistsException;
  */
 @RestController
 @RequestMapping(path = "/user")
+@CrossOrigin(origins = "*",allowedHeaders = "*", allowCredentials = "true")
 public class UserController {
 
     @Autowired
@@ -42,9 +43,10 @@ public class UserController {
      * @return Registered User detail
      */
     @PostMapping(path = "/register", consumes = "application/json")
-    public ResponseEntity<String> register(@RequestBody RegisterUserRequest request, @RequestParam("password") String password) {
+    public ResponseEntity<String> register(@RequestBody RegisterUserRequest request,@RequestParam("password") String password) {
         ResponseEntity<String> responseEntity= null;
         try {
+            //String password = request.getPassword();
             userService.register(request, password);
             responseEntity = ResponseEntity.ok().build();
         }catch(EntityExistsException e){

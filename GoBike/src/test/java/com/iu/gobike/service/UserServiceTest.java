@@ -30,9 +30,11 @@ public class UserServiceTest {
     private User user;
     private ResetPasswordRequest request;
 
+    private String secretKey = "op";
+
     @Before
     public void setUp(){
-        userService = new UserServiceImpl(userRepository);
+        userService = new UserServiceImpl();
         user = User.builder().firstName("Aa").lastName("Bb").password("jo")
                 .securityQuestionId(1).securityQuestionAnswer("ans").build();
         request = ResetPasswordRequest.builder().userName("A").question(1).answer("ans").newPassword("kp").build();

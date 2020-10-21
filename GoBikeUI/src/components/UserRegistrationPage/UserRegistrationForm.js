@@ -2,8 +2,6 @@ import React from "react";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
@@ -75,7 +73,7 @@ class UserRegistrationForm extends React.Component {
     return (
       <Alert severity="error">
         <AlertTitle>Error</AlertTitle>
-        <strong>{props} cannot be blank</strong>
+        <strong>{props}</strong>
       </Alert>
     );
   };
@@ -110,21 +108,21 @@ class UserRegistrationForm extends React.Component {
     this.state.Userpresent = false;
 
 
-    var targetUrl = "http://localhost:8080/traveller/signup";
+    var targetUrl = "http://localhost:7070/user/register?password="+this.state.password;
     const requestOptions = {
       method: "POST",
       credentials: "include",
-      headers: { "Content-Type": "application/json" },
+      headers: {'Content-Type': 'application/json', Accept: 'application/json'},
       body: JSON.stringify({
-        emailID: this.state.emailID,
-        username: this.state.username,
+        email: this.state.emailID,
+        userName: this.state.username,
         firstName: this.state.firstName,
         lastName: this.state.lastName,
-        password: this.state.password,
       }),
     };
     fetch(targetUrl, requestOptions)
-      .then((response) => {
+      .then(response => {
+        console.log(response)
         // check for error response
         if (response.status == "200") {
           this.state.isRegistered = "True";
@@ -135,14 +133,21 @@ class UserRegistrationForm extends React.Component {
             // <Redirect to={'/traveller/success'} />
           }
           // get error message from body or default to response statusText
+        } else {
+          this.setState({isRegistered : false})
+          // return (
+          //   <Alert severity="error">
+          //     <AlertTitle>Error</AlertTitle>
+          //     <strong>Already registered</strong>
+          //   </Alert>
+          // );
         }
-
         // this.setState({ totalReactPackages: data.total })
       })
-      .catch((error) => {
-        // this.setState({ errorMessage: error.toString() });
-        console.error("There was an error!", error);
-      });
+      // .catch((error) => {
+      //   // this.setState({ errorMessage: error.toString() });
+      //   console.error("There was an error!", error);
+      // });
   };
 
   myDialogue = () => {
@@ -238,7 +243,7 @@ class UserRegistrationForm extends React.Component {
             </Typography> */}
 
         <CssBaseline />
-        {this.state.isRegistered === true ? this.myDialogue() : null}
+        {this.state.isRegistered === true ? this.myDialogue() : this.state.isRegistered === false ? alert("Username or email is already registered"):null}
         <div className={this.classes.root}>
           <AppBar position="static" style={{ backgroundColor: "indigo" }}>
             <Toolbar>
@@ -310,7 +315,7 @@ class UserRegistrationForm extends React.Component {
             style={{ marginLeft: "500px", marginTop: "40px" }}
           >
             {this.state.firstNamepresent === true
-              ? this.myalert("First name")
+              ? this.myalert("First name cannot be blank")
               : null}
             <TextField
               autoComplete="fname"
@@ -336,7 +341,7 @@ class UserRegistrationForm extends React.Component {
             sm={4}
             style={{ marginLeft: "500px", marginTop: "15px" }}
           >
-            {this.state.lastNamepresent === true ? this.myalert("Last name") : null}
+            {this.state.lastNamepresent === true ? this.myalert("Last name cannot be blank") : null}
             <TextField
               variant="outlined"
               required
@@ -358,7 +363,7 @@ class UserRegistrationForm extends React.Component {
             sm={4}
             style={{ marginLeft: "500px", marginTop: "15px" }}
           >
-            {this.state.emailIDPresent === true ? this.myalert("EmailID") : null}
+            {this.state.emailIDPresent === true ? this.myalert("EmailID cannot be blank") : null}
             <TextField
               variant="outlined"
               required
@@ -380,7 +385,7 @@ class UserRegistrationForm extends React.Component {
             sm={4}
             style={{ marginLeft: "500px", marginTop: "15px" }}
           >
-            {this.state.passwordpresent === true ? this.myalert("Password") : null}
+            {this.state.passwordpresent === true ? this.myalert("Password cannot be blank") : null}
             <TextField
               variant="outlined"
               required
@@ -403,7 +408,7 @@ class UserRegistrationForm extends React.Component {
             sm={4}
             style={{ marginLeft: "500px", marginTop: "15px" }}
           >
-            {this.state.Userpresent === true ? this.myalert("Username") : null}
+            {this.state.Userpresent === true ? this.myalert("Username cannot be blank") : null}
             <TextField
               variant="outlined"
               required
