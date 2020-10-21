@@ -7,10 +7,12 @@ import com.iu.gobike.exception.ResetPasswordException;
 import com.iu.gobike.model.User;
 import com.iu.gobike.repository.UserRepository;
 import com.iu.gobike.util.EncryptDecryptUtil;
+import com.iu.gobike.util.GoBikeUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.BadPaddingException;
@@ -18,9 +20,13 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.naming.AuthenticationException;
 import javax.persistence.EntityExistsException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author jbhushan
@@ -93,5 +99,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUserName(String userName) {
         return userRepository.findByUserName(userName);
+    }
+
+    @Override
+    public void generateOtp(String email) throws ResetPasswordException {
+        if(email != null){
+           User user = userRepository.findByEmail(email);
+           if(user != null){
+               String otp = GoBikeUtil.generateRandomNumber(1000, 9999);
+               MailService.sendMail(user.getEmail(),"OTP for password reset",otp);
+               user.setOtp(otp);
+               userRepository.save(user);
+           }
+        }
+        throw new ResetPasswordException();
+    }
+
+    @Override
+    public boolean verifyOtp(String userName, String otp){
+        User user = userRepository.findByUserName(userName);
+        return otp.equals(user.getOtp());
+    }
+
+    @Override
+    public ResponseEntity<?> signOut(HttpServletRequest req, HttpServletResponse res) {
+        Map<String, Object> result = new HashMap<>();
+//        HttpSession session=req.getSession();
+        System.out.println("terminating session for " + req.getSession().getAttribute("username"));
+        req.getSession().invalidate();
+        result.put("TerminateSession", "true");
+        return ResponseEntity.ok(result);
     }
 }

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
 import javax.persistence.EntityExistsException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author jbhushan
@@ -81,7 +83,6 @@ public class UserController {
     /**
      * This API is responsible for reset password. It validates User on the basis of
      * security question before setting password.
-     * @param request
      * @return Success message if password is reset else error message
      */
     @PostMapping(path = "/password/reset", consumes = "application/json")
@@ -96,5 +97,37 @@ public class UserController {
             responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         return responseEntity;
+    }
+
+    /**
+     * This API is responsible for sending otp for resetting password
+     *
+     * @return Success if userName was valid else error
+     */
+    @PostMapping(path = "/otp/{email}", consumes = "application/json")
+    public ResponseEntity<String> generateOtp(@PathVariable String email) {
+        ResponseEntity<String> responseEntity= null;
+        try {
+            userService.generateOtp(email);
+            responseEntity = ResponseEntity.ok().build();
+        } catch (ResetPasswordException e) {
+            responseEntity = ResponseEntity.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).build();
+        }
+        return responseEntity;
+    }
+
+    /**
+     * This API is responsible for sending otp for resetting password
+     *
+     * @return Success if userName was valid else error
+     */
+    @GetMapping(path = "/otp/verify", consumes = "application/json")
+    public ResponseEntity<Boolean> verifyOtp(HttpServletRequest request, @RequestParam("otp") String otp) {
+         return ResponseEntity.ok(userService.verifyOtp((String) request.getSession().getAttribute("username"), otp));
+    }
+
+    @RequestMapping(value = "/logout", method = {RequestMethod.GET})
+    public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response) {
+        return userService.signOut(request,response);
     }
 }

@@ -152,7 +152,7 @@ class MainLoginForm extends React.Component {
               console.log(data.body)
               this.setState({ isVerifiedUser : true})
               console.log("redirecting to home page.....");
-              this.props.history.push('/traveller/otpverify')
+              this.props.history.push('/traveller/success')
             } else {
               return this.setState({ isVerifiedUser : false})
             }

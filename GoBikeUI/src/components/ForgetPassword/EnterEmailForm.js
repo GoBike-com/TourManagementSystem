@@ -44,7 +44,7 @@ class EnterEmailForm extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     window.sessionStorage.setItem("isRequestComingFromForgotPassword", "True");
-    var targetUrl = "http://localhost:8080/traveller/verifyuser";
+    var targetUrl = "http://localhost:7070/user/otp/"+this.state.emailID;
 
     fetch(targetUrl, {
       method: "post",
@@ -53,9 +53,9 @@ class EnterEmailForm extends React.Component {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({
-        emailID: this.state.emailID,
-      }),
+      // body: JSON.stringify({
+      //   emailID: this.state.emailID,
+      // }),
     })
       .then((response) => response.json())
       .then((data) => {

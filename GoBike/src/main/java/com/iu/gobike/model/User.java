@@ -62,6 +62,9 @@ public class User {
     @Column(name="LAST_MODIFIED_DATE")
     private Instant lastModifiedDate;
 
+    @Column(name="otp")
+    public String otp;
+
     @PrePersist
     void onCreate() {
         this.createdDate = this.lastModifiedDate = Instant.now();
