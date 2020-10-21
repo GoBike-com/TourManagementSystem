@@ -1,13 +1,6 @@
 import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
-// core components
-import Header from "../../assets/components/Header/Header.js";
-import HeaderLinks from "../../assets/components/Header/HeaderLinks.js";
-import GridContainer from "../../assets/components/Grid/GridContainer.js";
-import GridItem from "../../assets/components/Grid/GridItem.js";
-import Card from "../../assets/components/Card/Card.js";
 
 import loginStyles from "../../assets/jss/material-kit-react/views/loginPage.js";
 
