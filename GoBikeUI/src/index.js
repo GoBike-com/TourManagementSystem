@@ -13,6 +13,12 @@ import Dashboard from './components/Dashboard/Dashboard';
 import ForgetPassword from './components/ForgetPassword/EmailPage';
 import OTPVerify from './components/OTP/OTPVerify';
 import NewPassword from './components/ForgetPassword/NewPassword';
+import SearchComponent from './components/Dashboard/SearchComponent';
+import Accomodation from './components/Dashboard/Accomodation';
+import Itinerary from './components/Dashboard/Itinerary';
+import Travel from './components/Dashboard/Travel';
+import Review from './components/Dashboard/Review';
+import Chat from './components/Dashboard/Chat';
 
 // pages
 
@@ -30,6 +36,15 @@ ReactDOM.render(
         <Route path="/traveller/forgetpassword" exact component={ForgetPassword} />
         <Route path="/traveller/otpverify" component={OTPVerify} />
         <Route path="/traveller/resetpassword" exact component={NewPassword} />
+
+        <Route path="/search" exact component={SearchComponent} />
+        <Route path="/accomodation" exact component={Accomodation} />
+        <Route path="/itinerary" exact component={Itinerary} />
+        <Route path="/travel" exact component={Travel} />
+        <Route path="/review" exact component={Review} />
+        <Route path="/chat" exact component={Chat} />
+
+
       </Switch>
     </Router>,
   document.getElementById("root")

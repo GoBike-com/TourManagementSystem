@@ -18,7 +18,7 @@ import Search from './SearchComponent';
 
 
 
-class Dashboard extends React.Component {
+class Chat extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -175,6 +175,7 @@ class Dashboard extends React.Component {
           <Panel />
         </Grid>
         <Grid item xs={10} >
+            Chat
         </Grid>
       </Grid>
     </Grid>
@@ -182,4 +183,4 @@ class Dashboard extends React.Component {
 };
 }
 
-export default Dashboard;
+export default withRouter(Chat);

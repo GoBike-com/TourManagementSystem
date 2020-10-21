@@ -1,102 +1,204 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import Itinerary from '../Itinerary/itinerary';
-
-function Panel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-Panel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `vertical-tab-${index}`,
-    'aria-controls': `vertical-tabpanel-${index}`,
-  };
-}
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import ImageIcon from "@material-ui/icons/Image";
+import WorkIcon from "@material-ui/icons/Work";
+import BeachAccessIcon from "@material-ui/icons/BeachAccess";
+import { whiteColor } from "assets/jss/material-kit-react";
+import Search from "./SearchComponent";
+import { Link, withRouter } from "react-router-dom";
+import Button from "../../assets/components/CustomButtons/Button.js";
+import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
+import FlightTakeoffIcon from '@material-ui/icons/FlightTakeoff';
+import HomeIcon from '@material-ui/icons/Home';
+import DescriptionIcon from '@material-ui/icons/Description';
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
+import RateReviewIcon from '@material-ui/icons/RateReview';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-    display: 'flex',
-    height: 224,
-  },
-  tabs: {
-    borderRight: `1px solid ${theme.palette.divider}`,
+    width: "100%",
+    maxWidth: 300,
+    backgroundColor: "black",
+    color: "white",
+    padding: "20px",
+    // borderSpacing:"2px",
   },
 }));
 
-export default function VerticalTabs() {
+export default function Panel() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   return (
-    <div className={classes.root} style={{marginTop:"30px"}}>
-      <Tabs
-        orientation="vertical"
-        value={value}
-        onChange={handleChange}
-        aria-label="Vertical tabs example"
-        className={classes.tabs}
-        scrollButtons="off"
-      >
-        <Tab label="View Itinerary" {...a11yProps(0)} />
-        <Tab label="Upcoming Tours" {...a11yProps(1)} />
-        <Tab label="Past Tours" {...a11yProps(2)} />
-        <Tab label="Chats" {...a11yProps(3)} />
-        <Tab label="Feedback" {...a11yProps(4)} />
-        <Tab label="Recommendations" {...a11yProps(5)} />
-       
-      </Tabs>
-      <Panel value={value} index={0}>
-        <Itinerary
-        />
-      </Panel>
-      <Panel value={value} index={1}>
-        Upcoming Tours
-      </Panel>
-      <Panel value={value} index={2}>
-        Past Tours
-      </Panel>
-      <Panel value={value} index={3}>
-        Chat
-      </Panel>
-      <Panel value={value} index={4}>
-        Feedback
-      </Panel>
-      <Panel value={value} index={5}>
-        Recommendations
-      </Panel>
-    </div>
+    <List className={classes.root}>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar style={{marginBottom:"35px"}}>
+            <LocationSearchingIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <Link
+          style={{
+            textDecorationLine: "none",
+            textAlign: "left",
+            color: "white",
+          }}
+          to={"/search"}
+        >
+          <ListItemText
+            primary="Search"
+            secondary="find your next destination"
+          />
+        </Link>
+      </ListItem>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar style={{marginBottom:"35px"}}>
+            <FlightTakeoffIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <Link
+          style={{
+            textDecorationLine: "none",
+            textAlign: "left",
+            color: "white",
+          }}
+          to={"/travel"}
+        >
+          <ListItemText primary="Travel" secondary="flights - buses - trains" />
+        </Link>
+      </ListItem>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar style={{marginBottom:"35px"}}>
+            <HomeIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <Link
+          style={{
+            textDecorationLine: "none",
+            textAlign: "left",
+            color: "white",
+          }}
+          to={"/accomodation"}
+        >
+          <ListItemText primary="Accomodation" secondary="book your stay" />
+        </Link>
+      </ListItem>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar style={{marginBottom:"35px"}}>
+            <DescriptionIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <Link
+          style={{
+            textDecorationLine: "none",
+            textAlign: "left",
+            color: "white",
+          }}
+          to={"/itinerary"}
+        >
+          <ListItemText primary="Itinerary" secondary="manage your bookings" />
+        </Link>
+      </ListItem>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar style={{marginBottom:"35px"}}>
+            <ChatBubbleIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <Link
+          style={{
+            textDecorationLine: "none",
+            textAlign: "left",
+            color: "white",
+          }}
+          to={"/chat"}
+        >
+          <ListItemText
+            primary="Chat with group"
+            secondary="fellow travellers"
+          />
+        </Link>
+      </ListItem>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar style={{marginBottom:"35px"}}>
+            <RateReviewIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <Link
+          style={{
+            textDecorationLine: "none",
+            textAlign: "left",
+            color: "white",
+          }}
+          to={"/review"}
+        >
+          <ListItemText
+            primary="Review and Feedback"
+            secondary="rate your experience"
+          />
+        </Link>
+      </ListItem>
+      <ListItem>
+        <ListItemAvatar></ListItemAvatar>
+        <ListItemText />
+      </ListItem>
+      <ListItem>
+        {/* <ListItemAvatar>
+          <Avatar>
+          </Avatar>
+        </ListItemAvatar> */}
+        <ListItemText />
+      </ListItem>
+      <ListItem>
+        {/* <ListItemAvatar>
+          <Avatar>
+         </Avatar>
+        </ListItemAvatar> */}
+        <ListItemText />
+      </ListItem>
+      <ListItem>
+        {/* <ListItemAvatar>
+          <Avatar>
+         </Avatar>
+        </ListItemAvatar> */}
+        <ListItemText />
+      </ListItem>
+      <ListItem>
+        {/* <ListItemAvatar>
+          <Avatar>
+         </Avatar>
+        </ListItemAvatar> */}
+        <ListItemText />
+      </ListItem>
+      <ListItem>
+        {/* <ListItemAvatar>
+          <Avatar>
+         </Avatar>
+        </ListItemAvatar> */}
+        <ListItemText />
+      </ListItem>
+      <ListItem>
+        {/* <ListItemAvatar>
+          <Avatar>
+         </Avatar>
+        </ListItemAvatar> */}
+        <ListItemText />
+      </ListItem>
+      <ListItem>
+        {/* <ListItemAvatar>
+          <Avatar>
+         </Avatar>
+        </ListItemAvatar> */}
+        <ListItemText />
+      </ListItem>
+    </List>
   );
 }

@@ -76,7 +76,6 @@
     "typescript": "3.9.5"
   },
   "devDependencies": {
-    "cross-fetch": "^3.0.6",
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.8"
   }
