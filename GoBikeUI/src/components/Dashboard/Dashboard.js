@@ -221,11 +221,11 @@ class Dashboard extends React.Component {
   
   handleSubmit = (event) => {
       event.preventDefault();
-      var targetUrl = "http://localhost:8080/traveller/logout";
+      var targetUrl = "http://localhost:7070/user/logout";
   
       fetch(targetUrl, 
         {
-          method:'post',
+          method:'get',
           credentials: 'include',
           headers: {'Content-Type': 'application/json', Accept: 'application/json'},
       }
