@@ -164,7 +164,7 @@ class MainLoginForm extends React.Component {
       else{
         alert("The entered credentials are wrong or you've not verified that you're not a robot. Please check");
       }
-  //   fetch("http://localhost:8080/login", {
+  //   fetch("http://localhost:7070/login", {
   //     method: "POST",
   //     // headers: {
   //     //   "Content-Type": "application/json",

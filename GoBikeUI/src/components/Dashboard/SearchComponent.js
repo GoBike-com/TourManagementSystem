@@ -93,7 +93,7 @@ class SearchComponent extends React.Component {
   
   handleSubmit = (event) => {
       event.preventDefault();
-      var targetUrl = "http://localhost:8080/traveller/logout";
+      var targetUrl = "http://localhost:7070/traveller/logout";
   
       fetch(targetUrl, 
         {
