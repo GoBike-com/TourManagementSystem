@@ -6,40 +6,51 @@ import com.iu.gobike.dto.ResetPasswordRequest;
 import com.iu.gobike.exception.ResetPasswordException;
 import com.iu.gobike.model.User;
 import com.iu.gobike.repository.UserRepository;
-import com.iu.gobike.util.EncryptionUtil;
+import com.iu.gobike.util.EncryptDecryptUtil;
+import com.iu.gobike.util.GoBikeUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.naming.AuthenticationException;
 import javax.persistence.EntityExistsException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author jbhushan
  */
 @Component
-@AllArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
 
+    @Value("${secret}")
+    private String secretKey;
+
     @Override
     public void register(RegisterUserRequest request, String password) throws EntityExistsException, InvalidKeySpecException, NoSuchAlgorithmException {
         String email = request.getEmail();
         String userName = request.getUserName();
-        Long phone = Long.parseLong(request.getPhone());
-        User user = userRepository.findByUserNameOrEmailOrPhone(request.getUserName(), request.getEmail(), Long.parseLong(request.getPhone()));
+       // Long phone = Long.parseLong(request.getPhone());
+        User user = userRepository.findByUserNameOrEmail(request.getUserName(), request.getEmail());
         if(user == null) {
-            user = User.builder().userName(userName).email(email).password(EncryptionUtil.encrypt(password))
-                    .phone(phone).lastName(request.getLastName()).firstName(request.getLastName())
-                    .city(request.getCity()).securityQuestionId(request.getQuestion()).securityQuestionAnswer(request.getAnswer())
-                    .build();
+            user = User.builder().userName(userName).email(email).password(EncryptDecryptUtil.encrypt(password,secretKey))
+                    .lastName(request.getLastName()).firstName(request.getLastName())
+                    .city(request.getCity()).build();
             userRepository.save(user);
         } else {
             String attribute = null;
@@ -47,21 +58,22 @@ public class UserServiceImpl implements UserService {
                 attribute = "email";
             } else if(userName.equalsIgnoreCase(user.getUserName())){
                 attribute = "userName";
-            }else{
-                attribute ="phone";
             }
             throw new EntityExistsException(attribute);
         }
     }
 
     @Override
-    public User login(String userName, String password) throws AuthenticationException, InvalidKeySpecException, NoSuchAlgorithmException {
+    public User login(String userName, String password) throws AuthenticationException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException {
         log.info("Request for login");
-        User user = userRepository.findByUserNameAndPassword(userName, EncryptionUtil.encrypt(password));
-        if(user == null){
-            throw new AuthenticationException();
+        User user = userRepository.findByUserName(userName);
+        if(user != null){
+            String decryptedPassword = EncryptDecryptUtil.decrypt(user.getPassword(),secretKey);
+            if(decryptedPassword.equals(password)){
+                return user;
+            }
         }
-        return user;
+        throw new AuthenticationException();
     }
 
     @Override
@@ -71,7 +83,7 @@ public class UserServiceImpl implements UserService {
         if(user != null){
             if(user.getSecurityQuestionId() == request.getQuestion() &&
             user.getSecurityQuestionAnswer().equals(request.getAnswer())){
-                user.setPassword(EncryptionUtil.encrypt(request.getNewPassword()));
+                user.setPassword(EncryptDecryptUtil.encrypt(request.getNewPassword(),secretKey));
                 userRepository.save(user);
                 return GoBikeConstant.SUCCESS;
             }
@@ -87,5 +99,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUserName(String userName) {
         return userRepository.findByUserName(userName);
+    }
+
+    @Override
+    public void generateOtp(String email) throws ResetPasswordException {
+        if(email != null){
+           User user = userRepository.findByEmail(email);
+           if(user != null){
+               String otp = GoBikeUtil.generateRandomNumber(1000, 9999);
+               MailService.sendMail(user.getEmail(),"OTP for password reset",otp);
+               user.setOtp(otp);
+               userRepository.save(user);
+           }
+        }
+        throw new ResetPasswordException();
+    }
+
+    @Override
+    public boolean verifyOtp(String userName, String otp){
+        User user = userRepository.findByUserName(userName);
+        return otp.equals(user.getOtp());
+    }
+
+    @Override
+    public ResponseEntity<?> signOut(HttpServletRequest req, HttpServletResponse res) {
+        Map<String, Object> result = new HashMap<>();
+//        HttpSession session=req.getSession();
+        System.out.println("terminating session for " + req.getSession().getAttribute("username"));
+        req.getSession().invalidate();
+        result.put("TerminateSession", "true");
+        return ResponseEntity.ok(result);
     }
 }

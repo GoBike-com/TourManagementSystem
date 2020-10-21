@@ -15,16 +15,9 @@ import image from "../../assets/img/Image3.jpg";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import { withStyles } from "@material-ui/core/styles";
 import GitHubIcon from "@material-ui/icons/GitHub";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import firebase from "../Utility/firebase";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { DesktopWindows } from "@material-ui/icons";
 import FormDialog from "./FormDialog";
 import FacebookLogin from "react-facebook-login";
-import Icon from '@material-ui/core/Icon';
 import { Alert, AlertTitle } from "@material-ui/lab";
 
 
@@ -129,7 +122,7 @@ class MainLoginForm extends React.Component {
     return (
       <Alert severity="error">
         <AlertTitle>Error</AlertTitle>
-        <strong>Entered username is not registered with us!</strong>
+        <strong>Invalid Credentials</strong>
       </Alert>
     );
   };
@@ -143,45 +136,28 @@ class MainLoginForm extends React.Component {
     }
 
     if(this.state.username !== "" && this.state.password !== "" ){
-    var targetUrl = "http://localhost:8080/traveller/login";
+    var targetUrl = "http://localhost:7070/user/login?username="+this.state.username +"&password="+this.state.password;
 
     fetch(targetUrl, 
       {
-        method:'post',
-        credentials: 'include',
+        method:'get',
         headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-        body: JSON.stringify({ 
-            username: this.state.username,
-            password:this.state.password,
-         })
     }
-    ).then(response =>response.json())
+    )
+    //.then(response =>response.json())
     .then(
      data => {
-            // check for error response
             console.log(data)
-            console.log(data.isUserAvailable)
-            // if (data.status == "200") {
-              if(data.isUserAvailable === false)
-              {
-                return this.setState({ isVerifiedUser : false})
-              }
-              else{
-
-                this.state.isVerifiedUser = "True";
-                if(this.state.isVerifiedUser == "True"){
-                    console.log("redirecting to home page.....");
-                    this.props.history.push('/traveller/otpverify')
-                    // <Redirect to={'/traveller/success'} />
-                }
-              }
-            //     // get error message from body or default to response statusText
-                
-            // }
-
-            // this.setState({ totalReactPackages: data.total })
-        })        .catch(error => {
-            // this.setState({ errorMessage: error.toString() });
+            // check for error response
+            if (data.status == "200"){
+              console.log(data.body)
+              this.setState({ isVerifiedUser : true})
+              console.log("redirecting to home page.....");
+              this.props.history.push('/traveller/success')
+            } else {
+              return this.setState({ isVerifiedUser : false})
+            }
+        }).catch(error => {
             console.error('There was an error!', error);
         });
       }

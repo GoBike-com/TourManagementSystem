@@ -51,7 +51,6 @@ public class User {
     private String email;
 
     @Column(name = "SECURITY_QUESTION")
-    @NotNull
     private int securityQuestionId;
 
     @Column(name = "SECURITY_ANSWER")
@@ -62,6 +61,9 @@ public class User {
 
     @Column(name="LAST_MODIFIED_DATE")
     private Instant lastModifiedDate;
+
+    @Column(name="otp")
+    public String otp;
 
     @PrePersist
     void onCreate() {

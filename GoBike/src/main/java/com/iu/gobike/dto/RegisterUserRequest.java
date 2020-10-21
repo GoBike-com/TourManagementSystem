@@ -21,4 +21,5 @@ public class RegisterUserRequest {
     private String postalCode;
     private int question;
     private String answer;
+    private String password;
 }
