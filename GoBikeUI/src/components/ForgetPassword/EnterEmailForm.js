@@ -53,21 +53,16 @@ class EnterEmailForm extends React.Component {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      // body: JSON.stringify({
-      //   emailID: this.state.emailID,
-      // }),
     })
-      .then((response) => response.json())
+     // .then((response) => response.json())
       .then((data) => {
         // check for error response
         console.log(data);
-        if (data.isUserAvailable == true) {
+        if (data.status == 200) {
           this.state.isVerifiedUser = "True";
-          if (this.state.isVerifiedUser == "True") {
             console.log("redirecting to home page.....");
             this.props.history.push("/traveller/otpverify");
             // <Redirect to={'/traveller/success'} />
-          }
         } else {
           this.setState({ hasError: true });
           // return this.myalert()
