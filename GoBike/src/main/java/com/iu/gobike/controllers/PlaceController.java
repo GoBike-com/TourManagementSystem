@@ -13,6 +13,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(path = "/place")
+@CrossOrigin(origins = "*")
 public class PlaceController {
 
     @Autowired

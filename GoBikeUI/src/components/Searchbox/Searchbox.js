@@ -8,36 +8,34 @@ export default function Asynchronous() {
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const loading = open && options.length === 0;
-    let currentSearchText = "";
+    const [searchText, setSearchText] = React.useState("");
 
     React.useEffect(() => {
         let active = true;
 
-        if (!loading) {
-            return undefined;
-        }
-
         (async () => {
-            const response = fetch(`localhost:7070/place/search/${currentSearchText}`) //call to retrieve from search backend API
+            const targetUrl = "http://localhost:7070/place/search/";
+            fetch(targetUrl + searchText, {
+                    method:'get',
+                    headers: {Accept: 'application/json'},
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    const results = String(data).split(",");
+                    if (active) {
+                        setOptions((results.length && searchText ? results : []));
+                    }
+                })
                 .catch((error) => {
-                    // alert(error);
                     console.log(error);
-                });
-
-            if (response.ok) {
-                const searchResults = await response.data.json();
-                if (active) {
-                    setOptions(Object.keys(searchResults).map((key) => searchResults[key].item[0])); //might need to change depending on what gets returned
-                }
-            } else {
-                console.log("Call to search api failed.");
-            }
+                    setOptions([]);
+                })
         })();
 
         return () => {
             active = false;
         };
-    }, [loading]);
+    }, [searchText]);
 
     React.useEffect(() => {
         if (!open) {
@@ -47,7 +45,7 @@ export default function Asynchronous() {
 
     return (
         <Autocomplete
-            freeSolo
+            clearOnBlur={false}
             id="searchbar"
             style={{ width: 300 }}
             open={open}
@@ -60,18 +58,15 @@ export default function Asynchronous() {
             onChange={(event, value, reason ) => {
                 if (value !== null) {
                     //they hit enter or they clicked on auto fill. Go to selected response.
-                    window.location.href = `http://localhost:3000/traveller/success?${currentSearchText}`;
+                    window.location.href = `http://localhost:3000/traveller/success`;
                 }
             }}
             onInputChange={(event, value, reason) => {
-                if (value !== null) {
-                    currentSearchText = value;
-                } else {
-                    currentSearchText = "aaa";
-                }
+                setSearchText(value);
+                console.log(searchText);
             }}
-            getOptionSelected={(option, value) => option.name === value.name}
-            getOptionLabel={(option) => option.name}
+            getOptionSelected={(option, value) => option === value}
+            getOptionLabel={(option) => option}
             options={options}
             loading={loading}
             renderInput={(params) => (
