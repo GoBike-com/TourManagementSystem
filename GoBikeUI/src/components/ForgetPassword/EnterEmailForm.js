@@ -189,7 +189,7 @@ class EnterEmailForm extends React.Component {
                     required
                     fullWidth
                     id="emailID"
-                    label="Enter your username"
+                    label="Enter email"
                     autoFocus
                     style={{ width: "100%", marginTop: "20px" }}
                     inputProps={{
@@ -213,7 +213,7 @@ class EnterEmailForm extends React.Component {
                   style={{ marginTop: "20px", backgroundColor: "indigo" }}
                   disableFocusRipple="true"
                 >
-                  Verify username
+                  Send OTP
                 </Button>
               </Link>
             </form>

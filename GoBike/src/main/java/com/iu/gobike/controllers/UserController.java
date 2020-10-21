@@ -130,4 +130,15 @@ public class UserController {
     public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response) {
         return userService.signOut(request,response);
     }
+
+    /**
+     * This API is responsible for resetting password
+     *
+     * @return Success if userName was valid else error
+     */
+    @PutMapping(path = "/password", consumes = "application/json")
+    public ResponseEntity<String> resetPassword(@RequestHeader("password") String password, HttpServletRequest request) {
+        userService.resetPassword((String) request.getSession().getAttribute("emailID"),password);
+         return ResponseEntity.ok().build();
+    }
 }
