@@ -18,6 +18,9 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
+/**
+ * @author jbhushan
+ */
 public interface UserService {
 
     void register(RegisterUserRequest registerUserRequest, String password) throws EntityExistsException, InvalidKeySpecException, NoSuchAlgorithmException;

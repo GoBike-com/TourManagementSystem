@@ -2,6 +2,8 @@ package com.iu.gobike;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class GoBikeApplication {
@@ -10,9 +12,9 @@ public class GoBikeApplication {
 		SpringApplication.run(GoBikeApplication.class, args);
 	}
 
-//	@Bean
-//	public PasswordEncoder encoder() {
-//		return new BCryptPasswordEncoder();
-//	}
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
 
 }
