@@ -57,4 +57,9 @@ public class AmadeusRestTemplate {
         return restTemplate.exchange(amadeusUrl+url,
                 HttpMethod.GET,getHttpEntity(), response);
     }
+
+    public <T> ResponseEntity<T> post(String url, Class<T> response){
+        return restTemplate.exchange(amadeusUrl+url,
+                HttpMethod.POST,getHttpEntity(), response);
+    }
 }
