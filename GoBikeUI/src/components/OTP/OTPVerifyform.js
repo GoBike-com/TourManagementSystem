@@ -46,9 +46,6 @@ class OTPVerifyform extends React.Component {
       method: "GET",
       credentials: 'include',
       headers: { "Content-Type": "application/json" },
-      // body: JSON.stringify({
-      //   userOTP: this.state.userOTP,
-      // }),
     };
     fetch(targetUrl, requestOptions).then(response => response.json())
       .then(data => {

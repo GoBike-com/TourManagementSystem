@@ -12,7 +12,5 @@ import java.util.List;
  */
 public interface TravelService {
 
-    ResponseEntity<SearchAirportResponse> searchAirports(String keyword);
-
-    ResponseEntity<SearchFlightResponse> searchFlights(SearchFlightRequest request);
+    SearchAirportResponse searchAirports(String keyword);
 }
