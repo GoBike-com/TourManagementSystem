@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(path = "/travel")
+@CrossOrigin(origins = "*",allowedHeaders = "*", allowCredentials = "true")
 public class TravelController {
 
     @Autowired
@@ -22,6 +23,8 @@ public class TravelController {
      */
     @GetMapping(path = "/airport/search/{keyword}", produces = "application/json")
     public ResponseEntity<SearchAirportResponse> airport(@PathVariable("keyword") String keyword) {
-        return travelService.searchAirports(keyword);
+        SearchAirportResponse response = travelService.searchAirports(keyword);
+         return  ResponseEntity.ok(response);
+
     }
 }

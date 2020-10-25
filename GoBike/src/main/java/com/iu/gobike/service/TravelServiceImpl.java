@@ -1,13 +1,15 @@
 package com.iu.gobike.service;
 
 import com.iu.gobike.dto.SearchAirportResponse;
+import com.iu.gobike.dto.SearchFlightRequest;
+import com.iu.gobike.dto.SearchFlightResponse;
 import com.iu.gobike.util.AmadeusRestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 /**
  * @author jbhushan
@@ -19,7 +21,12 @@ public class TravelServiceImpl implements TravelService {
     AmadeusRestTemplate amadeusRestTemplate;
 
     @Override
-    public  ResponseEntity<SearchAirportResponse> searchAirports(String keyword) {
-         return amadeusRestTemplate.get("v1/reference-data/locations?subType=CITY&countryCode=US&view=LIGHT&keyword="+keyword, SearchAirportResponse.class);
+    public SearchAirportResponse searchAirports(String keyword) {
+        ResponseEntity<SearchAirportResponse> r = amadeusRestTemplate.get("v1/reference-data/locations?subType=CITY&countryCode=US&view=LIGHT&keyword="+keyword, SearchAirportResponse.class);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Baeldung-Example-Header",
+                "Value-ResponseEntityBuilderWithHttpHeaders");
+        return r.getBody();
     }
 }
