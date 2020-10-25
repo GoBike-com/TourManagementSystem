@@ -1,29 +1,24 @@
 import React from "react";
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import Panel from "./Panel";
 import { Grid, Paper } from "@material-ui/core";
 import { Link, withRouter } from "react-router-dom";
 import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Search from "./SearchComponent";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
-  TimePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 class Travel extends React.Component {
   constructor(props) {
@@ -31,10 +26,13 @@ class Travel extends React.Component {
     this.state = {
       currency: "",
       SelectedDate: "",
+      options: [],
+      isLoading: false,
     };
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   currencies = [
@@ -123,6 +121,28 @@ class Travel extends React.Component {
 
   classes = this.useStyles;
 
+   handleSearch = (query) => {
+    //setIsLoading(true);
+    console.log(query)
+    var targetUrl = "http://localhost:7070/travel/airport/search/"+query;
+    fetch(targetUrl,{
+      method: "GET",
+       credentials: "include",
+       headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+     })
+     .then(res => res.json())
+      .then((res) => {
+        console.log(res)
+        const options = res.data.map((i) => ({
+          name: i.name
+        }));
+
+       this.setState({ options: options,
+                      isLoading : true, });
+        // setIsLoading(false);
+      });
+  };
+
   handleSubmit = (event) => {
     event.preventDefault();
     var targetUrl = "http://localhost:7070/traveller/logout";
@@ -204,41 +224,31 @@ class Travel extends React.Component {
             </div>
             <div>
               <LocationOnIcon />
-              <TextField
-                style={{ width: "15%", marginTop: "5px" }}
+              <AsyncTypeahead
+                id="source"
+                labelKey="name"
+                minLength={3}
+              //  isLoading={this.state.isLoading}
+                onSearch={this.handleSearch}
+               // onChange={setSingleSelections}
+                options={this.state.options}
+                placeholder="Enter source"
+               // selected={singleSelections}
+               renderMenuItemChildren={(option, props) => (
+                <React.Fragment>
+                  <span>{option.name}</span>
+                </React.Fragment>
+              )}
+              />
+               <LocationOnIcon />
+                <AsyncTypeahead
                 id="destination"
-                select
-                label="Leaving from"
-                value={this.state.currency}
-                onChange={this.handleChange}
-                variant="outlined"
-                color="primary"
-                size="medium"
-              >
-                {this.currencies.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <LocationOnIcon />
-              <TextField
-                style={{ width: "15%", marginTop: "5px", marginLeft: "3px" }}
-                id="destination"
-                select
-                label="Going to"
-                value={this.state.currency}
-                onChange={this.handleChange}
-                variant="outlined"
-                color="primary"
-                size="medium"
-              >
-                {this.currencies.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+                labelKey="name"
+                onSearch={this.handleSearch}
+                options={this.state.options}
+                placeholder="Enter destination"
+               // selected={singleSelections}
+              />
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                   style={{ marginLeft: "15px", height: "20px", width: "15%" }}
@@ -272,12 +282,12 @@ class Travel extends React.Component {
                 />
               </MuiPickersUtilsProvider>
               <TextField
-                style={{ width: "15%", marginTop: "5px", marginLeft: "15px" }}
+               // style={{ width: "15%", marginTop: "5px", marginLeft: "15px" }}
                 id="destination"
-                select
-                label="1 traveller"
-                value={this.state.currency}
-                onChange={this.handleChange}
+               // select
+                label="Number of travellers"
+               // value={this.state.currency}
+               // onChange={this.handleChange}
                 variant="outlined"
                 color="primary"
                 size="medium"
