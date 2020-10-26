@@ -1,6 +1,8 @@
 package com.iu.gobike.controllers;
 
 import com.iu.gobike.dto.SearchAirportResponse;
+import com.iu.gobike.dto.SearchFlightRequest;
+import com.iu.gobike.amadeus.dto.SearchFlightAmadeusResponse;
 import com.iu.gobike.service.TravelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +28,15 @@ public class TravelController {
         SearchAirportResponse response = travelService.searchAirports(keyword);
          return  ResponseEntity.ok(response);
 
+    }
+
+    /**
+     * This API is responsible for getting airport with the given keyword
+     * @return list of airports
+     */
+    @PostMapping(path = "/search/flight", produces = "application/json")
+    public ResponseEntity<SearchFlightAmadeusResponse> searchFlights(@RequestBody SearchFlightRequest request) {
+        SearchFlightAmadeusResponse response = travelService.searchFlights(request);
+        return ResponseEntity.ok(response);
     }
 }
