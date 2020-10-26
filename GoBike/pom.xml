@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.iu</groupId>
 	<artifactId>gobike</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>gobike</name>
 	<description>Gobike website.</description>
 
@@ -86,5 +86,23 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<jar.name>dev</jar.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<jar.name>prod</jar.name>
+			</properties>
+		</profile>
+	</profiles>
 
 </project>
