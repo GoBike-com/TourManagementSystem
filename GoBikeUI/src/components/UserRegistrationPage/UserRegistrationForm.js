@@ -20,7 +20,7 @@ import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
-
+import { config } from '../Constants';
 class UserRegistrationForm extends React.Component {
   constructor(props) {
     super(props);
@@ -108,7 +108,7 @@ class UserRegistrationForm extends React.Component {
     this.state.Userpresent = false;
 
 
-    var targetUrl = "http://localhost:7070/user/register?password="+this.state.password;
+    var targetUrl = config.API_URL + "/user/register?password="+this.state.password;
     const requestOptions = {
       method: "POST",
       credentials: "include",

@@ -25,7 +25,7 @@ import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
-
+import { config } from '../Constants';
 class NewPasswordForm extends React.Component {
   constructor(props) {
     super(props);
@@ -62,7 +62,7 @@ class NewPasswordForm extends React.Component {
       this.state.isBlank = false;
       return this.setState({ isNotMatched: true });
     }
-    var targetUrl = "http://localhost:7070/user/password";
+    var targetUrl = config.API_URL + "/user/password";
     const requestOptions = {
       method: "PUT",
       credentials: "include",
