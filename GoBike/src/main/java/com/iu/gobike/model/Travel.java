@@ -11,6 +11,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @EqualsAndHashCode
 @Builder
@@ -35,11 +36,9 @@ public class Travel {
     private Instant travelDate;
 
     @Column(name="CREATED_DATE", updatable = false)
-    @CreatedDate
     private Instant createdDate;
 
     @Column(name="LAST_MODIFIED_DATE")
-    @LastModifiedDate
     private Instant lastModifiedDate;
 
     @Column(name="CREATED_BY")
@@ -50,5 +49,15 @@ public class Travel {
 
     @Column(name="E_TICKET")
     private Blob eTicket;
+
+    @PrePersist
+    void onCreate() {
+        this.createdDate = this.lastModifiedDate = Instant.now();
+    }
+
+    @PreUpdate
+    void onUpdate() {
+         this.lastModifiedDate = Instant.now();
+    }
 
 }

@@ -15,17 +15,11 @@ import image from "../../assets/img/Image3.jpg";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import { withStyles } from "@material-ui/core/styles";
 import GitHubIcon from "@material-ui/icons/GitHub";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import firebase from "../Utility/firebase";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { DesktopWindows } from "@material-ui/icons";
 import FormDialog from "./FormDialog";
 import FacebookLogin from "react-facebook-login";
-import Icon from '@material-ui/core/Icon';
-
+import { Alert, AlertTitle } from "@material-ui/lab";
+import { config } from '../Constants'
 
 const CLIENT_ID = "194e95dcd20fa2f8e523";
 const REDIRECT_URI = "http://localhost:3000/traveller/success";
@@ -85,6 +79,8 @@ class MainLoginForm extends React.Component {
       open: false,
       phoneNumber: "",
       isLoggedIn: "false",
+      isUserAvailable: false,
+      hasErr: false,
     };
     let currentURLPath = window.location.pathname;
 
@@ -112,25 +108,79 @@ class MainLoginForm extends React.Component {
     this.setState({ phoneNumber: event.target.value });
   };
 
+  myalert = (props) => {
+    if(this.state.hasErr === true){
+      return(
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          <strong>{props}!</strong>
+        </Alert>
+      );
+    }
+    
+    return (
+      <Alert severity="error">
+        <AlertTitle>Error</AlertTitle>
+        <strong>Invalid Credentials</strong>
+      </Alert>
+    );
+  };
+
+
   handleSubmit = () => {
     console.log("handleSubmit");
-    fetch("https://gorest.co.in/public-api/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization:
-          "Bearer e4267e0897e3f80ee6b50eb1592ef7aed446b1f87caa91eae3cbb194ac20cf88",
-      },
-      body: JSON.stringify({
-        name: "Tenali Ramakrishna",
-        gender: "Male",
-        email: "tenn.ramakrishnda@15ce.commm",
-        status: "Active",
-      }),
-    }).then((response) => {
-      this.props.history.push("/traveller/success");
-    });
+
+    if(this.state.username === "" || this.state.password ===""){
+      return this.setState({ hasErr : true })
+    }
+
+    if(this.state.username !== "" && this.state.password !== "" ){
+    var targetUrl = config.API_URL + "/user/login?username="+this.state.username +"&password="+this.state.password;
+
+    fetch(targetUrl, 
+      {
+        method:'get',
+        headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+    }
+    )
+    //.then(response =>response.json())
+    .then(
+     data => {
+            console.log(data)
+            // check for error response
+            if (data.status == "200"){
+              console.log(data.body)
+              this.setState({ isVerifiedUser : true})
+              console.log("redirecting to home page.....");
+              this.props.history.push('/traveller/success')
+            } else {
+              return this.setState({ isVerifiedUser : false})
+            }
+        }).catch(error => {
+            console.error('There was an error!', error);
+        });
+      }
+      else{
+        alert("The entered credentials are wrong or you've not verified that you're not a robot. Please check");
+      }
+  //   fetch("http://localhost:7070/login", {
+  //     method: "POST",
+  //     // headers: {
+  //     //   "Content-Type": "application/json",
+  //     //   Accept: "application/json",
+  //     //   Authorization:
+  //     //     "Bearer e4267e0897e3f80ee6b50eb1592ef7aed446b1f87caa91eae3cbb194ac20cf88",
+  //     // },
+  //     body: JSON.stringify({
+  //       username: this.state.username,
+  //       password: this.state.password,
+  //     }),
+  //   }).then((response) => {
+  //     if(response.status == "200"){
+  //       this.props.history.push("/traveller/success");
+  //     }
+      
+  //   });
   };
 
   responseFacebook = (response) => {
@@ -258,15 +308,17 @@ class MainLoginForm extends React.Component {
                 </div>
               </Typography>
               <form className={classes.form} noValidate>
+              {this.state.hasErr === true ? this.myalert("username and password are mandatory") : null}
+              {this.state.isVerifiedUser === false ? this.myalert() : null}
                 <TextField
                   variant="outlined"
                   margin="normal"
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  id="username"
+                  label="Enter your username"
+                  name="username"
+                  autoComplete="username"
                   autoFocus
                   onChange={this.handleUsernameChange}
                 />
@@ -298,12 +350,12 @@ class MainLoginForm extends React.Component {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    {/* <Link href="#" variant="body2"> */}
+                  <Link style={{textDecorationLine:"none",textAlign:'left'}} to={"/traveller/forgetpassword"}>
                     Forgot password?
-                    {/* </Link> */}
+                    </Link>
                   </Grid>
                   <Grid item>
-                    <Link to="/traveller/register" variant="body2">
+                    <Link to={"/traveller/register"} style={{textDecorationLine:"none",textAlign:'right'}}>
                       {"Don't have an account? Sign Up"}
                     </Link>
                   </Grid>

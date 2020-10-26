@@ -1,5 +1,6 @@
 package com.iu.gobike.model;
 
+import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -10,6 +11,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @EqualsAndHashCode
 @Builder
@@ -33,16 +35,19 @@ public class User {
     @Column(name = "STATE")
     private String state;
 
-    @Column(name = "USER_NAME")
+    @Column(name = "USER_NAME",unique = true)
+    @NotNull
     private String userName;
 
     @Column(name ="PASSWORD")
+    @NotNull
     private String password;
 
-    @Column(name = "PHONE")
+    @Column(name = "PHONE", length=10)
     private Long phone;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", unique = true)
+    @NotNull
     private String email;
 
     @Column(name = "SECURITY_QUESTION")
@@ -52,11 +57,22 @@ public class User {
     private String securityQuestionAnswer;
 
     @Column(name="CREATED_DATE", updatable = false)
-    @CreatedDate
     private Instant createdDate;
 
     @Column(name="LAST_MODIFIED_DATE")
-    @LastModifiedDate
     private Instant lastModifiedDate;
+
+    @Column(name="otp")
+    public String otp;
+
+    @PrePersist
+    void onCreate() {
+        this.createdDate = this.lastModifiedDate = Instant.now();
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        this.lastModifiedDate = Instant.now();
+    }
 
 }
