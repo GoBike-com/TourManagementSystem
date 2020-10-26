@@ -49,7 +49,6 @@ public class UserController {
     public ResponseEntity<String> register(@RequestBody RegisterUserRequest request,@RequestParam("password") String password) {
         ResponseEntity<String> responseEntity= null;
         try {
-            //String password = request.getPassword();
             userService.register(request, password);
             responseEntity = ResponseEntity.ok().build();
         }catch(EntityExistsException e){

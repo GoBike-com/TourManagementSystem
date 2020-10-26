@@ -46,7 +46,8 @@
     "react-swipeable-views": "0.13.3",
     "reactstrap": "8.4.1",
     "serve": "^11.2.0",
-    "skeleton-css": "^2.0.4"
+    "skeleton-css": "^2.0.4",
+    "google-maps-react": "2.0.6"
   },
   "scripts": {
     "start": "react-scripts start",
