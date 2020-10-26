@@ -21,6 +21,7 @@ import Review from './components/Dashboard/Review';
 import Chat from './components/Dashboard/Chat';
 import Searchbox from "./components/Searchbox/Searchbox";
 import Explore from './components/Explore/Explore';
+import GobikeMap from './components/Itinerary/GobikeMap';
 
 // pages
 
@@ -47,6 +48,7 @@ ReactDOM.render(
         <Route path="/review" exact component={Review} />
         <Route path="/chat" exact component={Chat} />
         <Route path="/explore" exact component={Explore} />
+        <Route path="/map" exact component={GobikeMap} />
       </Switch>
     </Router>,
   document.getElementById("root")
