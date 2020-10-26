@@ -19,6 +19,7 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import { config } from '../Constants'
 
 class Travel extends React.Component {
   constructor(props) {
@@ -124,7 +125,7 @@ class Travel extends React.Component {
    handleSearch = (query) => {
     //setIsLoading(true);
     console.log(query)
-    var targetUrl = "http://localhost:7070/travel/airport/search/"+query;
+    var targetUrl = config.API_URL + "/travel/airport/search/"+query;
     fetch(targetUrl,{
       method: "GET",
        credentials: "include",
@@ -145,7 +146,7 @@ class Travel extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    var targetUrl = "http://localhost:7070/traveller/logout";
+    var targetUrl = config.API_URL + "/traveller/logout";
 
     fetch(targetUrl, {
       method: "post",

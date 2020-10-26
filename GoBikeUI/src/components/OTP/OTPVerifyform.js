@@ -16,6 +16,7 @@ import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import { makeStyles } from "@material-ui/core/styles";
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { config } from '../Constants'
 
 
 class OTPVerifyform extends React.Component {
@@ -41,7 +42,7 @@ class OTPVerifyform extends React.Component {
     if(this.state.userOTP === ""){
       return this.setState({isErr2 : true})
     }
-    var targetUrl = "http://localhost:7070/user/otp/verify?otp="+this.state.userOTP;
+    var targetUrl = config.API_URL + "/user/otp/verify?otp=" + this.state.userOTP;
     const requestOptions = {
       method: "GET",
       credentials: 'include',
