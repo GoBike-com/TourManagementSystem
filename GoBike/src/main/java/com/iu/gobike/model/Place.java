@@ -47,6 +47,12 @@ public class Place {
     @Column(name="LAST_MODIFIED_DATE")
     private Instant lastModifiedDate;
 
+    @Column(name="LATITUDE")
+    private Float latitude;
+
+    @Column(name="LONGITUDE")
+    private Float longitude;
+
     @PrePersist
     void onCreate() {
         this.createdDate = this.lastModifiedDate = Instant.now();
