@@ -13,6 +13,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { config } from '../Constants';
 
 class EnterEmailForm extends React.Component {
   constructor(props) {
@@ -44,7 +45,7 @@ class EnterEmailForm extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     window.sessionStorage.setItem("isRequestComingFromForgotPassword", "True");
-    var targetUrl = "http://localhost:7070/user/otp/"+this.state.emailID;
+    var targetUrl = config.API_URL + "/user/otp/"+this.state.emailID;
 
     fetch(targetUrl, {
       method: "post",

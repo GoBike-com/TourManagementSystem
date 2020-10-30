@@ -3,6 +3,7 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { config } from '../Constants';
 
 export default function Asynchronous() {
     const [open, setOpen] = React.useState(false);
@@ -14,7 +15,7 @@ export default function Asynchronous() {
         let active = true;
 
         (async () => {
-            const targetUrl = "http://localhost:7070/place/search/";
+            const targetUrl = config.API_URL + "/place/search/";
             fetch(targetUrl + searchText, {
                     method:'get',
                     headers: {Accept: 'application/json'},

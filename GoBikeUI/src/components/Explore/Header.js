@@ -8,6 +8,7 @@ import {Link} from "react-router-dom";
 import Button from "../../assets/components/CustomButtons/Button";
 import {Grid} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import { config } from '../Constants';
 
 class Header extends React.Component {
     constructor(props) {
@@ -36,7 +37,7 @@ class Header extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
         //TODO: Change to proper "add to itinerary call"
-        const targetUrl = "http://localhost:7070/user/logout";
+        const targetUrl = config.API_URL + "/user/logout";
 
         fetch(targetUrl,
             {

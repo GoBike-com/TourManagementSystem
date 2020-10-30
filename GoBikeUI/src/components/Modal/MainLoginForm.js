@@ -19,8 +19,7 @@ import firebase from "../Utility/firebase";
 import FormDialog from "./FormDialog";
 import FacebookLogin from "react-facebook-login";
 import { Alert, AlertTitle } from "@material-ui/lab";
-
-
+import { config } from '../Constants'
 
 const CLIENT_ID = "194e95dcd20fa2f8e523";
 const REDIRECT_URI = "http://localhost:3000/traveller/success";
@@ -136,7 +135,7 @@ class MainLoginForm extends React.Component {
     }
 
     if(this.state.username !== "" && this.state.password !== "" ){
-    var targetUrl = "http://localhost:7070/user/login?username="+this.state.username +"&password="+this.state.password;
+    var targetUrl = config.API_URL + "/user/login?username="+this.state.username +"&password="+this.state.password;
 
     fetch(targetUrl, 
       {
