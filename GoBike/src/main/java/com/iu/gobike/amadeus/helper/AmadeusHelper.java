@@ -23,26 +23,19 @@ public class AmadeusHelper {
        List<Flight> details = amadeusResponse.getData();
        Dictionary dictionary = amadeusResponse.getDictionaries();
        if(details!=null && dictionary!=null){
-          // details.stream().map(flight -> flight.getItineraries().stream().map(itinerary -> itinerary.getSegments()));
-           for(Flight flightDetails: details){
+           List<FlightInfo> list = new ArrayList<FlightInfo>();
+          for(Flight flightDetails: details){
                List<FlightItinerary> itineraries = flightDetails.getItineraries();
-
                List<List<FlightInfo>> ino = itineraries.stream().map(itinerary -> {
-//                   FlightInfo flightInfo = FlightInfo.builder().duration(itinerary.getDuration())
-//                           .airline().build();
-                  //SearchFlightResponse response = SearchFlightResponse.builder()..build();;
-                   List<FlightInfo> flights = new ArrayList<FlightInfo>() ;
-                   List<FlightInfo> returnFlight = new ArrayList<FlightInfo>() ;
-                   List<FlightInfo> i = itinerary.getSegments().stream().map(segment -> {
+                  itinerary.getSegments().stream().map(segment -> {
                        FlightInfo flightInfo = populateFlightDetails(dictionary, flightDetails, itinerary, segment);
-                       return flightInfo;
+                       list.add(flightInfo);
+                       return list;
                    }).collect(Collectors.toList());
-                 //  return null;
-                  return i;
+                  return list;
                }).collect(Collectors.toList());
-
-               return ino.get(0);
            }
+           return list;
        }
        return null;
        }
@@ -64,7 +57,6 @@ public class AmadeusHelper {
     }
 
     private static String getCarrier(Map<String,String> carriers, String carrierCode ) {
-    return carriers.get(carrierCode);
-
+        return carriers.get(carrierCode);
     }
 }
