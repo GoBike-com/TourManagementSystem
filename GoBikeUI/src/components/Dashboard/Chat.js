@@ -14,7 +14,8 @@ import { Link , withRouter } from "react-router-dom";
 import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Search from './SearchComponent';
-import { config } from '../Constants'
+import ChatApp from '../Chat/ChatApp';
+import Store from '../Chat/Store';
 
 
 
@@ -93,7 +94,7 @@ class Chat extends React.Component {
   
   handleSubmit = (event) => {
       event.preventDefault();
-      var targetUrl = config.API_URL + "/traveller/logout";
+      var targetUrl = "http://localhost:8080/traveller/logout";
   
       fetch(targetUrl, 
         {
@@ -175,7 +176,9 @@ class Chat extends React.Component {
           <Panel />
         </Grid>
         <Grid item xs={10} >
-            Chat
+          <Store>
+            <ChatApp />
+          </Store>
         </Grid>
       </Grid>
     </Grid>

@@ -8,6 +8,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/pickers": "^3.2.10",
+    "@pusher/chatkit-client": "^1.14.1",
     "axios": "^0.19.0",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.5.2",
@@ -16,7 +17,7 @@
     "cors": "^2.8.5",
     "date-fns": "^2.16.1",
     "dotenv": "^6.2.0",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "firebase": "^7.22.0",
     "gitstar-components": "^1.0.5",
     "google-map-react": "^1.1.5",
@@ -29,7 +30,6 @@
     "react-alert": "^5.5.0",
     "react-bootstrap": "^1.3.0",
     "react-bootstrap-switch": "15.5.3",
-    "react-bootstrap-typeahead": "5.1.2",
     "react-calendar": "^2.19.2",
     "react-chartkick": "^0.4.0",
     "react-datetime": "2.16.3",
@@ -47,7 +47,7 @@
     "reactstrap": "8.4.1",
     "serve": "^11.2.0",
     "skeleton-css": "^2.0.4",
-    "google-maps-react": "2.0.6"
+    "socket.io": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -78,7 +78,6 @@
     "typescript": "3.9.5"
   },
   "devDependencies": {
-    "cross-fetch": "^3.0.6",
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.8"
   }

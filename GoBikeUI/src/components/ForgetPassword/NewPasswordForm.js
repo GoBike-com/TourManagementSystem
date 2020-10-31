@@ -25,7 +25,9 @@ import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
-import { config } from '../Constants';
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+
 class NewPasswordForm extends React.Component {
   constructor(props) {
     super(props);
@@ -62,14 +64,11 @@ class NewPasswordForm extends React.Component {
       this.state.isBlank = false;
       return this.setState({ isNotMatched: true });
     }
-    var targetUrl = config.API_URL + "/user/password";
+    var targetUrl = "http://localhost:8080/traveller/forgetpassword";
     const requestOptions = {
-      method: "PUT",
+      method: "POST",
       credentials: "include",
-      headers: { 
-        "Content-Type": "application/json",
-        "password" :this.state.newPassword
-     },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         password: this.state.newPassword,
       }),

@@ -1,14 +1,21 @@
 import React from "react";
 // material-ui components
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
 // core components
 import Button from "../../assets/components/CustomButtons/Button.js";
+import CardBody from "../../assets/components/Card/CardBody.js";
+import CardHeader from "../../assets/components/Card/CardHeader.js";
+import CustomInput from "../../assets/components/CustomInput/CustomInput.js";
+import CardFooter from "../../assets/components/Card/CardFooter";
 import { Link,withRouter } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Container from "@material-ui/core/Container";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -16,7 +23,6 @@ import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import { makeStyles } from "@material-ui/core/styles";
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import { Alert, AlertTitle } from '@material-ui/lab';
-import { config } from '../Constants'
 
 
 class OTPVerifyform extends React.Component {
@@ -42,11 +48,14 @@ class OTPVerifyform extends React.Component {
     if(this.state.userOTP === ""){
       return this.setState({isErr2 : true})
     }
-    var targetUrl = config.API_URL + "/user/otp/verify?otp=" + this.state.userOTP;
+    var targetUrl = "http://localhost:8080/traveller/verifyotp";
     const requestOptions = {
-      method: "GET",
+      method: "POST",
       credentials: 'include',
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userOTP: this.state.userOTP,
+      }),
     };
     fetch(targetUrl, requestOptions).then(response => response.json())
       .then(data => {

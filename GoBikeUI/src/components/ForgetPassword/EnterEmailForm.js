@@ -13,7 +13,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import { Alert, AlertTitle } from '@material-ui/lab';
-import { config } from '../Constants';
 
 class EnterEmailForm extends React.Component {
   constructor(props) {
@@ -45,7 +44,7 @@ class EnterEmailForm extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     window.sessionStorage.setItem("isRequestComingFromForgotPassword", "True");
-    var targetUrl = config.API_URL + "/user/otp/"+this.state.emailID;
+    var targetUrl = "http://localhost:8080/traveller/verifyuser";
 
     fetch(targetUrl, {
       method: "post",
@@ -54,16 +53,21 @@ class EnterEmailForm extends React.Component {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+      body: JSON.stringify({
+        emailID: this.state.emailID,
+      }),
     })
-     // .then((response) => response.json())
+      .then((response) => response.json())
       .then((data) => {
         // check for error response
         console.log(data);
-        if (data.status == 200) {
+        if (data.isUserAvailable == true) {
           this.state.isVerifiedUser = "True";
+          if (this.state.isVerifiedUser == "True") {
             console.log("redirecting to home page.....");
             this.props.history.push("/traveller/otpverify");
             // <Redirect to={'/traveller/success'} />
+          }
         } else {
           this.setState({ hasError: true });
           // return this.myalert()
@@ -185,7 +189,7 @@ class EnterEmailForm extends React.Component {
                     required
                     fullWidth
                     id="emailID"
-                    label="Enter email"
+                    label="Enter your username"
                     autoFocus
                     style={{ width: "100%", marginTop: "20px" }}
                     inputProps={{
@@ -209,7 +213,7 @@ class EnterEmailForm extends React.Component {
                   style={{ marginTop: "20px", backgroundColor: "indigo" }}
                   disableFocusRipple="true"
                 >
-                  Send OTP
+                  Verify username
                 </Button>
               </Link>
             </form>

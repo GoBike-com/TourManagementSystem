@@ -14,7 +14,7 @@ import { Link , withRouter } from "react-router-dom";
 import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Search from './SearchComponent';
-import { config } from '../Constants'
+
 
 
 
@@ -93,7 +93,7 @@ class Review extends React.Component {
   
   handleSubmit = (event) => {
       event.preventDefault();
-      var targetUrl = config.API_URL + "/traveller/logout";
+      var targetUrl = "http://localhost:8080/traveller/logout";
   
       fetch(targetUrl, 
         {
