@@ -15,9 +15,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import CImage from '../../assets/img/chicago.jpg';
-import CFoodImage from '../../assets/img/chicago-pizza.jpg';
-import CHotelImage from '../../assets/img/chicago-hotel.jpg';
 import Header from "./Header";
 import fetch from "cross-fetch";
 import {config} from "../Constants";
@@ -30,8 +27,9 @@ class Explore extends React.Component {
             city: new URLSearchParams(this.props.location.search).get("city"),
             isLoaded: false,
             placeData: [],
-            thingsToDoData: [],
-            restaurantData: []
+            activityData: [],
+            restaurantData: [],
+            hotelData: []
         };
     }
 
@@ -46,8 +44,9 @@ class Explore extends React.Component {
                this.setState({
                    isLoaded: true,
                    placeData: data,
-                   thingsToDoData: data.thingsToDo,
-                   restaurantData: data.restaurant
+                   activityData: data.activity,
+                   restaurantData: data.restaurant,
+                   hotelData: data.hotel
                });
             })
             .catch((error) => {
@@ -55,71 +54,6 @@ class Explore extends React.Component {
                 alert(error)
             });
     }
-
-    thingsToDoData = [
-        {
-            img: "",
-            title: 'Image',
-            description: 'This will be a short description',
-            cols: 2,
-            url: "Link to external site"
-        },
-        {
-            img: CImage,
-            title: 'Image',
-            description: 'This will be a short description',
-            cols: 1,
-            url: "Link to external site"
-        },
-        {
-            img: CImage,
-            title: 'Image',
-            description: 'This will be a short description',
-            cols: 1,
-            url: "Link to external site"
-        },
-        {
-            img: CImage,
-            title: 'Image',
-            description: 'This will be a short description',
-            cols: 1,
-            url: "Link to external site"
-        },
-        {
-            img: CImage,
-            title: 'Image',
-            description: 'This will be a short description',
-            cols: 1,
-            url: "Link to external site"
-        },
-    ];
-
-    hotelData = [
-        {
-            img: CHotelImage,
-            title: 'Image',
-            description: 'author',
-            url: "Link to external site"
-        },
-        {
-            img: CHotelImage,
-            title: 'Image',
-            description: 'author',
-            url: "Link to external site"
-        },
-        {
-            img: CHotelImage,
-            title: 'Image',
-            description: 'author',
-            url: "Link to external site"
-        },
-        {
-            img: CHotelImage,
-            title: 'Image',
-            description: 'author',
-            url: "Link to external site"
-        },
-    ];
 
     //Styles
     useStyles = makeStyles((theme) => ({
@@ -150,7 +84,7 @@ class Explore extends React.Component {
     classes = this.useStyles;
 
     render() {
-        const { city, isLoaded, restaurantData } = this.state;
+        const { city, isLoaded, placeData, activityData, restaurantData, hotelData } = this.state;
         return (
             <div>
                 {/*Top Bar*/}
@@ -159,19 +93,12 @@ class Explore extends React.Component {
                 {/*Place Name*/}
                 <Typography className={this.classes.placeTitle} variant="h1" component="h2" gutterBottom
                             align="center">
-                    {this.state.city}
+                    {placeData.name}
                 </Typography>
 
                 {/*Short Place Description*/}
                 <Typography variant="body1" gutterBottom align={"center"}>
-                    Chicago, on Lake Michigan in Illinois, is among the largest cities in the U.S. Famed for its
-                    bold
-                    architecture, it has a skyline punctuated by skyscrapers such as the iconic John Hancock Center,
-                    1,451-ft. Willis Tower (formerly the Sears Tower) and the neo-Gothic Tribune Tower. The city is
-                    also
-                    renowned for its museums, including the Art Institute of Chicago with its noted Impressionist
-                    and
-                    Post-Impressionist works.
+                    {placeData.description}
                 </Typography>
                 <Divider variant="middle"/>
 
@@ -181,15 +108,14 @@ class Explore extends React.Component {
                         <GridListTile key="Subheader" cols={3} style={{height: 'auto'}}>
                             <ListSubheader component="div">Things to Do</ListSubheader>
                         </GridListTile>
-                        {this.thingsToDoData.map((tile) => (
-                            <GridListTile key={tile.img} cols={tile.cols || 1}>
-                                <img src={tile.img} alt={tile.title}/>
+                        {activityData.map((tile) => (
+                            <GridListTile key={tile.imageURL} cols={tile.columns || 1}>
+                                <img src={tile.imageURL} alt={tile.name}/>
                                 <GridListTileBar
-                                    title={tile.title}
+                                    title={tile.name}
                                     subtitle={<span>{tile.description}</span>}
                                     actionIcon={
-                                        <IconButton aria-label={`info about ${tile.title}`}
-                                                    className={this.classes.icon}>
+                                        <IconButton aria-label={`info about ${tile.name}`} className={this.classes.icon} href={tile.websiteURL} target="_blank">
                                             <InfoIcon/>
                                         </IconButton>
                                     }
@@ -198,7 +124,7 @@ class Explore extends React.Component {
                         ))}
                     </GridList>
                 </div>
-                <br/><br/><br/><br/>
+                <br/><br/><br/>
                 <Divider variant="middle"/>
 
                 {/*Restaurants*/}
@@ -239,7 +165,7 @@ class Explore extends React.Component {
                         ))}
                     </Grid>
                 </div>
-                <br/><br/><br/><br/>
+                <br/><br/><br/>
                 <Divider variant="middle"/>
 
                 {/*Hotels*/}
@@ -248,15 +174,14 @@ class Explore extends React.Component {
                         <GridListTile key="Subheader" cols={2} style={{height: 'auto'}}>
                             <ListSubheader component="div">Hotels</ListSubheader>
                         </GridListTile>
-                        {this.hotelData.map((tile) => (
-                            <GridListTile key={tile.img}>
-                                <img src={tile.img} alt={tile.title}/>
+                        {hotelData.map((tile) => (
+                            <GridListTile key={tile.imageURL}>
+                                <img src={tile.imageURL} alt={tile.name}/>
                                 <GridListTileBar
-                                    title={tile.title}
+                                    title={tile.name}
                                     subtitle={<span>{tile.description}</span>}
                                     actionIcon={
-                                        <IconButton aria-label={`info about ${tile.title}`}
-                                                    className={this.classes.icon}>
+                                        <IconButton aria-label={`info about ${tile.name}`} className={this.classes.icon} target="_blank" href={tile.websiteURL}>
                                             <InfoIcon/>
                                         </IconButton>
                                     }
@@ -265,29 +190,6 @@ class Explore extends React.Component {
                         ))}
                     </GridList>
                 </div>
-                {/*Flights*/}
-                {/*<div className={this.classes.gridRoot}>*/}
-                {/*    <GridList cellHeight={300} className={this.classes.gridList}>*/}
-                {/*        <GridListTile key="Subheader" cols={2} style={{height: 'auto'}}>*/}
-                {/*            <ListSubheader component="div">Things to Do</ListSubheader>*/}
-                {/*        </GridListTile>*/}
-                {/*        {this.tileData.map((tile) => (*/}
-                {/*            <GridListTile key={tile.img}>*/}
-                {/*                <img src={tile.img} alt={tile.title}/>*/}
-                {/*                <GridListTileBar*/}
-                {/*                    title={tile.title}*/}
-                {/*                    subtitle={<span>{tile.description}</span>}*/}
-                {/*                    actionIcon={*/}
-                {/*                        <IconButton aria-label={`info about ${tile.title}`}*/}
-                {/*                                    className={this.classes.icon}>*/}
-                {/*                            <InfoIcon/>*/}
-                {/*                        </IconButton>*/}
-                {/*                    }*/}
-                {/*                />*/}
-                {/*            </GridListTile>*/}
-                {/*        ))}*/}
-                {/*    </GridList>*/}
-                {/*</div>*/}
             </div>
         );
     };

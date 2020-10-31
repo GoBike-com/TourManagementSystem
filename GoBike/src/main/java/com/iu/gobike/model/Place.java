@@ -39,11 +39,20 @@ public class Place implements Serializable {
     private String description;
 
     @OneToMany(mappedBy="place")
+    @JsonManagedReference
     private List<Image> image;
 
     @OneToMany(mappedBy = "place")
     @JsonManagedReference
     private List<Restaurant> restaurant;
+
+    @OneToMany(mappedBy = "place")
+    @JsonManagedReference
+    private List<Activity> activity;
+
+    @OneToMany(mappedBy = "place")
+    @JsonManagedReference
+    private List<Hotel> hotel;
 
     @Column(name = "ratings")
     private Integer ratings;

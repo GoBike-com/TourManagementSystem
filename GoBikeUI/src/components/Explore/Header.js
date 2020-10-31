@@ -37,23 +37,26 @@ class Header extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
         //TODO: Change to proper "add to itinerary call"
-        const targetUrl = config.API_URL + "/user/logout";
 
-        fetch(targetUrl,
-            {
-                method: 'get',
-                credentials: 'include',
-                headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-            }
-        ).then(
-            response => {
-                if (response.status == "200") {
-                    alert("Added to itinerary!")
-                }
-            })
-            .catch(error => {
-                console.error('There was an error!', error);
-            });
+        // const targetUrl = config.API_URL + "/user/logout";
+        //
+        // fetch(targetUrl,
+        //     {
+        //         method: 'get',
+        //         credentials: 'include',
+        //         headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+        //     }
+        // ).then(
+        //     response => {
+        //         if (response.status == "200") {
+        //             alert("Added to itinerary!")
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error('There was an error!', error);
+        //     });
+        alert("Added to itinerary!")
+        window.location.href = `http://localhost:3000/travel`
     };
 
     render() {
