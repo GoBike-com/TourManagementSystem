@@ -59,7 +59,7 @@ export default function Asynchronous() {
             onChange={(event, value, reason ) => {
                 if (value !== null) {
                     //they hit enter or they clicked on auto fill. Go to selected response.
-                    window.location.href = `http://localhost:3000/explore`;
+                    window.location.href = `http://localhost:3000/explore?city=` + value;
                 }
             }}
             onInputChange={(event, value, reason) => {

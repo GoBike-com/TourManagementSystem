@@ -2,11 +2,7 @@ package com.iu.gobike.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
 import javax.persistence.*;
-import java.sql.Blob;
 import java.time.Instant;
 
 @Getter
@@ -18,18 +14,27 @@ import java.time.Instant;
 @Builder
 @Entity
 @Table
-public class Image {
+public class Hotel {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "IMAGE")
-    private Blob image;
+    @Column(name = "NAME")
+    private String name;
 
-    @JoinColumn(name = "PLACE_ID")
+    @Column(name = "DESCRIPTION")
+    private String description;
+
+    @Column(name = "WEBSITE_URL")
+    private String websiteURL;
+
+    @Column(name = "IMAGE_URL")
+    private String imageURL;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
+    @JoinColumn(name = "PLACE_ID")
     private Place place;
 
     @Column(name="CREATED_DATE", updatable = false)
