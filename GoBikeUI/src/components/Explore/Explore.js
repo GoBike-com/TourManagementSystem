@@ -23,11 +23,15 @@ import Header from "./Header";
 class Explore extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            city: new URLSearchParams(this.props.location.search).get("city")
+        };
     }
 
     thingsToDoData = [
         {
-            img: CImage,
+            img: "",
             title: 'Image',
             description: 'This will be a short description',
             cols: 2,
@@ -177,7 +181,7 @@ class Explore extends React.Component {
 
                 {/*Place Name*/}
                 <Typography className={this.classes.placeTitle} variant="h1" component="h2" gutterBottom align="center">
-                    Chicago
+                    {this.state.city}
                 </Typography>
 
                 {/*Short Place Description*/}
