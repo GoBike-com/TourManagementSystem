@@ -19,6 +19,9 @@ import Itinerary from './components/Dashboard/Itinerary';
 import Travel from './components/Dashboard/Travel';
 import Review from './components/Dashboard/Review';
 import Chat from './components/Dashboard/Chat';
+import Searchbox from "./components/Explore/Searchbox";
+import Explore from './components/Explore/Explore';
+import GobikeMap from './components/Itinerary/GobikeMap';
 
 // pages
 
@@ -43,8 +46,9 @@ ReactDOM.render(
         <Route path="/travel" exact component={Travel} />
         <Route path="/review" exact component={Review} />
         <Route path="/chat" exact component={Chat} />
-
-
+  		<Route path="/explore" exact component={Explore} />
+        <Route path="/map" exact component={GobikeMap} />
+		<Route path="/searchbox" exact component={Searchbox} />
       </Switch>
     </Router>,
   document.getElementById("root")

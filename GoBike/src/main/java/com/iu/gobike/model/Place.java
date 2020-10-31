@@ -1,9 +1,10 @@
 package com.iu.gobike.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Blob;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
 
@@ -16,7 +17,9 @@ import java.util.List;
 @Builder
 @Entity
 @Table
-public class Place {
+public class Place implements Serializable {
+
+    private static final long serialversionUID = 1l;
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -33,10 +36,23 @@ public class Place {
 
     @Lob
     @Column(name = "DESCRIPTION", columnDefinition="BLOB")
-    private Blob description;
+    private String description;
 
     @OneToMany(mappedBy="place")
+    @JsonManagedReference
     private List<Image> image;
+
+    @OneToMany(mappedBy = "place")
+    @JsonManagedReference
+    private List<Restaurant> restaurant;
+
+    @OneToMany(mappedBy = "place")
+    @JsonManagedReference
+    private List<Activity> activity;
+
+    @OneToMany(mappedBy = "place")
+    @JsonManagedReference
+    private List<Hotel> hotel;
 
     @Column(name = "ratings")
     private Integer ratings;
