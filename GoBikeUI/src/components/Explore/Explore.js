@@ -19,15 +19,46 @@ import CImage from '../../assets/img/chicago.jpg';
 import CFoodImage from '../../assets/img/chicago-pizza.jpg';
 import CHotelImage from '../../assets/img/chicago-hotel.jpg';
 import Header from "./Header";
+import fetch from "cross-fetch";
+import {config} from "../Constants";
 
 class Explore extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            city: new URLSearchParams(this.props.location.search).get("city"),
+            isLoaded: false,
+            placeData: [],
+            thingsToDoData: [],
+            restaurantData: []
+        };
+    }
+
+    componentDidMount() {
+        const targetUrl = config.API_URL + "/place/details/" + this.state.city;
+        fetch(targetUrl, {
+            method:'get',
+            headers: {Accept: 'application/json'},
+        })
+            .then((response) => response.json())
+            .then((data) => {
+               this.setState({
+                   isLoaded: true,
+                   placeData: data,
+                   thingsToDoData: data.thingsToDo,
+                   restaurantData: data.restaurant
+               });
+            })
+            .catch((error) => {
+                console.log(error);
+                alert(error)
+            });
     }
 
     thingsToDoData = [
         {
-            img: CImage,
+            img: "",
             title: 'Image',
             description: 'This will be a short description',
             cols: 2,
@@ -59,57 +90,6 @@ class Explore extends React.Component {
             title: 'Image',
             description: 'This will be a short description',
             cols: 1,
-            url: "Link to external site"
-        },
-    ];
-
-    restaurantData = [
-        {
-            img: CFoodImage,
-            title: 'Image',
-            description: 'This will be a short description',
-            url: "Link to external site"
-        },
-        {
-            img: CFoodImage,
-            title: 'Image',
-            description: 'This will be a short description',
-            url: "Link to external site"
-        },
-        {
-            img: CFoodImage,
-            title: 'Image',
-            description: 'This will be a short description',
-            url: "Link to external site"
-        },
-        {
-            img: CFoodImage,
-            title: 'Image',
-            description: 'This will be a short description',
-            url: "Link to external site"
-        },
-        {
-            img: CFoodImage,
-            title: 'Image',
-            description: 'This will be a short description',
-            url: "Link to external site"
-        },
-        {
-            img: CFoodImage,
-            title: 'Image',
-            description: 'This will be a short description',
-            url: "Link to external site"
-        },
-        {
-            img: CFoodImage,
-            title: 'Image',
-            description: 'This will be a short description',
-            url: "Link to external site"
-        },
-        {
-            img: CFoodImage,
-            title: 'Image',
-            description: 'This will be a short description',
             url: "Link to external site"
         },
     ];
@@ -170,22 +150,27 @@ class Explore extends React.Component {
     classes = this.useStyles;
 
     render() {
+        const { city, isLoaded, restaurantData } = this.state;
         return (
             <div>
                 {/*Top Bar*/}
                 <Header/>
 
                 {/*Place Name*/}
-                <Typography className={this.classes.placeTitle} variant="h1" component="h2" gutterBottom align="center">
-                    Chicago
+                <Typography className={this.classes.placeTitle} variant="h1" component="h2" gutterBottom
+                            align="center">
+                    {this.state.city}
                 </Typography>
 
                 {/*Short Place Description*/}
                 <Typography variant="body1" gutterBottom align={"center"}>
-                    Chicago, on Lake Michigan in Illinois, is among the largest cities in the U.S. Famed for its bold
+                    Chicago, on Lake Michigan in Illinois, is among the largest cities in the U.S. Famed for its
+                    bold
                     architecture, it has a skyline punctuated by skyscrapers such as the iconic John Hancock Center,
-                    1,451-ft. Willis Tower (formerly the Sears Tower) and the neo-Gothic Tribune Tower. The city is also
-                    renowned for its museums, including the Art Institute of Chicago with its noted Impressionist and
+                    1,451-ft. Willis Tower (formerly the Sears Tower) and the neo-Gothic Tribune Tower. The city is
+                    also
+                    renowned for its museums, including the Art Institute of Chicago with its noted Impressionist
+                    and
                     Post-Impressionist works.
                 </Typography>
                 <Divider variant="middle"/>
@@ -224,20 +209,20 @@ class Explore extends React.Component {
                         </GridListTile>
                     </GridList>
                     <Grid container spacing={5}>
-                        {this.restaurantData.map((tile) => (
+                        {restaurantData.map((tile) => (
                             <Grid item md={3}>
                                 <Card className={this.classes.root}>
-                                    <CardActionArea>
+                                    <CardActionArea href={tile.websiteURL} target="_blank">
                                         <CardMedia
                                             component="img"
                                             className={this.classes.media}
                                             height="140"
-                                            image={tile.img}
-                                            title="Contemplative Reptile"
+                                            image={tile.imageURL}
+                                            title={tile.name}
                                         />
                                         <CardContent>
                                             <Typography gutterBottom variant="h5" component="h2">
-                                                Lizard
+                                                {tile.name}
                                             </Typography>
                                             <Typography variant="body2" color="textSecondary" component="p">
                                                 {tile.description}
@@ -245,7 +230,7 @@ class Explore extends React.Component {
                                         </CardContent>
                                     </CardActionArea>
                                     <CardActions>
-                                        <Button size="small" color="primary">
+                                        <Button size="small" color="primary" href={tile.websiteURL} target="_blank">
                                             Learn More
                                         </Button>
                                     </CardActions>
