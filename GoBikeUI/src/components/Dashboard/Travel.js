@@ -51,6 +51,7 @@ class Travel extends React.Component {
     this.handletravellerclass = this.handletravellerclass.bind(this);
     this.handleAirportSearch = this.handleAirportSearch.bind(this);
     this.handleStopClass = this.handleStopClass.bind(this)
+    this.handleFlightSearch = this.handleFlightSearch.bind(this)
 
     // this.handleChangeLeavingFrom2 = this.handleChangeLeavingFrom2.bind(this);
     // this.handleChangeLeavingFrom1 = this.handleChangeLeavingFrom1.bind(this);
@@ -210,7 +211,7 @@ class Travel extends React.Component {
       });
   };
 
-  handleSearch = (event) => {
+  handleFlightSearch = (event) => {
     event.preventDefault();
     this.state.searchResult = true;
 
@@ -221,17 +222,23 @@ class Travel extends React.Component {
     console.log("no of travellers " + this.state.countoftravellers);
     console.log("traveller class " + this.state.travellerclass);
 
-    var targetUrl = "https:// URL name ";
+    var targetUrl = config.API_URL + "/travel/search/flight";
+    // fetch(targetUrl,{
+    //   method: "POST",
+    //    credentials: "include",
+    //    headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+    //  })
     const requestOptions = {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        departurecity: this.state.departurecity,
-        arrivalcity: this.state.arrivalcity,
-        depaturedate:this.state.depatureDate,
-        arrivaldate: this.state.arrivaldDate,
-        countoftravellers: this.state.countoftravellers,
+        source: this.state.departurecity[0].iataCode,
+        destination: this.state.arrivalcity[0].iataCode,
+        travelDate:this.state.depatureDate,
+        returnDate: this.state.arrivaldDate,
+        nonStop: this.state.stop === "Non-stop",
+        adults: this.state.countoftravellers,
         travellerclass: this.state.travellerclass,
       }),
     };
@@ -270,11 +277,13 @@ class Travel extends React.Component {
       .then((res) => {
         console.log(res)
         const options = res.data.map((i) => ({
-          name: i.name
+          name: i.name,
+          iataCode: i.iataCode
         }));
 
        this.setState({ options: options,
-                      isLoading : true, });
+                      isLoading : true,
+                    });
         // setIsLoading(false);
       });
   };
@@ -292,8 +301,6 @@ class Travel extends React.Component {
   render() {
     return (
       <Grid>
-        {/* {console.log(this.state.depatureDate)}
-        {console.log(this.state.selectedDate)} */}
         <CssBaseline />
         <div className={this.classes.root}>
           <AppBar position="static" style={{ backgroundColor: "indigo" }}>
@@ -356,17 +363,18 @@ class Travel extends React.Component {
                     id="source"
                     labelKey="name"
                     minLength={3}
+                    onChange={(selected) => this.setState({departurecity : selected})}
                     //  isLoading={this.state.isLoading}
                     onSearch={this.handleAirportSearch}
                     // onChange={setSingleSelections}
                     options={this.state.options}
                     placeholder="Enter source"
                     // selected={singleSelections}
-                    renderMenuItemChildren={(option, props) => (
-                    <React.Fragment>
-                      <span>{option.name}</span>
-                    </React.Fragment>
-                  )}
+                  //  renderMenuItemChildren={(option, props) => (
+                  //   <React.Fragment>
+                  //     <span>{option.name}</span>
+                  //   </React.Fragment>
+                  // )}
                  />
                   {/* <Autocomplete
                     id="combo-box-demo"
@@ -408,6 +416,7 @@ class Travel extends React.Component {
                     id="destination"
                     labelKey="name"
                     minLength={3}
+                    onChange={(selected) => this.setState({arrivalcity : selected})}
                     //  isLoading={this.state.isLoading}
                     onSearch={this.handleAirportSearch}
                     // onChange={setSingleSelections}
@@ -582,14 +591,14 @@ class Travel extends React.Component {
                   style={{
                     backgroundColor: "indigo",
                     width: "15%",
-                    marginTop: "35px",
-                    marginLeft: "15px",
-                    height: "55px",
-                    fontSize: "18px",
+                    // marginTop: "35px",
+                    // marginLeft: "15px",
+                    // height: "55px",
+                    // fontSize: "18px",
                     fontFamily: "Arial",
                     color: "white",
                   }}
-                  onClick={this.handleSearch}
+                  onClick={this.handleFlightSearch}
                 >
                   Search
                 </Button>

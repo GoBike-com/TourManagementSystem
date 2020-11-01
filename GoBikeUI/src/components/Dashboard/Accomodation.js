@@ -15,8 +15,7 @@ import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Search from './SearchComponent';
 import { config } from '../Constants'
-
-
+import Accomodations from '../Accomodations/Accomondations';
 
 class Accomodation extends React.Component {
   constructor(props) {
@@ -185,6 +184,7 @@ class Accomodation extends React.Component {
           <Panel />
         </Grid>
         <Grid item xs={10} >
+          <Accomodations/>
         </Grid>
       </Grid>
     </Grid>
