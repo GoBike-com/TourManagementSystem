@@ -1,24 +1,17 @@
 import React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import Panel from "./Panel";
-import { Grid, Paper } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Link , withRouter } from "react-router-dom";
 import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Search from './SearchComponent';
 import ChatApp from '../Chat/ChatApp';
 import Store from '../Chat/Store';
 import { config } from '../Constants'
-
-
 
 
 class Chat extends React.Component {
