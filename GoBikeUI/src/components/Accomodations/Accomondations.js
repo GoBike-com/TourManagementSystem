@@ -1,7 +1,8 @@
 import React from 'react';
 import 'date-fns';
 import { makeStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
+import Tab from '@material-ui/core/Tab';
+import HouseIcon from '@material-ui/icons/House';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
@@ -74,109 +75,109 @@ export default function Accomodation() {
     setAge1(event.target.value);
   };
 
+  function a11yProps(index) {
+    return {
+      id: `scrollable-force-tab-${index}`,
+      'aria-controls': `scrollable-force-tabpanel-${index}`,
+    };
+  }
+
 
   return (
-
-                        <Grid container className={classes.mainbody} spacing={4}>
-                            <Grid item xs={12} sm={4}>
-                                <InputLabel id="demo-simple-select-outlined-label">Going From</InputLabel>
-                                    <Select className={classes.margin}
-                                    value={age}
-                                    onChange={handleChange}
-                                    >
-                                    <MenuItem value="">
-                                        Places
-                                    </MenuItem>
-                                    <MenuItem value={10}>Chicago</MenuItem>
-                                    <MenuItem value={20}>Colorado</MenuItem>
-                                    <MenuItem value={30}>Bloomington</MenuItem>
-                                    </Select>
-                            </Grid>
-                            <Grid item xs={12} sm={4}>
-                                <InputLabel>Going To</InputLabel>
-                                    <Select className={classes.margin}
-                                    value={age1}
-                                    onChange={handleChange1}
-                                    >
-                                    <MenuItem value="">
-                                        Places
-                                    </MenuItem>
-                                    <MenuItem value={10}>Chicago</MenuItem>
-                                    <MenuItem value={20}>Colorado</MenuItem>
-                                    <MenuItem value={30}>Bloomington</MenuItem>
-                                    </Select>
-                            </Grid> 
-                            <Grid item xs={12} sm={4}>
-                                <InputLabel>Number of Travellers</InputLabel>
-                                    <Select className={classes.margin}
-                                    value={age1}
-                                    onChange={handleChange1}
-                                    >
-                                    <MenuItem value="">
-                                    Number of Travellers
-                                    </MenuItem>
-                                    <MenuItem value={10}>1</MenuItem>
-                                    <MenuItem value={20}>2</MenuItem>
-                                    <MenuItem value={30}>3</MenuItem>
-                                    </Select>
-                            </Grid> 
-                            <Grid item xs={12} sm={4}>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <KeyboardDatePicker
-                                            disableToolbar
-                                            variant="inline"
-                                            format="MM/dd/yyyy"
-                                            margin="normal"
-                                            id="date-picker-inline"
-                                            label="Check-in"
-                                            font="Roboto ,Helvetica , Arial, sans-serif"
-                                            value={selectedDate}
-                                            onChange={handleDateChange}
-                                            KeyboardButtonProps={{
-                                                'aria-label': 'change date',
-                                            }}
-                                            />
-                                </MuiPickersUtilsProvider>
-                            </Grid>
-                            <Grid item xs={12} sm={4}>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <KeyboardDatePicker
-                                            disableToolbar
-                                            variant="inline"
-                                            format="MM/dd/yyyy"
-                                            margin="normal"
-                                            id="date-picker-inline"
-                                            label="Check-out"
-                                            value={selectedDate}
-                                            onChange={handleDateChange}
-                                            KeyboardButtonProps={{
-                                                'aria-label': 'change date',
-                                            }}
-                                            />
-                                </MuiPickersUtilsProvider>
-                            </Grid>
-                            <Grid item xs={12} sm={4}>
-                                <InputLabel>Travelling for</InputLabel>
-                                    <Select className={classes.margin}
-                                    value={age1}
-                                    onChange={handleChange1}
-                                    >
-                                    <MenuItem value="">
-                                    Travelling for
-                                    </MenuItem>
-                                    <MenuItem value={10}>1</MenuItem>
-                                    <MenuItem value={20}>2</MenuItem>
-                                    <MenuItem value={30}>3</MenuItem>
-                                    </Select>
-                            </Grid> 
-                           
-                            <Grid item xs={12}>
-                                <Button className={classes.btn} color="primary" size="large" variant="contained">Search
-                                </Button>
-                            </Grid> 
-                           
-                            
-                            
-                        </Grid>
+    <Grid container className={classes.mainbody} spacing={4}>
+      <Grid item xs={12}>
+          <Tab label="Stays" icon={<HouseIcon className={classes.tabs} />} {...a11yProps(0)} />
+      </Grid> 
+      <Grid item xs={12} sm={4}>
+          <InputLabel id="demo-simple-select-outlined-label">Hotel/Place</InputLabel>
+              <Select className={classes.margin}
+              value={age}
+              onChange={handleChange}
+              >
+              </Select>
+      </Grid>
+        {/* <Grid item xs={12} sm={4}>
+            <InputLabel>Going To</InputLabel>
+                <Select className={classes.margin}
+                value={age1}
+                onChange={handleChange1}
+                >
+                <MenuItem value="">
+                    Places
+                </MenuItem>
+                <MenuItem value={10}>Chicago</MenuItem>
+                <MenuItem value={20}>Colorado</MenuItem>
+                <MenuItem value={30}>Bloomington</MenuItem>
+                </Select>
+        </Grid>  */}
+        <Grid item xs={12} sm={4}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        format="MM/dd/yyyy"
+                        margin="normal"
+                        id="date-picker-inline"
+                        label="Check-in"
+                        font="Roboto ,Helvetica , Arial, sans-serif"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
+                        />
+            </MuiPickersUtilsProvider>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        format="MM/dd/yyyy"
+                        margin="normal"
+                        id="date-picker-inline"
+                        label="Check-out"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
+                        />
+            </MuiPickersUtilsProvider>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+            <InputLabel>Number of person</InputLabel>
+                <Select className={classes.margin}
+                value={age1}
+                onChange={handleChange1}
+                >
+                <MenuItem value="">
+                Number of Person
+                </MenuItem>
+                <MenuItem value={10}>1</MenuItem>
+                <MenuItem value={20}>2</MenuItem>
+                <MenuItem value={30}>3</MenuItem>
+                </Select>
+        </Grid> 
+        {/* <Grid item xs={12} sm={4}>
+            <InputLabel>Travelling for</InputLabel>
+                <Select className={classes.margin}
+                value={age1}
+                onChange={handleChange1}
+                >
+                <MenuItem value="">
+                Travelling for
+                </MenuItem>
+                <MenuItem value={10}>1</MenuItem>
+                <MenuItem value={20}>2</MenuItem>
+                <MenuItem value={30}>3</MenuItem>
+                </Select>
+        </Grid>  */}
+        
+        <Grid item xs={12}>
+            <Button className={classes.btn} color="primary" size="large" variant="contained">Search
+            </Button>
+        </Grid> 
+    </Grid>
   );
 }
