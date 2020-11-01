@@ -1,7 +1,6 @@
 import React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
@@ -32,6 +31,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import moment from "moment";
 import { config } from '../Constants'
 
+
 class Travel extends React.Component {
   constructor(props) {
     super(props);
@@ -45,7 +45,6 @@ class Travel extends React.Component {
       arrivalcity: "",
       countoftravellers: "",
       travellerclass: "",
-      stop:""
     };
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -57,9 +56,6 @@ class Travel extends React.Component {
     this.handleChangeArrivalAt = this.handleChangeArrivalAt.bind(this);
     this.handleCountoftravellers = this.handleCountoftravellers.bind(this);
     this.handletravellerclass = this.handletravellerclass.bind(this);
-    this.handleAirportSearch = this.handleAirportSearch.bind(this);
-    this.handleStopClass = this.handleStopClass.bind(this)
-
     // this.handleChangeLeavingFrom2 = this.handleChangeLeavingFrom2.bind(this);
     // this.handleChangeLeavingFrom1 = this.handleChangeLeavingFrom1.bind(this);
   }
@@ -67,8 +63,6 @@ class Travel extends React.Component {
   countoftravellers = ["1", "2", "3", "4"];
 
   travellerclass = ["Economy", "Premium Economy", "Business", "First"];
-
-  stop = ["Non-stop", "Multiple"];
 
   cities = ["Chicago", "Bloomington"];
 
@@ -159,13 +153,6 @@ class Travel extends React.Component {
     this.setState({ travellerclass: value });
   }
 
-  
-  handleStopClass = (event,value) => {
-    event.preventDefault();
-    console.log(value);
-    this.setState({ stop: value });
-  }
-
   handleDateChange = (date) => {
     const arrivalDate = moment(date).format("YYYY-MM-DD");
     this.setState({ selectedDate: arrivalDate });
@@ -186,37 +173,47 @@ class Travel extends React.Component {
 
   classes = this.useStyles;
 
+  componentDidMount() {
+    const { history } = this.props;
+     window.addEventListener("popstate", () => {
+     history.go(1);
+   });
+   }
+   
   handleSubmit = (event) => {
-    event.preventDefault();
-    var targetUrl = "http://localhost:8080/traveller/logout";
-
-    fetch(targetUrl, {
-      method: "post",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((response) => {
-        // check for error response
-        if (response.status == "200") {
-          this.state.isLoggedOut = "True";
-          if (this.state.isLoggedOut == "True") {
-            console.log("redirecting to home page.....");
-            this.props.history.push("/traveller/signin");
-            // <Redirect to={'/traveller/success'} />
-          }
-          // get error message from body or default to response statusText
-        }
-
-        // this.setState({ totalReactPackages: data.total })
-      })
-      .catch((error) => {
-        // this.setState({ errorMessage: error.toString() });
-        console.error("There was an error!", error);
-      });
-  };
+      event.preventDefault();
+      var targetUrl = config.API_URL + "/user/logout";
+  
+      fetch(targetUrl, 
+        {
+          method:'get',
+          credentials: 'include',
+          headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+      }
+      ).then(
+       response => {
+              // check for error response
+              if (response.status == "200") {
+                  this.state.isLoggedOut = "True";
+                  if(this.state.isLoggedOut == "True"){
+                      this.state.isLoggedOut = "False";
+                      console.log("redirecting to home page.....");
+                      console.log(this.state.isLoggedOut);
+                      localStorage.clear();
+                      this.props.history.push('/traveller/signin')
+                      // <Redirect to={'/traveller/success'} />
+                  }
+                  // get error message from body or default to response statusText
+                  
+              }
+  
+              // this.setState({ totalReactPackages: data.total })
+          })
+          .catch(error => {
+              // this.setState({ errorMessage: error.toString() });
+              console.error('There was an error!', error);
+          });
+    };
 
   handleSearch = (event) => {
     event.preventDefault();
@@ -262,28 +259,6 @@ class Travel extends React.Component {
       .catch((error) => {
         // this.setState({ errorMessage: error.toString() });
         console.error("There was an error!", error);
-      });
-  };
-
-  handleAirportSearch = (query) => {
-    //setIsLoading(true);
-    console.log(query)
-    var targetUrl = config.API_URL + "/travel/airport/search/"+query;
-    fetch(targetUrl,{
-      method: "GET",
-       credentials: "include",
-       headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-     })
-     .then(res => res.json())
-      .then((res) => {
-        console.log(res)
-        const options = res.data.map((i) => ({
-          name: i.name
-        }));
-
-       this.setState({ options: options,
-                      isLoading : true, });
-        // setIsLoading(false);
       });
   };
 
@@ -360,23 +335,7 @@ class Travel extends React.Component {
                 {/* // style={{ backgroundColor: "lightyellow" }}> */}
                 <div style={{ display: "inline-block" }}>
                   <LocationOnIcon />
-                  <AsyncTypeahead
-                    id="source"
-                    labelKey="name"
-                    minLength={3}
-                    //  isLoading={this.state.isLoading}
-                    onSearch={this.handleAirportSearch}
-                    // onChange={setSingleSelections}
-                    options={this.state.options}
-                    placeholder="Enter source"
-                    // selected={singleSelections}
-                    renderMenuItemChildren={(option, props) => (
-                    <React.Fragment>
-                      <span>{option.name}</span>
-                    </React.Fragment>
-                  )}
-                 />
-                  {/* <Autocomplete
+                  <Autocomplete
                     id="combo-box-demo"
                     options={this.cities}
                     // getOptionLabel={(option) => option.city}
@@ -407,28 +366,12 @@ class Travel extends React.Component {
                         // size="medium"
                       />
                     )}
-                  /> */}
+                  />
                 </div>
 
                 <div style={{ display: "inline-block" }}>
                   <LocationOnIcon />
-                  <AsyncTypeahead
-                    id="destination"
-                    labelKey="name"
-                    minLength={3}
-                    //  isLoading={this.state.isLoading}
-                    onSearch={this.handleAirportSearch}
-                    // onChange={setSingleSelections}
-                    options={this.state.options}
-                    placeholder="Enter source"
-                    // selected={singleSelections}
-                    renderMenuItemChildren={(option, props) => (
-                    <React.Fragment>
-                      <span>{option.name}</span>
-                    </React.Fragment>
-                  )}
-                />
-                  {/* <Autocomplete
+                  <Autocomplete
                     id="combo-box-demo2"
                     options={this.cities}
                     // getOptionLabel={(option) => option.city}
@@ -455,16 +398,16 @@ class Travel extends React.Component {
                         size="medium"
                       />
                     )}
-                  /> */}
+                  />
                 </div>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
-                    // style={{
-                    //   marginLeft: "15px",
-                    //   height: "20px",
-                    //   width: "20%",
-                    //   marginTop: "45px",
-                    // }}
+                    style={{
+                      marginLeft: "15px",
+                      height: "20px",
+                      width: "20%",
+                      marginTop: "45px",
+                    }}
                     disableToolbar
                     variant="inline"
                     format="yyyy-MM-dd"
@@ -482,12 +425,12 @@ class Travel extends React.Component {
                 {this.state.onewayflag === true ? null : (
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
-                      // style={{
-                      //   marginLeft: "15px",
-                      //   marginTop: "45px",
-                      //   height: "20px",
-                      //   width: "20%",
-                      // }}
+                      style={{
+                        marginLeft: "15px",
+                        marginTop: "45px",
+                        height: "20px",
+                        width: "20%",
+                      }}
                       disableToolbar
                       variant="inline"
                       format="yyyy-MM-dd"
@@ -515,12 +458,12 @@ class Travel extends React.Component {
                       <TextField
                         {...params}
                         id="start"
-                        // style={{
-                        //   width: "200px",
-                        //   // marginTop: "5px",
-                        //   marginLeft: "10px",
-                        //   marginBottom: "10px",
-                        // }}
+                        style={{
+                          width: "200px",
+                          // marginTop: "5px",
+                          marginLeft: "10px",
+                          marginBottom: "10px",
+                        }}
                         // select
                         label="No. of passengers"
                         // value={value}
@@ -546,14 +489,14 @@ class Travel extends React.Component {
                       <TextField
                         {...params}
                         id="start"
-                        // style={{
-                        //   width: "200px",
-                        //   // marginTop: "5px",
-                        //   marginLeft: "10px",
-                        //   marginBottom: "10px",
-                        // }}
+                        style={{
+                          width: "200px",
+                          // marginTop: "5px",
+                          marginLeft: "10px",
+                          marginBottom: "10px",
+                        }}
                         // select
-                        label="class"
+                        label="Preferred class"
                         // value={value}
                         onChange={this.handleChange}
                         variant="outlined"
@@ -563,29 +506,6 @@ class Travel extends React.Component {
                     )}
                   />
                 </div>
-                <div style={{ display: "inline-block" }}>
-                  <Autocomplete
-                      id="combo-box-demo4"
-                      options={this.stop}
-                      // getOptionLabel={(option) => option.value}
-                      // style={{ width: "15%", display: "inline-block" }}
-                      autoSelect
-                      value={this.state.stop}
-                      onChange={this.handleStopClass}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          id="stop"
-                          label="stop"
-                          // value={value}
-                          onChange={this.handleChange}
-                          variant="outlined"
-                          color="primary"
-                          size="medium"
-                        />
-                      )}
-                    />
-                  </div>
                 <Button
                   style={{
                     backgroundColor: "indigo",

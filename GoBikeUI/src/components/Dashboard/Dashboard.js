@@ -91,6 +91,13 @@ class Dashboard extends React.Component {
   classes = this.useStyles;
 
   
+  componentDidMount() {
+    const { history } = this.props;
+     window.addEventListener("popstate", () => {
+     history.go(1);
+   });
+   }
+   
   handleSubmit = (event) => {
       event.preventDefault();
       var targetUrl = config.API_URL + "/user/logout";
@@ -107,7 +114,10 @@ class Dashboard extends React.Component {
               if (response.status == "200") {
                   this.state.isLoggedOut = "True";
                   if(this.state.isLoggedOut == "True"){
+                      this.state.isLoggedOut = "False";
                       console.log("redirecting to home page.....");
+                      console.log(this.state.isLoggedOut);
+                      localStorage.clear();
                       this.props.history.push('/traveller/signin')
                       // <Redirect to={'/traveller/success'} />
                   }

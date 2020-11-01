@@ -16,6 +16,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Search from './SearchComponent';
 import ChatApp from '../Chat/ChatApp';
 import Store from '../Chat/Store';
+import { config } from '../Constants'
+
 
 
 
@@ -92,13 +94,20 @@ class Chat extends React.Component {
   classes = this.useStyles;
 
   
+  componentDidMount() {
+    const { history } = this.props;
+     window.addEventListener("popstate", () => {
+     history.go(1);
+   });
+   }
+   
   handleSubmit = (event) => {
       event.preventDefault();
-      var targetUrl = "http://localhost:8080/traveller/logout";
+      var targetUrl = config.API_URL + "/user/logout";
   
       fetch(targetUrl, 
         {
-          method:'post',
+          method:'get',
           credentials: 'include',
           headers: {'Content-Type': 'application/json', Accept: 'application/json'},
       }
@@ -108,7 +117,10 @@ class Chat extends React.Component {
               if (response.status == "200") {
                   this.state.isLoggedOut = "True";
                   if(this.state.isLoggedOut == "True"){
+                      this.state.isLoggedOut = "False";
                       console.log("redirecting to home page.....");
+                      console.log(this.state.isLoggedOut);
+                      localStorage.clear();
                       this.props.history.push('/traveller/signin')
                       // <Redirect to={'/traveller/success'} />
                   }

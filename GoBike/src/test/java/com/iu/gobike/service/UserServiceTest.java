@@ -41,16 +41,16 @@ public class UserServiceTest {
 
     }
 
-    @Test
-    public void resetPassword() throws ResetPasswordException, InvalidKeySpecException, NoSuchAlgorithmException {
-        Mockito.when(userRepository.findByUserName(Mockito.anyString())).thenReturn(user);
-        request.setUserName("user");
-        String response = userService.resetPassword(request);
-        Assert.assertEquals(GoBikeConstant.SUCCESS, response);
-    }
+    // @Test
+    // public void resetPassword() throws ResetPasswordException, InvalidKeySpecException, NoSuchAlgorithmException {
+    //     Mockito.when(userRepository.findByUserName(Mockito.anyString())).thenReturn(user);
+    //     request.setUserName("user");
+    //     String response = userService.resetPassword(request);
+    //     Assert.assertEquals(GoBikeConstant.SUCCESS, response);
+    // }
 
-    @Test(expected = ResetPasswordException.class)
-    public void resetPassword_invalidRequest() throws ResetPasswordException, InvalidKeySpecException, NoSuchAlgorithmException {
-        userService.resetPassword(request);
-    }
+    // @Test(expected = ResetPasswordException.class)
+    // public void resetPassword_invalidRequest() throws ResetPasswordException, InvalidKeySpecException, NoSuchAlgorithmException {
+    //     userService.resetPassword(request);
+    // }
 }

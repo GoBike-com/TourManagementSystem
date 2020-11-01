@@ -42,19 +42,22 @@ class OTPVerifyform extends React.Component {
     if(this.state.userOTP === ""){
       return this.setState({isErr2 : true})
     }
-    var targetUrl = config.API_URL + "/user/otp/verify?otp=" + this.state.userOTP;
+    var targetUrl = config.API_URL + "/user/otp/verify";
     const requestOptions = {
-      method: "GET",
+      method: "POST",
       credentials: 'include',
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        otp: this.state.otp,
+      }),
     };
     fetch(targetUrl, requestOptions).then(response => response.json())
       .then(data => {
         // check for error response
         this.setState({isErr2:false});
         console.log(data)
-        console.log("dsfasd" + data.isValidOTP);
-        if (data.isValidOTP === true) {
+        console.log("dsfasd" + data.HAS_VALID_OTP);
+        if (data.HAS_VALID_OTP === true) {
           this.state.isValidOTP = "True";
           console.log("h1" + this.state.isValidOTP);
           console.log("h2" + window.sessionStorage.getItem("isRequestComingFromForgotPassword"))
