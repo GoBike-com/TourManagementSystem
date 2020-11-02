@@ -1,5 +1,6 @@
 package com.iu.gobike.model;
 
+import com.iu.gobike.enums.FlightType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,12 +21,11 @@ public class Flight {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "BOOKING_NUMBER")
-    private Long bookingNumber;
-
-    @OneToOne
+    @ManyToOne
     private Travel travel;
+
+    @Column(name = "TYPE")
+    private FlightType type;
 
     @Column(name = "TRAVEL_CLASS")
     private String travelClass;
