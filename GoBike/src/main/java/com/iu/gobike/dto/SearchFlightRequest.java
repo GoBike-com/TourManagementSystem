@@ -22,7 +22,7 @@ public class SearchFlightRequest {
     private String travelDate;
     private String returnDate;
     private int adults;
- //   @Enumerated
-    private TravelClass travelClass;
+    //@Enumerated
+    private String travelClass;
 
 }

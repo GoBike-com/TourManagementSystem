@@ -22,8 +22,8 @@ public class AmadeusHelper {
     public static List<FlightInfo> extractFlightDetails(SearchFlightAmadeusResponse amadeusResponse){
        List<Flight> details = amadeusResponse.getData();
        Dictionary dictionary = amadeusResponse.getDictionaries();
+        List<FlightInfo> list = new ArrayList<FlightInfo>();
        if(details!=null && dictionary!=null){
-           List<FlightInfo> list = new ArrayList<FlightInfo>();
           for(Flight flightDetails: details){
                List<FlightItinerary> itineraries = flightDetails.getItineraries();
                List<List<FlightInfo>> ino = itineraries.stream().map(itinerary -> {
@@ -35,9 +35,8 @@ public class AmadeusHelper {
                   return list;
                }).collect(Collectors.toList());
            }
-           return list;
        }
-       return null;
+       return list;
        }
 
     private static FlightInfo populateFlightDetails(Dictionary dictionary, Flight flightDetails, FlightItinerary itinerary, com.iu.gobike.amadeus.model.travel.Segment segment) {

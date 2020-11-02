@@ -59,7 +59,7 @@ class Travel extends React.Component {
 
   countoftravellers = ["1", "2", "3", "4"];
 
-  travellerclass = ["Economy", "Premium Economy", "Business", "First"];
+  travellerclass = ["ECONOMY", "PREMIUM_ECONOMY", "BUSINESS", "FIRST"];
 
   stop = ["Non-stop", "Multiple"];
 
@@ -239,29 +239,22 @@ class Travel extends React.Component {
         returnDate: this.state.arrivaldDate,
         nonStop: this.state.stop === "Non-stop",
         adults: this.state.countoftravellers,
-        travellerclass: this.state.travellerclass,
+        travelClass: this.state.travellerclass,
       }),
     };
     fetch(targetUrl, requestOptions)
-      .then((response) => {
-        // check for error response
-        if (response.status == "200") {
-          this.state.isRegistered = "True";
-          if (this.state.isRegistered == "True") {
-            console.log("redirecting to home page.....");
-            // this.props.history.push("/traveller/success");
-            return this.setState({isRegistered : true})
-            // <Redirect to={'/traveller/success'} />
-          }
-          // get error message from body or default to response statusText
-        }
+    .then(res => res.json())
+    .then((response) => {
+       if(response.flights.length === 0 && response.returnFlights.length === 0){
+          alert("No flights found for your search. Please select different route!")
+       } else {
 
-        // this.setState({ totalReactPackages: data.total })
-      })
-      .catch((error) => {
-        // this.setState({ errorMessage: error.toString() });
-        console.error("There was an error!", error);
-      });
+       }
+    })
+    .catch((error) => {
+      // this.setState({ errorMessage: error.toString() });
+      console.error("There was an error!", error);
+    });
   };
 
   handleAirportSearch = (query) => {
