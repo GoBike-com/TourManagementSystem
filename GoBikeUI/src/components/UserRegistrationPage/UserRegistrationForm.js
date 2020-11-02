@@ -150,7 +150,9 @@ class UserRegistrationForm extends React.Component {
           this.state.isRegistered = "True";
           if (this.state.isRegistered == "True") {
             console.log("redirecting to home page.....");
-            // this.props.history.push("/traveller/success");
+            // this.props.history.push({pathname:"/traveller/success", state: {
+            //   username: this.state.userName,
+            // }});            
             return this.setState({isRegistered : true})
             // <Redirect to={'/traveller/success'} />
           }
@@ -264,7 +266,7 @@ class UserRegistrationForm extends React.Component {
             </Typography> */}
 
         <CssBaseline />
-        {/* {this.state.isRegistered === true ? this.myDialogue() : this.state.isRegistered === false ? alert("Username or email is already registered"):null} */}
+        {this.state.isRegistered === true ? this.myDialogue() : this.state.isRegistered === false ? alert("Username or email is already registered"):null}
         <div className={this.classes.root}>
           <AppBar position="static" style={{ backgroundColor: "indigo" }}>
             <Toolbar>
@@ -453,7 +455,7 @@ class UserRegistrationForm extends React.Component {
             />
           </Grid> */}
           <Grid>
-            <Link to="/traveller/signin">
+            <Link to="/traveller/success">
               <Button
                 style={{
                   marginTop: "20px",
