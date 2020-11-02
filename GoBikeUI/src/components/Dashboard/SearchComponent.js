@@ -1,20 +1,16 @@
 import React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import Panel from "./Panel";
 import { Grid, Paper } from "@material-ui/core";
 import { Link , withRouter } from "react-router-dom";
 import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Search from './SearchComponent';
 import { config } from '../Constants'
+import ExploreComponent from "../Explore/ExploreComponent";
 
 class SearchComponent extends React.Component {
   constructor(props) {
@@ -149,41 +145,25 @@ class SearchComponent extends React.Component {
               GoBike
               <DirectionsBikeIcon className={this.classes.logo} />
             </Typography>
-            {/* <div className={this.classes.search}>
-              <div className={this.classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: this.classes.inputRoot,
-                  input: this.classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-                style={{marginLeft:"100px"}}
-              />
-            </div> */}
             
             <Link to={"/traveller/signin"} style={{float:"right"}}>
-              <Button size="sm" style={{alignItems:"right", marginRight:"10px", }}
-              
-                onClick= {this.handleSubmit}
-              >
+              <Button size="sm" style={{alignItems:"right", marginRight:"10px", }} onClick= {this.handleSubmit}>
                 logout
               </Button>
             </Link>
             </Toolbar>
 
-            
-        
         </AppBar>
       </div>
       <Grid container >
         <Grid item xs={2}>
           <Panel />
         </Grid>
+        {/* Put Explore Here */}
         <Grid item xs={10} >
-            Search
+
+            <ExploreComponent />
+
         </Grid>
       </Grid>
     </Grid>
