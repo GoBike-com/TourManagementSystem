@@ -9,6 +9,7 @@ import Panel from "./Panel";
 import { Grid } from "@material-ui/core";
 import { Link, withRouter } from "react-router-dom";
 import Button from "../../assets/components/CustomButtons/Button.js";
+import Btn from '@material-ui/core/Button';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
@@ -300,7 +301,7 @@ class Travel extends React.Component {
           <Card
             className={this.classes.root1}
             raised="true"
-            style={{ width: "80%", marginLeft: "140px", marginTop: "40px" }}
+            style={{ width: "80%" }}
           >
             <CardHeader style={{height: '250px', background: flight.airline }}></CardHeader>
             <CardContent>
@@ -312,9 +313,9 @@ class Travel extends React.Component {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" color="primary">
+              <Btn size="small" color="primary">
                 Add to itinerary
-              </Button>
+              </Btn>
             </CardActions>    
           </Card>
         </div>
@@ -333,7 +334,7 @@ class Travel extends React.Component {
             raised="true"
             style={{ width: "80%", marginLeft: "140px", marginTop: "40px" }}
           >
-            <CardHeader style={{height: '250px', background: flight.airline }}></CardHeader>
+            <CardHeader>{flight.airline}</CardHeader>
             <CardContent>
               <Typography gutterBottom variant="h5" component="h2">
                   {flight.duration}
@@ -343,9 +344,9 @@ class Travel extends React.Component {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" color="primary">
+              <Btn size="small" color="primary">
                 Add to itinerary
-              </Button>
+              </Btn>
             </CardActions>    
           </Card>
         </div>
