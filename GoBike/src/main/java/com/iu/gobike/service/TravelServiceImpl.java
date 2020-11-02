@@ -36,7 +36,7 @@ public class TravelServiceImpl implements TravelService {
     public SearchFlightResponse searchFlights(SearchFlightRequest request) {
         String url = "v2/shopping/flight-offers?currencyCode=USD&originLocationCode=" + request.getSource() +
                 "&destinationLocationCode=" + request.getDestination() + "&departureDate=" + request.getTravelDate() +
-                "&adults=" + request.getAdults()+"&nonStop="+request.isNonStop()+"&travelClass="+request.getTravelClass().name();
+                "&adults=" + request.getAdults()+"&nonStop="+request.isNonStop()+"&travelClass="+request.getTravelClass();
         String returnDate = request.getReturnDate();
         if(returnDate!=null){
             url = url+"&returnDate="+returnDate;
