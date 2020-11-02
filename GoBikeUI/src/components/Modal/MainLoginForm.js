@@ -135,75 +135,76 @@ class MainLoginForm extends React.Component {
     }
 
     if(this.state.username !== "" && this.state.password !== "" ){
-    var targetUrl = config.API_URL + "/user/login?username="+this.state.username +"&password="+this.state.password;
+    var targetUrl = config.API_URL + "/user/login";
 
-    fetch(targetUrl, 
-      {
-        method:'get',
-        headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-    }
-    )
-    //.then(response =>response.json())
-    .then(
-     data => {
-            console.log(data)
-            // check for error response
-            if (data.status == "200"){
-              console.log(data.body)
-              this.setState({ isVerifiedUser : true})
-              console.log("redirecting to home page.....");
-              this.props.history.push('/traveller/success')
-            } else {
-              return this.setState({ isVerifiedUser : false})
-            }
-        }).catch(error => {
-            console.error('There was an error!', error);
-        });
-      }
-      else{
-        alert("The entered credentials are wrong or you've not verified that you're not a robot. Please check");
-      }
-  //   fetch("http://localhost:7070/login", {
-  //     method: "POST",
-  //     // headers: {
-  //     //   "Content-Type": "application/json",
-  //     //   Accept: "application/json",
-  //     //   Authorization:
-  //     //     "Bearer e4267e0897e3f80ee6b50eb1592ef7aed446b1f87caa91eae3cbb194ac20cf88",
-  //     // },
-  //     body: JSON.stringify({
-  //       username: this.state.username,
-  //       password: this.state.password,
-  //     }),
-  //   }).then((response) => {
-  //     if(response.status == "200"){
-  //       this.props.history.push("/traveller/success");
-  //     }
-      
-  //   });
+    // var targetUrl = config.API_URL + "/user/register?password="+this.state.password;
+    const requestOptions = {
+      method: "POST",
+      credentials: "include",
+      headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+      body: JSON.stringify({
+        
+        userName: this.state.username,
+        password:this.state.password,
+      }),
+    };
+    fetch(targetUrl, requestOptions)
+      .then(response => {
+        console.log(response)
+        // check for error response
+        if (response.status == "200") {
+           this.props.history.push({pathname : '/traveller/success',state:{
+             username:this.state.username
+           }})
+          // this.state.isRegistered = "True";
+          // if (this.state.isRegistered == "True") {
+          //   console.log("redirecting to home page.....");
+          //   // this.props.history.push("/traveller/success");
+          //   return this.setState({isRegistered : true})
+          //   // <Redirect to={'/traveller/success'} />
+          // }
+          // get error message from body or default to response statusText
+        } else {
+          this.setState({isRegistered : false})
+          // return (
+          //   <Alert severity="error">
+          //     <AlertTitle>Error</AlertTitle>
+          //     <strong>Already registered</strong>
+          //   </Alert>
+          // );
+        }
+        // this.setState({ totalReactPackages: data.total })
+      })
+      // .catch((error) => {
+      //   // this.setState({ errorMessage: error.toString() });
+      //   console.error("There was an error!", error);
+      // });
   };
+}
 
   responseFacebook = (response) => {
-    // this.setState({ username: response.email });
-    // this.setState({ password: "" });
+    this.setState({ username: response.email });
+    this.setState({ password: "" });
     console.log(response);
-    this.props.history.push("/traveller/success");
+    this.props.history.push({pathname : '/traveller/success',state:{
+      username:this.state.username
+    }})
 
-    // var firstName = "";
-    // var lastName = "";
-    // if (response.name !== null) {
-    //   var name = "";
-    //   name = response.name.split(" ");
-    //   if (name.length === 1) {
-    //     firstName = name[0];
-    //   } else {
-    //     for (let i = 0; i < name.length - 1; i++) {
-    //       firstName = firstName + name[i] + " ";
-    //     }
-    //     firstName = firstName.substring(0, firstName.length - 1);
-    //     lastName = name[name.length - 1];
-    //   }
-    // }
+    var firstName = "";
+    var lastName = "";
+    if (response.name !== null) {
+      var name = "";
+      name = response.name.split(" ");
+      if (name.length === 1) {
+        firstName = name[0];
+      } else {
+        for (let i = 0; i < name.length - 1; i++) {
+          firstName = firstName + name[i] + " ";
+        }
+        firstName = firstName.substring(0, firstName.length - 1);
+        lastName = name[name.length - 1];
+      }
+    }
   };
 
   handleClickShowPassword = (event) => {
@@ -259,7 +260,9 @@ class MainLoginForm extends React.Component {
           .then(function (result) {
             // this.handleClose();
             console.log("user is signed in");
-            this.props.history.push("/traveller/success");
+            this.props.history.push({pathname:"/traveller/success", state: {
+              username: this.state.userName,
+            }});
             // ...
 
             console.log("user is signed in");
@@ -338,7 +341,9 @@ class MainLoginForm extends React.Component {
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
                 />
-
+                <Link to={{pathname:"/traveller/success", state: {
+              username: this.state.username,
+            }}} >
                 <Button
                   fullWidth
                   variant="contained"
@@ -348,6 +353,7 @@ class MainLoginForm extends React.Component {
                 >
                   Sign In
                 </Button>
+                </Link>
                 <Grid container>
                   <Grid item xs>
                   <Link style={{textDecorationLine:"none",textAlign:'left'}} to={"/traveller/forgetpassword"}>
