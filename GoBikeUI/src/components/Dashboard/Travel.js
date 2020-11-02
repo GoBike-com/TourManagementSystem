@@ -17,9 +17,11 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import moment from "moment";
 import { config } from '../Constants'
@@ -29,15 +31,15 @@ class Travel extends React.Component {
     super(props);
     this.state = {
       currency: "",
-      // SelectedDate: "",
-      // depatureDate:"",
       searchResult: "",
       onewayflag: "",
       departurecity: "",
       arrivalcity: "",
       countoftravellers: "",
       travellerclass: "",
-      stop:""
+      stop:"",
+      returnFlights:"",
+      flights:"",
     };
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -52,7 +54,8 @@ class Travel extends React.Component {
     this.handleAirportSearch = this.handleAirportSearch.bind(this);
     this.handleStopClass = this.handleStopClass.bind(this)
     this.handleFlightSearch = this.handleFlightSearch.bind(this)
-
+    this.renderFlights = this.renderFlights.bind(this)
+    this.renderReturnFlights = this.renderReturnFlights.bind(this)
     // this.handleChangeLeavingFrom2 = this.handleChangeLeavingFrom2.bind(this);
     // this.handleChangeLeavingFrom1 = this.handleChangeLeavingFrom1.bind(this);
   }
@@ -223,11 +226,6 @@ class Travel extends React.Component {
     console.log("traveller class " + this.state.travellerclass);
 
     var targetUrl = config.API_URL + "/travel/search/flight";
-    // fetch(targetUrl,{
-    //   method: "POST",
-    //    credentials: "include",
-    //    headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-    //  })
     const requestOptions = {
       method: "POST",
       credentials: "include",
@@ -247,12 +245,15 @@ class Travel extends React.Component {
     .then((response) => {
        if(response.flights.length === 0 && response.returnFlights.length === 0){
           alert("No flights found for your search. Please select different route!")
+          console.log("test")
        } else {
-
+         this.setState({
+          flights : response.flights,
+          returnFlights : response.returnFlights,
+         })
        }
     })
     .catch((error) => {
-      // this.setState({ errorMessage: error.toString() });
       console.error("There was an error!", error);
     });
   };
@@ -290,6 +291,68 @@ class Travel extends React.Component {
     event.preventDefault();
     this.setState({ onewayflag: false });
   };
+
+  renderFlights = () => {
+    return (
+      this.state.flights.map(flight => {
+        return (
+        <div>
+          <Card
+            className={this.classes.root1}
+            raised="true"
+            style={{ width: "80%", marginLeft: "140px", marginTop: "40px" }}
+          >
+            <CardHeader style={{height: '250px', background: flight.airline }}></CardHeader>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                  {flight.duration}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                  {flight.price}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small" color="primary">
+                Add to itinerary
+              </Button>
+            </CardActions>    
+          </Card>
+        </div>
+        )
+      })
+    )
+  }
+
+  renderReturnFlights= () => {
+    return (
+      this.state.returnFlights.map(flight => {
+        return (
+        <div>
+          <Card
+            className={this.classes.root1}
+            raised="true"
+            style={{ width: "80%", marginLeft: "140px", marginTop: "40px" }}
+          >
+            <CardHeader style={{height: '250px', background: flight.airline }}></CardHeader>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                  {flight.duration}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                  {flight.price}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small" color="primary">
+                Add to itinerary
+              </Button>
+            </CardActions>    
+          </Card>
+        </div>
+        )
+      })
+    )
+  }
 
   render() {
     return (
@@ -598,182 +661,10 @@ class Travel extends React.Component {
               </div>
             </Card>
             <div>
-              <Card
-                className={this.classes.root1}
-                raised="true"
-                style={{ width: "80%", marginLeft: "140px", marginTop: "40px" }}
-              >
-                <CardContent>
-                  <Typography
-                    className={this.classes.title1}
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    <button
-                      style={{ backgroundColor: "darkgreen", color: "white" }}
-                    >
-                      No change fees
-                    </button>
-                    <div
-                      style={{
-                        float: "right",
-                        fontWeight: "bold",
-                        fontSize: "20px",
-                      }}
-                    >
-                      $49
-                    </div>
-                  </Typography>
-                  <Typography className={this.classes.pos} color="primary">
-                    9:00am - 4:47pm
-                  </Typography>
-                  <Typography>
-                    <div style={{ float: "right" }}>
-                      6h 47m (1 stop) 1h 58m in Tampa (TPA)
-                    </div>
-                  </Typography>
-                  <Typography variant="body2" component="p">
-                    Chicago to Indianapolis
-                    <br />
-                    Spirit Airlines • Wed, Nov 4
-                  </Typography>
-                  <Typography component="p" variant="body2">
-                    3 cleaning and safety practices
-                  </Typography>
-                  <CardActions
-                    style={{ float: "right", paddingBottom: "20px" }}
-                  >
-                    <Button
-                      size="small"
-                      style={{
-                        backgroundColor: "black",
-                        color: "white",
-                        width: "30",
-                      }}
-                    >
-                      Add to Itinerary
-                    </Button>
-                  </CardActions>
-                </CardContent>
-              </Card>
-
-              <Card
-                className={this.classes.root1}
-                raised="true"
-                style={{ width: "80%", marginLeft: "140px", marginTop: "40px" }}
-              >
-                <CardContent>
-                  <Typography
-                    className={this.classes.title1}
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    <button
-                      style={{ backgroundColor: "darkgreen", color: "white" }}
-                    >
-                      No change fees
-                    </button>
-                    <div
-                      style={{
-                        float: "right",
-                        fontWeight: "bold",
-                        fontSize: "20px",
-                      }}
-                    >
-                      $49
-                    </div>
-                  </Typography>
-                  <Typography className={this.classes.pos} color="primary">
-                    9:00am - 4:47pm
-                  </Typography>
-                  <Typography>
-                    <div style={{ float: "right" }}>
-                      6h 47m (1 stop) 1h 58m in Tampa (TPA)
-                    </div>
-                  </Typography>
-                  <Typography variant="body2" component="p">
-                    Chicago to Indianapolis
-                    <br />
-                    Spirit Airlines • Wed, Nov 4
-                  </Typography>
-                  <Typography component="p" variant="body2">
-                    3 cleaning and safety practices
-                  </Typography>
-                  <CardActions
-                    style={{ float: "right", paddingBottom: "20px" }}
-                  >
-                    <Button
-                      size="small"
-                      style={{
-                        backgroundColor: "black",
-                        color: "white",
-                        width: "30",
-                      }}
-                    >
-                      Add to Itinerary
-                    </Button>
-                  </CardActions>
-                </CardContent>
-              </Card>
-              <Card
-                className={this.classes.root1}
-                raised="true"
-                style={{ width: "80%", marginLeft: "140px", marginTop: "40px" }}
-              >
-                <CardContent>
-                  <Typography
-                    className={this.classes.title1}
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    <button
-                      style={{ backgroundColor: "darkgreen", color: "white" }}
-                    >
-                      No change fees
-                    </button>
-                    <div
-                      style={{
-                        float: "right",
-                        fontWeight: "bold",
-                        fontSize: "20px",
-                      }}
-                    >
-                      $49
-                    </div>
-                  </Typography>
-                  <Typography className={this.classes.pos} color="primary">
-                    9:00am - 4:47pm
-                  </Typography>
-                  <Typography>
-                    <div style={{ float: "right" }}>
-                      6h 47m (1 stop) 1h 58m in Tampa (TPA)
-                    </div>
-                  </Typography>
-                  <Typography variant="body2" component="p">
-                    Chicago to Indianapolis
-                    <br />
-                    Spirit Airlines • Wed, Nov 4
-                  </Typography>
-                  <Typography component="p" variant="body2">
-                    3 cleaning and safety practices
-                  </Typography>
-                  <CardActions
-                    style={{ float: "right", paddingBottom: "20px" }}
-                  >
-                    <Button
-                      size="small"
-                      style={{
-                        backgroundColor: "black",
-                        color: "white",
-                        width: "30",
-                      }}
-                    >
-                      Add to Itinerary
-                    </Button>
-                  </CardActions>
-                </CardContent>
-              </Card>
+              {this.state.flights && this.renderFlights()}
+              {this.state.returnFlights &&this.renderReturnFlights()}
             </div>
+                  
           </Grid>
         </Grid>
       </Grid>
