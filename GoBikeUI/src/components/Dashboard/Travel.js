@@ -65,6 +65,7 @@ class Travel extends React.Component {
     this.handleRoundTrip = this.handleRoundTrip.bind(this)
     this.handleFlightSearch = this.handleFlightSearch.bind(this)
     this.renderFlights = this.renderFlights.bind(this)
+    this.addToItinerary = this.addToItinerary.bind(this)
     // this.handleChangeLeavingFrom2 = this.handleChangeLeavingFrom2.bind(this);
     // this.handleChangeLeavingFrom1 = this.handleChangeLeavingFrom1.bind(this);
   }
@@ -154,6 +155,39 @@ class Travel extends React.Component {
     this.setState({ countoftravellers: event.target.value });
   }
 
+  addToItinerary = (event) => {
+    event.preventDefault();
+    var targetUrl = config.API_URL + "test/itinerary/travel";
+    const requestOptions = {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        // source: this.state.departurecity[0].iataCode,
+        // destination: this.state.arrivalcity[0].iataCode,
+        // travelDate:this.state.depatureDate,
+        // returnDate: this.state.arrivaldDate,
+        // nonStop: this.state.stop,
+        // adults: this.state.countoftravellers,
+        // travelClass: this.state.travellerclass,
+      }),
+    };
+
+    fetch(targetUrl, requestOptions)
+      .then((response) => {
+        // check for error response
+        if (response.status == "200") {
+         
+        }
+
+        // this.setState({ totalReactPackages: data.total })
+      })
+      .catch((error) => {
+        // this.setState({ errorMessage: error.toString() });
+        console.error("There was an error!", error);
+      });
+  }
+
   handletravellerclass = (event,value) => {
     event.preventDefault();
     console.log(value);
@@ -193,10 +227,10 @@ class Travel extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    var targetUrl = "http://localhost:8080/traveller/logout";
+    var targetUrl = config.API_URL + "/user/logout";
 
     fetch(targetUrl, {
-      method: "post",
+      method: "get",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
@@ -344,7 +378,7 @@ class Travel extends React.Component {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Btn size="small" color="primary">
+                <Btn size="small" color="primary"  onClick={this.addToItinerary}>
                   Add to itinerary
                 </Btn>
               </CardActions>   
