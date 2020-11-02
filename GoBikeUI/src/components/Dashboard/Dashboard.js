@@ -15,6 +15,8 @@ import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Search from './SearchComponent';
 import { config } from '../Constants'
+import ExploreComponent from "../Explore/ExploreComponent";
+
 
 
 
@@ -186,6 +188,8 @@ class Dashboard extends React.Component {
           <Panel />
         </Grid>
         <Grid item xs={10} >
+        <ExploreComponent />
+
         </Grid>
       </Grid>
     </Grid>
