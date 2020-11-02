@@ -1,31 +1,38 @@
 import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
+import { Link, withRouter } from "react-router-dom";
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import Typography from "@material-ui/core/Typography";
+import moment from "moment";
+import {Card,Typography, CardHeader,CardActions, 
+  CardContent,AppBar, Toolbar,Grid,TextField,
+  Button as Btn, Switch, FormControlLabel} from '@material-ui/core';
 import { fade, makeStyles } from "@material-ui/core/styles";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
-import Panel from "./Panel";
-import { Grid } from "@material-ui/core";
-import { Link, withRouter } from "react-router-dom";
-import Button from "../../assets/components/CustomButtons/Button.js";
-import Btn from '@material-ui/core/Button';
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { red, purple } from '@material-ui/core/colors';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import moment from "moment";
 import { config } from '../Constants'
+import Panel from "./Panel";
+import Button from "../../assets/components/CustomButtons/Button.js";
+
+// const PurpleSwitch = withStyles({
+//   switchBase: {
+//     color: purple[300],
+//     '&$checked': {
+//       color: purple[500],
+//     },
+//     '&$checked + $track': {
+//       backgroundColor: purple[500],
+//     },
+//   },
+//   checked: {},
+//   track: {},
+// })(Switch);
 
 class Travel extends React.Component {
   constructor(props) {
@@ -38,7 +45,8 @@ class Travel extends React.Component {
       arrivalcity: "",
       countoftravellers: "",
       travellerclass: "",
-      stop:"",
+      stop:false,
+      roundtrip:false,
       returnFlights:"",
       flights:"",
     };
@@ -54,22 +62,19 @@ class Travel extends React.Component {
     this.handletravellerclass = this.handletravellerclass.bind(this);
     this.handleAirportSearch = this.handleAirportSearch.bind(this);
     this.handleStopClass = this.handleStopClass.bind(this)
+    this.handleRoundTrip = this.handleRoundTrip.bind(this)
     this.handleFlightSearch = this.handleFlightSearch.bind(this)
     this.renderFlights = this.renderFlights.bind(this)
-    this.renderReturnFlights = this.renderReturnFlights.bind(this)
     // this.handleChangeLeavingFrom2 = this.handleChangeLeavingFrom2.bind(this);
     // this.handleChangeLeavingFrom1 = this.handleChangeLeavingFrom1.bind(this);
   }
 
-  countoftravellers = ["1", "2", "3", "4"];
-
   travellerclass = ["ECONOMY", "PREMIUM_ECONOMY", "BUSINESS", "FIRST"];
 
-  stop = ["Non-stop", "Multiple"];
-
-  cities = ["Chicago", "Bloomington"];
-
   useStyles = makeStyles((theme) => ({
+    avatar: {
+      backgroundColor: red[1000],
+    },
     root1: {
       minWidth: 100,
     },
@@ -144,10 +149,9 @@ class Travel extends React.Component {
     this.setState({ departurecity: value });
   };
 
-  handleCountoftravellers = (event,value) => {
+  handleCountoftravellers = (event) => {
     event.preventDefault();
-    console.log(value);
-    this.setState({ countoftravellers: value });
+    this.setState({ countoftravellers: event.target.value });
   }
 
   handletravellerclass = (event,value) => {
@@ -157,10 +161,14 @@ class Travel extends React.Component {
   }
 
   
-  handleStopClass = (event,value) => {
+  handleStopClass = (event) => {
     event.preventDefault();
-    console.log(value);
-    this.setState({ stop: value });
+    this.setState({ stop: event.target.checked });
+  }
+
+  handleRoundTrip = (event) => {
+    event.preventDefault();
+    this.setState({ roundtrip: event.target.checked });
   }
 
   handleDateChange = (date) => {
@@ -236,7 +244,7 @@ class Travel extends React.Component {
         destination: this.state.arrivalcity[0].iataCode,
         travelDate:this.state.depatureDate,
         returnDate: this.state.arrivaldDate,
-        nonStop: this.state.stop === "Non-stop",
+        nonStop: this.state.stop,
         adults: this.state.countoftravellers,
         travelClass: this.state.travellerclass,
       }),
@@ -293,61 +301,54 @@ class Travel extends React.Component {
     this.setState({ onewayflag: false });
   };
 
-  renderFlights = () => {
+  renderFlights = (flights) => {
     return (
-      this.state.flights.map(flight => {
+      flights.map(flight => {
         return (
         <div>
           <Card
             className={this.classes.root1}
             raised="true"
-            style={{ width: "80%" }}
+            style={{ align : 'center'}}
           >
-            <CardHeader style={{height: '250px', background: flight.airline }}></CardHeader>
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                  {flight.duration}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                  {flight.price}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Btn size="small" color="primary">
-                Add to itinerary
-              </Btn>
-            </CardActions>    
-          </Card>
-        </div>
-        )
-      })
-    )
-  }
-
-  renderReturnFlights= () => {
-    return (
-      this.state.returnFlights.map(flight => {
-        return (
-        <div>
-          <Card
-            className={this.classes.root1}
-            raised="true"
-            style={{ width: "80%", marginLeft: "140px", marginTop: "40px" }}
-          >
-            <CardHeader>{flight.airline}</CardHeader>
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                  {flight.duration}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                  {flight.price}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Btn size="small" color="primary">
-                Add to itinerary
-              </Btn>
-            </CardActions>    
+            <div style={{ display: 'flex' }}>
+              <CardHeader 
+                  title={flight.airline}
+                  subheader = {flight.duration}
+                  />
+               <Typography paragraph variant="h5">
+                    {flight.price}
+                </Typography>  
+            </div>
+           <div style={{ display: 'flex' }}>
+              <CardContent>
+                <Typography paragraph >
+                    {flight.deptIataCode}
+                </Typography>    
+                <Typography paragraph>
+                    {flight.takeOffTime}
+                </Typography>
+                <Typography paragraph>
+                    {flight.deptTerminal}
+                </Typography>
+              </CardContent>
+              <CardContent>
+              <Typography paragraph>
+                    {flight.arrivalIataCode}
+                </Typography>
+                <Typography paragraph>
+                    {flight.arrivalTime}
+                </Typography>
+                <Typography paragraph>
+                    {flight.arrivalTerminal}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Btn size="small" color="primary">
+                  Add to itinerary
+                </Btn>
+              </CardActions>   
+            </div> 
           </Card>
         </div>
         )
@@ -394,20 +395,6 @@ class Travel extends React.Component {
           </Grid>
           <Grid item xs={10}>
             <h1 style={{ marginLeft: "20px" }}>Search your travel route</h1>
-            <div style={{ marginLeft: "20px" }}>
-              <Button
-                style={{ backgroundColor: "indigo", color: "white" }}
-                onClick={this.handleResetMode}
-              >
-                Roundtrip
-              </Button>
-              <Button
-                style={{ backgroundColor: "indigo", color: "white" }}
-                onClick={this.handleChangeMode}
-              >
-                one-way
-              </Button>
-            </div>
             <Card
               raised="true"
               style={{ width: "85%", marginLeft: "100px", marginTop: "40px" }}
@@ -421,50 +408,10 @@ class Travel extends React.Component {
                     labelKey="name"
                     minLength={3}
                     onChange={(selected) => this.setState({departurecity : selected})}
-                    //  isLoading={this.state.isLoading}
                     onSearch={this.handleAirportSearch}
-                    // onChange={setSingleSelections}
                     options={this.state.options}
                     placeholder="Enter source"
-                    // selected={singleSelections}
-                  //  renderMenuItemChildren={(option, props) => (
-                  //   <React.Fragment>
-                  //     <span>{option.name}</span>
-                  //   </React.Fragment>
-                  // )}
                  />
-                  {/* <Autocomplete
-                    id="combo-box-demo"
-                    options={this.cities}
-                    // getOptionLabel={(option) => option.city}
-                    style={{ backgroundColor: "lightyellow" }}
-                    // style={{ width: "600", marginTop: "5px",marginLeft:"5px" }}
-                    // autoSelect
-                    value={this.state.departurecity}
-                    onInputChange={this.handleChangeLeavingFrom}
-                    // onChange={this.handleChangeLeavingFrom}
-                    onChange={this.handleChangeLeavingFrom}
-                    // value={this.state.departurecity}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        style={{
-                          width: "500px",
-                          marginTop: "5px",
-                          marginLeft: "20px",
-                          backgroundColor: "lightyellow",
-                        }}
-                        id="start"
-                        // select
-                        label="Leaving from"
-                        // value={this.state.departurecity}
-                        // onChange={(val) => this.handleChangeLeavingFrom(val)}
-                        variant="outlined"
-                        color="primary"
-                        // size="medium"
-                      />
-                    )}
-                  /> */}
                 </div>
 
                 <div style={{ display: "inline-block" }}>
@@ -474,46 +421,15 @@ class Travel extends React.Component {
                     labelKey="name"
                     minLength={3}
                     onChange={(selected) => this.setState({arrivalcity : selected})}
-                    //  isLoading={this.state.isLoading}
                     onSearch={this.handleAirportSearch}
-                    // onChange={setSingleSelections}
                     options={this.state.options}
                     placeholder="Enter source"
-                    // selected={singleSelections}
                     renderMenuItemChildren={(option, props) => (
                     <React.Fragment>
                       <span>{option.name}</span>
                     </React.Fragment>
                   )}
                 />
-                  {/* <Autocomplete
-                    id="combo-box-demo2"
-                    options={this.cities}
-                    // getOptionLabel={(option) => option.city}
-                    style={{ width: "15%", display: "inline-block" }}
-                    autoSelect
-                    value={this.state.arrivalcity}
-                    onInputChange={this.handleChangeArrivalAt}
-                    onChange={this.handleChangeArrivalAt}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        id="start"
-                        style={{
-                          width: "500px",
-                          marginTop: "5px",
-                          marginLeft: "5px",
-                        }}
-                        // select
-                        label="Going to"
-                        // value={value}
-                        // onChange={this.handleChange}
-                        variant="outlined"
-                        color="primary"
-                        size="medium"
-                      />
-                    )}
-                  /> */}
                 </div>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
@@ -537,7 +453,7 @@ class Travel extends React.Component {
                     onChange={this.handleDateChange1}
                   />
                 </MuiPickersUtilsProvider>
-                {this.state.onewayflag === true ? null : (
+                {this.state.roundtrip && (
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
                       // style={{
@@ -561,7 +477,13 @@ class Travel extends React.Component {
                   </MuiPickersUtilsProvider>
                 )}
                 <div style={{ display: "inline-block" }}>
-                  <Autocomplete
+                  <TextField 
+                    id="count" 
+                    label="No. of passengers" 
+                    onChange={this.handleCountoftravellers}
+                    value={this.state.countoftravellers}
+                  />
+                  {/* <Autocomplete
                     id="combo-box-demo3"
                     options={this.countoftravellers}
                     // getOptionLabel={(option) => option.value}
@@ -587,8 +509,8 @@ class Travel extends React.Component {
                         color="primary"
                         size="medium"
                       />
-                    )}
-                  />
+                    )} 
+                  />*/}
                 </div>
 
                 <div style={{ display: "inline-block" }}>
@@ -622,27 +544,30 @@ class Travel extends React.Component {
                   />
                 </div>
                 <div style={{ display: "inline-block" }}>
-                  <Autocomplete
-                      id="combo-box-demo4"
-                      options={this.stop}
-                      // getOptionLabel={(option) => option.value}
-                      // style={{ width: "15%", display: "inline-block" }}
-                      autoSelect
-                      value={this.state.stop}
-                      onChange={this.handleStopClass}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          id="stop"
-                          label="stop"
-                          // value={value}
-                          onChange={this.handleChange}
-                          variant="outlined"
+                  <FormControlLabel
+                      control={
+                        <Switch
+                          checked={this.state.roundtrip}
+                          onChange={this.handleRoundTrip}
+                          name="roundtrip"
                           color="primary"
-                          size="medium"
                         />
-                      )}
+                      }
+                      label="roundtrip"
                     />
+                  </div>
+                  <div style={{ display: "inline-block" }}>
+                    <FormControlLabel
+                        control={
+                          <Switch
+                            checked={this.state.stop}
+                            onChange={this.handleStopClass}
+                            name="nonstop"
+                            color="primary"
+                          />
+                        }
+                        label="nonstop"
+                      />
                   </div>
                 <Button
                   style={{
@@ -661,9 +586,9 @@ class Travel extends React.Component {
                 </Button>
               </div>
             </Card>
-            <div>
-              {this.state.flights && this.renderFlights()}
-              {this.state.returnFlights &&this.renderReturnFlights()}
+            <div style={{ width: "85%", marginLeft: "100px", marginTop: "40px"} }>
+              {this.state.flights && this.renderFlights(this.state.flights)}
+              {this.state.returnFlights &&this.renderFlights(this.state.returnFlights)}
             </div>
                   
           </Grid>
