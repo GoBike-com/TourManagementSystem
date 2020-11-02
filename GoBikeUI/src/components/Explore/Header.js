@@ -35,28 +35,7 @@ class Header extends React.Component {
     classes = this.useStyles;
 
     handleSubmit = (event) => {
-        event.preventDefault();
-        //TODO: Change to proper "add to itinerary call"
-
-        // const targetUrl = config.API_URL + "/user/logout";
-        //
-        // fetch(targetUrl,
-        //     {
-        //         method: 'get',
-        //         credentials: 'include',
-        //         headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-        //     }
-        // ).then(
-        //     response => {
-        //         if (response.status == "200") {
-        //             alert("Added to itinerary!")
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.error('There was an error!', error);
-        //     });
         alert("Added to itinerary!")
-        window.location.href = `http://localhost:3000/travel`
     };
 
     render() {
@@ -72,7 +51,7 @@ class Header extends React.Component {
                             GoBike
                             <DirectionsBikeIcon className={this.classes.logo}/>
                         </Typography>
-                        <Link style={{float: "right"}}>
+                        <Link style={{float: "right"}} to="/travel">
                             <Button size="sm" style={{alignItems: "right", marginRight: "10px",}}
                                     onClick={this.handleSubmit}>
                                 Add to Itinerary

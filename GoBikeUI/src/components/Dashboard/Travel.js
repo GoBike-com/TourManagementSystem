@@ -1,61 +1,90 @@
 import React from "react";
+import { Link, withRouter } from "react-router-dom";
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+import moment from "moment";
+import {Card,Typography, CardHeader,CardActions, 
+  CardContent,AppBar, Toolbar,Grid,TextField,
+  Button as Btn, Switch, FormControlLabel} from '@material-ui/core';
 import { fade, makeStyles } from "@material-ui/core/styles";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
-import Panel from "./Panel";
-import { Grid, Paper } from "@material-ui/core";
-import { Link, withRouter } from "react-router-dom";
-import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { red, purple } from '@material-ui/core/colors';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { config } from '../Constants'
+import Panel from "./Panel";
+import Button from "../../assets/components/CustomButtons/Button.js";
+
+// const PurpleSwitch = withStyles({
+//   switchBase: {
+//     color: purple[300],
+//     '&$checked': {
+//       color: purple[500],
+//     },
+//     '&$checked + $track': {
+//       backgroundColor: purple[500],
+//     },
+//   },
+//   checked: {},
+//   track: {},
+// })(Switch);
 
 class Travel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       currency: "",
-      SelectedDate: "",
-      options: [],
-      isLoading: false,
+      searchResult: "",
+      onewayflag: "",
+      departurecity: "",
+      arrivalcity: "",
+      countoftravellers: "",
+      travellerclass: "",
+      stop:false,
+      roundtrip:false,
+      returnFlights:"",
+      flights:"",
     };
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
+    this.handleDateChange1 = this.handleDateChange1.bind(this);
+    this.handleChangeMode = this.handleChangeMode.bind(this);
+    this.handleResetMode = this.handleResetMode.bind(this);
+    this.handleChangeLeavingFrom = this.handleChangeLeavingFrom.bind(this);
+    this.handleChangeArrivalAt = this.handleChangeArrivalAt.bind(this);
+    this.handleCountoftravellers = this.handleCountoftravellers.bind(this);
+    this.handletravellerclass = this.handletravellerclass.bind(this);
+    this.handleAirportSearch = this.handleAirportSearch.bind(this);
+    this.handleStopClass = this.handleStopClass.bind(this)
+    this.handleRoundTrip = this.handleRoundTrip.bind(this)
+    this.handleFlightSearch = this.handleFlightSearch.bind(this)
+    this.renderFlights = this.renderFlights.bind(this)
+    this.addToItinerary = this.addToItinerary.bind(this)
+    // this.handleChangeLeavingFrom2 = this.handleChangeLeavingFrom2.bind(this);
+    // this.handleChangeLeavingFrom1 = this.handleChangeLeavingFrom1.bind(this);
   }
 
-  currencies = [
-    {
-      value: "1",
-      label: "Bloomington",
-    },
-    {
-      value: "2",
-      label: "Chicago",
-    },
-    {
-      value: "3",
-      label: "Colorado",
-    },
-    {
-      value: "4",
-      label: "Texas",
-    },
-  ];
+  travellerclass = ["ECONOMY", "PREMIUM_ECONOMY", "BUSINESS", "FIRST"];
 
   useStyles = makeStyles((theme) => ({
+    avatar: {
+      backgroundColor: red[1000],
+    },
+    root1: {
+      minWidth: 100,
+    },
+    title1: {
+      fontSize: 14,
+    },
+    pos: {
+      marginBottom: 12,
+    },
     root: {
       flexGrow: 2,
       // float:"right",
@@ -113,43 +142,95 @@ class Travel extends React.Component {
         },
       },
     },
-    inputbox: {},
   }));
 
+  handleChangeLeavingFrom = (event, value) => {
+    event.preventDefault();
+    console.log(value);
+    this.setState({ departurecity: value });
+  };
+
+  handleCountoftravellers = (event) => {
+    event.preventDefault();
+    this.setState({ countoftravellers: event.target.value });
+  }
+
+  addToItinerary = (event) => {
+    event.preventDefault();
+    var targetUrl = config.API_URL + "test/itinerary/travel";
+    const requestOptions = {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        // source: this.state.departurecity[0].iataCode,
+        // destination: this.state.arrivalcity[0].iataCode,
+        // travelDate:this.state.depatureDate,
+        // returnDate: this.state.arrivaldDate,
+        // nonStop: this.state.stop,
+        // adults: this.state.countoftravellers,
+        // travelClass: this.state.travellerclass,
+      }),
+    };
+
+    fetch(targetUrl, requestOptions)
+      .then((response) => {
+        // check for error response
+        if (response.status == "200") {
+         
+        }
+
+        // this.setState({ totalReactPackages: data.total })
+      })
+      .catch((error) => {
+        // this.setState({ errorMessage: error.toString() });
+        console.error("There was an error!", error);
+      });
+  }
+
+  handletravellerclass = (event,value) => {
+    event.preventDefault();
+    console.log(value);
+    this.setState({ travellerclass: value });
+  }
+
+  
+  handleStopClass = (event) => {
+    event.preventDefault();
+    this.setState({ stop: event.target.checked });
+  }
+
+  handleRoundTrip = (event) => {
+    event.preventDefault();
+    this.setState({ roundtrip: event.target.checked });
+  }
+
   handleDateChange = (date) => {
-    this.setState({ selectedDate: date });
+    const arrivalDate = moment(date).format("YYYY-MM-DD");
+    this.setState({ selectedDate: arrivalDate });
+  };
+
+  handleChangeArrivalAt = (event, value) => {
+    event.preventDefault();
+    console.log(value);
+    this.setState({ arrivalcity: value });
+  };
+
+  handleDateChange1 = (date) => {
+    console.log(date)
+    const beginDate = moment(date).format("YYYY-MM-DD");
+    console.log(beginDate);
+    this.setState({ depatureDate: beginDate });
   };
 
   classes = this.useStyles;
 
-   handleSearch = (query) => {
-    //setIsLoading(true);
-    console.log(query)
-    var targetUrl = config.API_URL + "/travel/airport/search/"+query;
-    fetch(targetUrl,{
-      method: "GET",
-       credentials: "include",
-       headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-     })
-     .then(res => res.json())
-      .then((res) => {
-        console.log(res)
-        const options = res.data.map((i) => ({
-          name: i.name
-        }));
-
-       this.setState({ options: options,
-                      isLoading : true, });
-        // setIsLoading(false);
-      });
-  };
-
   handleSubmit = (event) => {
     event.preventDefault();
-    var targetUrl = config.API_URL + "/traveller/logout";
+    var targetUrl = config.API_URL + "/user/logout";
 
     fetch(targetUrl, {
-      method: "post",
+      method: "get",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
@@ -175,6 +256,139 @@ class Travel extends React.Component {
         console.error("There was an error!", error);
       });
   };
+
+  handleFlightSearch = (event) => {
+    event.preventDefault();
+    this.state.searchResult = true;
+
+    console.log("departure date " + this.state.depatureDate);
+    console.log("arrival date " + this.state.selectedDate);
+    console.log("arrival city " + this.state.arrivalcity);
+    console.log("departure city " + this.state.departurecity);
+    console.log("no of travellers " + this.state.countoftravellers);
+    console.log("traveller class " + this.state.travellerclass);
+
+    var targetUrl = config.API_URL + "/travel/search/flight";
+    const requestOptions = {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        source: this.state.departurecity[0].iataCode,
+        destination: this.state.arrivalcity[0].iataCode,
+        travelDate:this.state.depatureDate,
+        returnDate: this.state.arrivaldDate,
+        nonStop: this.state.stop,
+        adults: this.state.countoftravellers,
+        travelClass: this.state.travellerclass,
+      }),
+    };
+    fetch(targetUrl, requestOptions)
+    .then(res => res.json())
+    .then((response) => {
+       if(response.flights.length === 0 && response.returnFlights.length === 0){
+          alert("No flights found for your search. Please select different route!")
+          console.log("test")
+       } else {
+         this.setState({
+          flights : response.flights,
+          returnFlights : response.returnFlights,
+         })
+       }
+    })
+    .catch((error) => {
+      console.error("There was an error!", error);
+    });
+  };
+
+  handleAirportSearch = (query) => {
+    //setIsLoading(true);
+    console.log(query)
+    var targetUrl = config.API_URL + "/travel/airport/search/"+query;
+    fetch(targetUrl,{
+      method: "GET",
+       credentials: "include",
+       headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+     })
+     .then(res => res.json())
+      .then((res) => {
+        console.log(res)
+        const options = res.data.map((i) => ({
+          name: i.name,
+          iataCode: i.iataCode
+        }));
+
+       this.setState({ options: options,
+                      isLoading : true,
+                    });
+        // setIsLoading(false);
+      });
+  };
+
+  handleChangeMode = (event) => {
+    event.preventDefault();
+    this.setState({ onewayflag: true });
+  };
+
+  handleResetMode = (event) => {
+    event.preventDefault();
+    this.setState({ onewayflag: false });
+  };
+
+  renderFlights = (flights) => {
+    return (
+      flights.map(flight => {
+        return (
+        <div>
+          <Card
+            className={this.classes.root1}
+            raised="true"
+            style={{ align : 'center'}}
+          >
+            <div style={{ display: 'flex' }}>
+              <CardHeader 
+                  title={flight.airline}
+                  subheader = {flight.duration}
+                  />
+               <Typography paragraph variant="h5">
+                    {flight.price}
+                </Typography>  
+            </div>
+           <div style={{ display: 'flex' }}>
+              <CardContent>
+                <Typography paragraph >
+                    {flight.deptIataCode}
+                </Typography>    
+                <Typography paragraph>
+                    {flight.takeOffTime}
+                </Typography>
+                <Typography paragraph>
+                    {flight.deptTerminal}
+                </Typography>
+              </CardContent>
+              <CardContent>
+              <Typography paragraph>
+                    {flight.arrivalIataCode}
+                </Typography>
+                <Typography paragraph>
+                    {flight.arrivalTime}
+                </Typography>
+                <Typography paragraph>
+                    {flight.arrivalTerminal}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Btn size="small" color="primary"  onClick={this.addToItinerary}>
+                  Add to itinerary
+                </Btn>
+              </CardActions>   
+            </div> 
+          </Card>
+        </div>
+        )
+      })
+    )
+  }
 
   render() {
     return (
@@ -214,106 +428,203 @@ class Travel extends React.Component {
             <Panel />
           </Grid>
           <Grid item xs={10}>
-            <h1>Search your travel route</h1>
-            <div>
-              <Button style={{ backgroundColor: "lightblue", color: "black" }}>
-                Roundtrip
-              </Button>
-              <Button style={{ backgroundColor: "lightblue", color: "black" }}>
-                one-way
-              </Button>
-            </div>
-            <div>
-              <LocationOnIcon />
-              <AsyncTypeahead
-                id="source"
-                labelKey="name"
-                minLength={3}
-              //  isLoading={this.state.isLoading}
-                onSearch={this.handleSearch}
-               // onChange={setSingleSelections}
-                options={this.state.options}
-                placeholder="Enter source"
-               // selected={singleSelections}
-               renderMenuItemChildren={(option, props) => (
-                <React.Fragment>
-                  <span>{option.name}</span>
-                </React.Fragment>
-              )}
-              />
-               <LocationOnIcon />
-                <AsyncTypeahead
-                id="destination"
-                labelKey="name"
-                onSearch={this.handleSearch}
-                options={this.state.options}
-                placeholder="Enter destination"
-               // selected={singleSelections}
-              />
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  style={{ marginLeft: "15px", height: "20px", width: "15%" }}
-                  disableToolbar
-                  variant="inline"
-                  format="MM/dd/yyyy"
-                  size="small"
-                  margin="normal"
-                  id="date-picker-inline"
-                  label="Select departure date"
-                  color="primary"
-                  font="Helvetica"
-                  value={this.state.selectedDate}
-                  onChange={this.handleDateChange}
+            <h1 style={{ marginLeft: "20px" }}>Search your travel route</h1>
+            <Card
+              raised="true"
+              style={{ width: "85%", marginLeft: "100px", marginTop: "40px" }}
+            >
+              <div style={{ backgroundColor: "lightyellow" }}>
+                {/* // style={{ backgroundColor: "lightyellow" }}> */}
+                <div style={{ display: "inline-block" }}>
+                  <LocationOnIcon />
+                  <AsyncTypeahead
+                    id="source"
+                    labelKey="name"
+                    minLength={3}
+                    onChange={(selected) => this.setState({departurecity : selected})}
+                    onSearch={this.handleAirportSearch}
+                    options={this.state.options}
+                    placeholder="Enter source"
+                 />
+                </div>
+
+                <div style={{ display: "inline-block" }}>
+                  <LocationOnIcon />
+                  <AsyncTypeahead
+                    id="destination"
+                    labelKey="name"
+                    minLength={3}
+                    onChange={(selected) => this.setState({arrivalcity : selected})}
+                    onSearch={this.handleAirportSearch}
+                    options={this.state.options}
+                    placeholder="Enter source"
+                    renderMenuItemChildren={(option, props) => (
+                    <React.Fragment>
+                      <span>{option.name}</span>
+                    </React.Fragment>
+                  )}
                 />
-              </MuiPickersUtilsProvider>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  style={{ marginLeft: "15px", height: "20px", width: "15%" }}
-                  disableToolbar
-                  variant="inline"
-                  format="MM/dd/yyyy"
-                  size="small"
-                  margin="normal"
-                  id="date-picker-inline"
-                  label="Select returning date"
-                  color="primary"
-                  font="Helvetica"
-                  value={this.state.selectedDate}
-                  onChange={this.handleDateChange}
-                />
-              </MuiPickersUtilsProvider>
-              <TextField
-               // style={{ width: "15%", marginTop: "5px", marginLeft: "15px" }}
-                id="destination"
-               // select
-                label="Number of travellers"
-               // value={this.state.currency}
-               // onChange={this.handleChange}
-                variant="outlined"
-                color="primary"
-                size="medium"
-              >
-                {this.currencies.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <Button
-                color="primary"
-                style={{
-                //   backgroundColor: "black",
-                  width: "15%",
-                  marginTop: "5px",
-                  marginLeft: "15px",
-                  height: "55px",
-                  fontSize:"18px",
-                  fontFamily:"Arial",    
-                }}
-              >
-                Search
-              </Button>
+                </div>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    // style={{
+                    //   marginLeft: "15px",
+                    //   height: "20px",
+                    //   width: "20%",
+                    //   marginTop: "45px",
+                    // }}
+                    disableToolbar
+                    variant="inline"
+                    format="yyyy-MM-dd"
+                    size="small"
+                    margin="normal"
+                    id="date-picker-inline"
+                    label="Select departure date"
+                    color="primary"
+                    font="Helvetica"
+                    // inputFormat={(date) => moment(new Date()).format('MM-DD-YYYY')}
+                    value={this.state.depatureDate}
+                    onChange={this.handleDateChange1}
+                  />
+                </MuiPickersUtilsProvider>
+                {this.state.roundtrip && (
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <KeyboardDatePicker
+                      // style={{
+                      //   marginLeft: "15px",
+                      //   marginTop: "45px",
+                      //   height: "20px",
+                      //   width: "20%",
+                      // }}
+                      disableToolbar
+                      variant="inline"
+                      format="yyyy-MM-dd"
+                      size="small"
+                      margin="normal"
+                      id="date-picker-inline"
+                      label="Select returning date"
+                      color="primary"
+                      font="Helvetica"
+                      value={this.state.selectedDate}
+                      onChange={this.handleDateChange}
+                    />
+                  </MuiPickersUtilsProvider>
+                )}
+                <div style={{ display: "inline-block" }}>
+                  <TextField 
+                    id="count" 
+                    label="No. of passengers" 
+                    onChange={this.handleCountoftravellers}
+                    value={this.state.countoftravellers}
+                  />
+                  {/* <Autocomplete
+                    id="combo-box-demo3"
+                    options={this.countoftravellers}
+                    // getOptionLabel={(option) => option.value}
+                    // style={{ width: "15%", display: "inline-block" }}
+                    autoSelect
+                    value={this.state.countoftravellers}
+                    onChange={this.handleCountoftravellers}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        id="start"
+                        // style={{
+                        //   width: "200px",
+                        //   // marginTop: "5px",
+                        //   marginLeft: "10px",
+                        //   marginBottom: "10px",
+                        // }}
+                        // select
+                        label="No. of passengers"
+                        // value={value}
+                        // onChange={this.handleChange}
+                        variant="outlined"
+                        color="primary"
+                        size="medium"
+                      />
+                    )} 
+                  />*/}
+                </div>
+
+                <div style={{ display: "inline-block" }}>
+                  <Autocomplete
+                    id="combo-box-demo4"
+                    options={this.travellerclass}
+                    // getOptionLabel={(option) => option.value}
+                    // style={{ width: "15%", display: "inline-block" }}
+                    autoSelect
+                    value={this.state.travellerclass}
+                    onChange={this.handletravellerclass}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        id="start"
+                        // style={{
+                        //   width: "200px",
+                        //   // marginTop: "5px",
+                        //   marginLeft: "10px",
+                        //   marginBottom: "10px",
+                        // }}
+                        // select
+                        label="class"
+                        // value={value}
+                        onChange={this.handleChange}
+                        variant="outlined"
+                        color="primary"
+                        size="medium"
+                      />
+                    )}
+                  />
+                </div>
+                <div style={{ display: "inline-block" }}>
+                  <FormControlLabel
+                      control={
+                        <Switch
+                          checked={this.state.roundtrip}
+                          onChange={this.handleRoundTrip}
+                          name="roundtrip"
+                          color="primary"
+                        />
+                      }
+                      label="roundtrip"
+                    />
+                  </div>
+                  <div style={{ display: "inline-block" }}>
+                    <FormControlLabel
+                        control={
+                          <Switch
+                            checked={this.state.stop}
+                            onChange={this.handleStopClass}
+                            name="nonstop"
+                            color="primary"
+                          />
+                        }
+                        label="nonstop"
+                      />
+                  </div>
+                <Button
+                  style={{
+                    backgroundColor: "indigo",
+                    width: "15%",
+                    // marginTop: "35px",
+                    // marginLeft: "15px",
+                    // height: "55px",
+                    // fontSize: "18px",
+                    fontFamily: "Arial",
+                    color: "white",
+                  }}
+                  onClick={this.handleFlightSearch}
+                >
+                  Search
+                </Button>
+              </div>
+            </Card>
+            <div style={{ width: "85%", marginLeft: "100px", marginTop: "40px"} }>
+              {this.state.flights && this.renderFlights(this.state.flights)}
+              {this.state.returnFlights &&this.renderFlights(this.state.returnFlights)}
             </div>
+                  
           </Grid>
         </Grid>
       </Grid>

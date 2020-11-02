@@ -1,21 +1,17 @@
 import React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import Panel from "./Panel";
-import { Grid, Paper } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Link , withRouter } from "react-router-dom";
 import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Search from './SearchComponent';
+import ChatApp from '../Chat/ChatApp';
+import Store from '../Chat/Store';
 import { config } from '../Constants'
-
 
 
 class Chat extends React.Component {
@@ -91,13 +87,20 @@ class Chat extends React.Component {
   classes = this.useStyles;
 
   
+  componentDidMount() {
+    const { history } = this.props;
+     window.addEventListener("popstate", () => {
+     history.go(1);
+   });
+   }
+   
   handleSubmit = (event) => {
       event.preventDefault();
-      var targetUrl = config.API_URL + "/traveller/logout";
+      var targetUrl = config.API_URL + "/user/logout";
   
       fetch(targetUrl, 
         {
-          method:'post',
+          method:'get',
           credentials: 'include',
           headers: {'Content-Type': 'application/json', Accept: 'application/json'},
       }
@@ -107,7 +110,10 @@ class Chat extends React.Component {
               if (response.status == "200") {
                   this.state.isLoggedOut = "True";
                   if(this.state.isLoggedOut == "True"){
+                      this.state.isLoggedOut = "False";
                       console.log("redirecting to home page.....");
+                      console.log(this.state.isLoggedOut);
+                      localStorage.clear();
                       this.props.history.push('/traveller/signin')
                       // <Redirect to={'/traveller/success'} />
                   }
@@ -175,7 +181,9 @@ class Chat extends React.Component {
           <Panel />
         </Grid>
         <Grid item xs={10} >
-            Chat
+          <Store>
+            <ChatApp />
+          </Store>
         </Grid>
       </Grid>
     </Grid>

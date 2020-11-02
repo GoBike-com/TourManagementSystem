@@ -46,6 +46,7 @@ class UserRegistrationForm extends React.Component {
     this.handlePassword = this.handlePassword.bind(this);
     this.handleUserName = this.handleUserName.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.validityEmail = this.validityEmail.bind(this);
   }
 
   handlePassword = (event) => {
@@ -78,6 +79,15 @@ class UserRegistrationForm extends React.Component {
     );
   };
 
+  validityEmail = (props) => {
+    return (
+      <Alert severity="error">
+        <AlertTitle>Error</AlertTitle>
+        <strong>Please enter correct {props}</strong>
+      </Alert>
+    );
+  }
+  
   handleSubmit = (event) => {
     event.preventDefault();
         if(this.state.username === "" && this.state.lastName === "" && this.state.firstName === "" &&
@@ -107,6 +117,18 @@ class UserRegistrationForm extends React.Component {
     }
     this.state.Userpresent = false;
 
+    if(this.state.emailIDPresent === false){
+
+      console.log("helllllllllllllllllllllllllllllllloooo")
+      let lastAtPos = this.state.emailID.lastIndexOf('@');
+      let lastDotPos = this.state.emailID.lastIndexOf('.');
+
+      if (!(lastAtPos < lastDotPos && lastAtPos > 0 && this.state.emailID.indexOf('@@') == -1 && lastDotPos > 2 && (this.state.emailID.length - lastDotPos) > 2)) {
+         return this.setState({emailInValid:true});
+       }
+    }  
+    this.setState({emailInValid:false});
+
 
     var targetUrl = config.API_URL + "/user/register?password="+this.state.password;
     const requestOptions = {
@@ -128,7 +150,9 @@ class UserRegistrationForm extends React.Component {
           this.state.isRegistered = "True";
           if (this.state.isRegistered == "True") {
             console.log("redirecting to home page.....");
-            // this.props.history.push("/traveller/success");
+            // this.props.history.push({pathname:"/traveller/success", state: {
+            //   username: this.state.userName,
+            // }});            
             return this.setState({isRegistered : true})
             // <Redirect to={'/traveller/success'} />
           }
@@ -237,7 +261,6 @@ class UserRegistrationForm extends React.Component {
                 <DirectionsBikeIcon className={classes.logo} />
               </span>
             </div>
-
             <Typography component="h1" variant="h5" style={{ color: "indigo" }}>
               Sign up
             </Typography> */}
@@ -364,6 +387,7 @@ class UserRegistrationForm extends React.Component {
             style={{ marginLeft: "500px", marginTop: "15px" }}
           >
             {this.state.emailIDPresent === true ? this.myalert("EmailID cannot be blank") : null}
+            {this.state.emailInValid === true ? this.validityEmail("EmailID") : null}
             <TextField
               variant="outlined"
               required

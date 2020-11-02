@@ -4,7 +4,8 @@ import com.iu.gobike.enums.TravelClass;
 import lombok.*;
 
 import javax.persistence.Enumerated;
-import java.time.Instant;
+import java.time.Clock;
+import java.util.List;
 
 /**
  * @author jbhushan
@@ -14,15 +15,13 @@ import java.time.Instant;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SearchFlightRequest {
-
-    private String source;
-    private String destination;
-    private boolean nonStop;
+public class SearchFlightResponse {
+    //@Enumerated
+    private String travelClass;
     private String travelDate;
     private String returnDate;
     private int adults;
-    //@Enumerated
-    private String travelClass;
+    private List<FlightInfo> flights;
+    private List<FlightInfo> returnFlights;
 
 }
