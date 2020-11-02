@@ -153,7 +153,9 @@ class MainLoginForm extends React.Component {
         console.log(response)
         // check for error response
         if (response.status == "200") {
-           this.props.history.push('/traveller/success')
+           this.props.history.push({pathname : '/traveller/success',state:{
+             username:this.state.username
+           }})
           // this.state.isRegistered = "True";
           // if (this.state.isRegistered == "True") {
           //   console.log("redirecting to home page.....");
@@ -181,26 +183,28 @@ class MainLoginForm extends React.Component {
 }
 
   responseFacebook = (response) => {
-    // this.setState({ username: response.email });
-    // this.setState({ password: "" });
+    this.setState({ username: response.email });
+    this.setState({ password: "" });
     console.log(response);
-    this.props.history.push("/traveller/success");
+    this.props.history.push({pathname : '/traveller/success',state:{
+      username:this.state.username
+    }})
 
-    // var firstName = "";
-    // var lastName = "";
-    // if (response.name !== null) {
-    //   var name = "";
-    //   name = response.name.split(" ");
-    //   if (name.length === 1) {
-    //     firstName = name[0];
-    //   } else {
-    //     for (let i = 0; i < name.length - 1; i++) {
-    //       firstName = firstName + name[i] + " ";
-    //     }
-    //     firstName = firstName.substring(0, firstName.length - 1);
-    //     lastName = name[name.length - 1];
-    //   }
-    // }
+    var firstName = "";
+    var lastName = "";
+    if (response.name !== null) {
+      var name = "";
+      name = response.name.split(" ");
+      if (name.length === 1) {
+        firstName = name[0];
+      } else {
+        for (let i = 0; i < name.length - 1; i++) {
+          firstName = firstName + name[i] + " ";
+        }
+        firstName = firstName.substring(0, firstName.length - 1);
+        lastName = name[name.length - 1];
+      }
+    }
   };
 
   handleClickShowPassword = (event) => {
@@ -256,7 +260,9 @@ class MainLoginForm extends React.Component {
           .then(function (result) {
             // this.handleClose();
             console.log("user is signed in");
-            this.props.history.push("/traveller/success");
+            this.props.history.push({pathname:"/traveller/success", state: {
+              username: this.state.userName,
+            }});
             // ...
 
             console.log("user is signed in");
@@ -335,7 +341,9 @@ class MainLoginForm extends React.Component {
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
                 />
-
+                <Link to={{pathname:"/traveller/success", state: {
+              username: this.state.username,
+            }}} >
                 <Button
                   fullWidth
                   variant="contained"
@@ -345,6 +353,7 @@ class MainLoginForm extends React.Component {
                 >
                   Sign In
                 </Button>
+                </Link>
                 <Grid container>
                   <Grid item xs>
                   <Link style={{textDecorationLine:"none",textAlign:'left'}} to={"/traveller/forgetpassword"}>

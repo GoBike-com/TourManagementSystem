@@ -150,6 +150,7 @@ class Dashboard extends React.Component {
             >
               GoBike
               <DirectionsBikeIcon className={this.classes.logo} />
+            <Typography>Welcome {this.props.location.state.username}</Typography>
             </Typography>
             {/* <div className={this.classes.search}>
               <div className={this.classes.searchIcon}>
