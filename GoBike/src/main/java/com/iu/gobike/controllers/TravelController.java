@@ -24,7 +24,7 @@ public class TravelController {
      * @return list of airports
      */
     @GetMapping(path = "/airport/search/{keyword}", produces = "application/json")
-    public ResponseEntity<SearchAirportResponse> airport(@PathVariable("keyword") String keyword) {
+    public ResponseEntity<SearchAirportResponse> searchAirport(@PathVariable("keyword") String keyword) {
         SearchAirportResponse response = travelService.searchAirports(keyword);
          return  ResponseEntity.ok(response);
 

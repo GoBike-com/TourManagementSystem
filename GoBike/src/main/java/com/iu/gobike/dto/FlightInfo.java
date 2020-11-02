@@ -17,8 +17,8 @@ public class FlightInfo {
 
     private float price;
     private String duration;
-    private Timestamp takeOffTime;
-    private Timestamp arrivalTime;
+    private String takeOffTime;
+    private String arrivalTime;
     private String airline;
     private String arrivalTerminal;
     private String deptTerminal;

@@ -9,7 +9,9 @@ import com.iu.gobike.dto.FlightInfo;
 import com.iu.gobike.dto.SearchFlightResponse;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,9 +46,9 @@ public class AmadeusHelper {
         Terminal dept = segment.getDeparture();
         FlightInfo flightInfo = FlightInfo.builder().duration(itinerary.getDuration())
                 .airline(getCarrier(dictionary.getCarriers(), segment.getCarrierCode()))
-                .duration(itinerary.getDuration()).price(flightDetails.getPrice().getTotal())
-                .arrivalTime(new Timestamp(arrival.getAt().getTime()))
-                .arrivalTime(new Timestamp(dept.getAt().getTime()))
+                .duration(itinerary.getDuration().substring(2)).price(flightDetails.getPrice().getTotal())
+                .arrivalTime(extractTime(arrival.getAt()))
+                .takeOffTime(extractTime(dept.getAt()))
                 .arrivalTerminal(arrival.getTerminal())
                 .deptTerminal(dept.getTerminal())
                 .arrivalIataCode(arrival.getIataCode())
@@ -57,5 +59,10 @@ public class AmadeusHelper {
 
     private static String getCarrier(Map<String,String> carriers, String carrierCode ) {
         return carriers.get(carrierCode);
+    }
+
+    private static String extractTime(Date dateTime ) {
+        String newString = new SimpleDateFormat("H:mm a").format(dateTime);
+        return newString;
     }
 }
