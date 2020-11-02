@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.sql.Blob;
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,13 +39,9 @@ public class Travel {
     @Column(name = "RETURN_DATE")
     private Instant returnDate;
 
-    @JoinColumn(name = "TRAVEL")
-    @OneToOne
-    private Flight travel;
-
-    @JoinColumn(name = "RETURN")
-    @OneToOne
-    private Flight returnFlight;
+    @JoinColumn(name = "FLIGHT")
+    @OneToMany
+    private List<Flight> flight;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
