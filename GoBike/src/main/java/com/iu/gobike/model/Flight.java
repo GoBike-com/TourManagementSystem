@@ -1,11 +1,8 @@
 package com.iu.gobike.model;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.time.Instant;
 
 @Getter
@@ -17,7 +14,7 @@ import java.time.Instant;
 @Builder
 @Entity
 @Table
-public class Travel {
+public class Flight {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -27,24 +24,29 @@ public class Travel {
     @Column(name = "BOOKING_NUMBER")
     private Long bookingNumber;
 
-    @JoinColumn(name = "USER")
-    @ManyToOne
-    private User user;
-
-    @Column(name = "TRAVEL_DATE")
-    @NonNull
-    private Instant travelDate;
-
-    @Column(name = "RETURN_DATE")
-    private Instant returnDate;
-
-    @JoinColumn(name = "TRAVEL")
     @OneToOne
-    private Flight travel;
+    private Travel travel;
 
-    @JoinColumn(name = "RETURN")
-    @OneToOne
-    private Flight returnFlight;
+    @Column(name = "TRAVEL_CLASS")
+    private String travelClass;
+
+    @Column(name = "DURATION")
+    private String duration;
+
+    @Column(name = "AIRLINE")
+    private String airline;
+
+    @Column(name = "ARRIVAL_TERMINAL")
+    private String arrivalTerminal;
+
+    @Column(name = "DEPT_TERMINAL")
+    private String deptTerminal;
+
+    @Column(name = "ARRIVAL_CODE")
+    private String arrivalIataCode;
+
+    @Column(name = "DEPT_CODE")
+    private String deptIataCode;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;

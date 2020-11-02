@@ -15,8 +15,7 @@ import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Search from './SearchComponent';
 import { config } from '../Constants'
-
-
+import Accomodations from '../Accomodations/Accomondations';
 
 class Accomodation extends React.Component {
   constructor(props) {
@@ -91,13 +90,20 @@ class Accomodation extends React.Component {
   classes = this.useStyles;
 
   
+  componentDidMount() {
+    const { history } = this.props;
+     window.addEventListener("popstate", () => {
+     history.go(1);
+   });
+   }
+   
   handleSubmit = (event) => {
       event.preventDefault();
-      var targetUrl = config.API_URL + "/traveller/logout";
+      var targetUrl = config.API_URL + "/user/logout";
   
       fetch(targetUrl, 
         {
-          method:'post',
+          method:'get',
           credentials: 'include',
           headers: {'Content-Type': 'application/json', Accept: 'application/json'},
       }
@@ -107,7 +113,10 @@ class Accomodation extends React.Component {
               if (response.status == "200") {
                   this.state.isLoggedOut = "True";
                   if(this.state.isLoggedOut == "True"){
+                      this.state.isLoggedOut = "False";
                       console.log("redirecting to home page.....");
+                      console.log(this.state.isLoggedOut);
+                      localStorage.clear();
                       this.props.history.push('/traveller/signin')
                       // <Redirect to={'/traveller/success'} />
                   }
@@ -175,6 +184,7 @@ class Accomodation extends React.Component {
           <Panel />
         </Grid>
         <Grid item xs={10} >
+          <Accomodations/>
         </Grid>
       </Grid>
     </Grid>

@@ -64,7 +64,7 @@ class NewPasswordForm extends React.Component {
     }
     var targetUrl = config.API_URL + "/user/password";
     const requestOptions = {
-      method: "PUT",
+      method: "POST",
       credentials: "include",
       headers: { 
         "Content-Type": "application/json",

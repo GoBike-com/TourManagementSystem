@@ -6,15 +6,26 @@ import com.iu.gobike.exception.ResetPasswordException;
 import com.iu.gobike.model.User;
 import com.iu.gobike.service.UserService;
 import org.hibernate.UnknownProfileException;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.naming.AuthenticationException;
 import javax.persistence.EntityExistsException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionEvent;
 
 /**
  * @author jbhushan
@@ -23,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(path = "/user")
 @CrossOrigin(origins = "*",allowedHeaders = "*", allowCredentials = "true")
 public class UserController {
+
 
     @Autowired
     private UserService userService;
@@ -66,11 +78,21 @@ public class UserController {
      * @return return User Details on success else Authorization Error
      */
     @CrossOrigin
-    @GetMapping(path = "/login", consumes = "application/json")
-    public ResponseEntity<User> login(@RequestParam("username") String userName, @RequestParam("password") String password) {
+    @PostMapping(path = "/login", consumes = "application/json")
+    public ResponseEntity<User> login(HttpServletRequest request, HttpServletResponse response) {
         ResponseEntity<User> responseEntity= null;
         try {
-            User user = userService.login(userName,password);
+            Map<String, String> postBody = getPostBodyInAMap(request);
+            String username = postBody.get("userName");
+            String password = postBody.get("password");
+            System.out.println(postBody);
+        	
+//        	HttpSession session = request.getSession();
+//        	session.setAttribute("username", userName);
+//        	
+//            System.out.println("usernameeeeeeeeeeeeeeeeeeee" + session.getAttribute("username"));
+            
+            User user = userService.login(username,password, request,response);
             responseEntity = ResponseEntity.ok(user);
         } catch (AuthenticationException e) {
             responseEntity = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -85,19 +107,21 @@ public class UserController {
      * security question before setting password.
      * @return Success message if password is reset else error message
      */
-    @PostMapping(path = "/password/reset", consumes = "application/json")
-    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
-        ResponseEntity<String> responseEntity= null;
-        try {
-            userService.resetPassword(request);
-            responseEntity = ResponseEntity.ok().build();
-        } catch (ResetPasswordException e) {
-            responseEntity = ResponseEntity.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).build();
-        } catch (Exception e) {
-            responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-        return responseEntity;
-    }
+//    @PostMapping(path = "/password/reset", consumes = "application/json")
+//    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request,HttpServletRequest req, HttpServletResponse response) {
+//        ResponseEntity<String> responseEntity= null;
+//        
+//        try {
+////        	Map<String, String> postBody = convertRequest(req);
+//            userService.resetPassword(request);
+//            responseEntity = ResponseEntity.ok().build();
+//        } catch (ResetPasswordException e) {
+//            responseEntity = ResponseEntity.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).build();
+//        } catch (Exception e) {
+//            responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//        return responseEntity;
+//    }
 
     /**
      * This API is responsible for sending otp for resetting password
@@ -105,8 +129,9 @@ public class UserController {
      * @return Success if userName was valid else error
      */
     @PostMapping(path = "/otp/{email}", consumes = "application/json")
-    public ResponseEntity<String> generateOtp(@PathVariable String email) {
+    public ResponseEntity<String> generateOtp(@PathVariable String email,HttpServletRequest request ) {
         ResponseEntity<String> responseEntity= null;
+        request.getSession().setAttribute("email", email);
         try {
             responseEntity = ResponseEntity.ok(userService.generateOtp(email));
         } catch (UnknownProfileException e) {
@@ -120,13 +145,14 @@ public class UserController {
      *
      * @return Success if userName was valid else error
      */
-    @GetMapping(path = "/otp/verify", consumes = "application/json")
-    public ResponseEntity<Boolean> verifyOtp(HttpServletRequest request, @RequestParam("otp") String otp) {
-         return ResponseEntity.ok(userService.verifyOtp((String) request.getSession().getAttribute("username"), otp));
+    @PostMapping(path = "/otp/verify", consumes = "application/json")
+    public ResponseEntity<?> verifyOTP(HttpServletRequest request,HttpServletResponse response) {
+         return userService.verifyOtp(request, response);
     }
 
     @RequestMapping(value = "/logout", method = {RequestMethod.GET})
     public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response) {
+    	System.out.println("Logging out for " + request.getSession().getAttribute("user"));
         return userService.signOut(request,response);
     }
 
@@ -135,9 +161,31 @@ public class UserController {
      *
      * @return Success if userName was valid else error
      */
-    @PutMapping(path = "/password", consumes = "application/json")
-    public ResponseEntity<String> resetPassword(@RequestHeader("password") String password, HttpServletRequest request) {
-        userService.resetPassword((String) request.getSession().getAttribute("emailID"),password);
-         return ResponseEntity.ok().build();
+    @PostMapping(path = "/password", consumes = "application/json")
+    public ResponseEntity<?> resetPassword(HttpServletRequest request, HttpServletResponse response) {
+    	return userService.resetPassword(request,response);
     }
+    
+    public Map<String, String> getPostBodyInAMap(HttpServletRequest request) {
+        Map<String, String> postBody = new HashMap<>();
+        try {
+            populatePostBody(postBody, request.getReader().lines().collect(Collectors.joining()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return postBody;
+    }
+
+    private void populatePostBody(Map<String, String> parameterMap, String body) {
+        try {
+            JSONObject userDetails = (JSONObject) new JSONParser().parse(body);
+            for(Object key: userDetails.keySet()) {
+                parameterMap.put((String)key, (String)userDetails.get(key));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+    
 }

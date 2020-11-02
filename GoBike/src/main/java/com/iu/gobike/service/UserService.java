@@ -25,9 +25,9 @@ public interface UserService {
 
     void register(RegisterUserRequest registerUserRequest, String password) throws EntityExistsException, InvalidKeySpecException, NoSuchAlgorithmException;
 
-    User login(String userName, String password) throws AuthenticationException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException;
+    User login(String userName, String password,HttpServletRequest request, HttpServletResponse response ) throws AuthenticationException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException;
 
-    String resetPassword(ResetPasswordRequest request) throws ResetPasswordException, InvalidKeySpecException, NoSuchAlgorithmException;
+//    ResponseEntity<?> resetPassword(ResetPasswordRequest request) throws ResetPasswordException, InvalidKeySpecException, NoSuchAlgorithmException;
 
     Iterable<User> getAllUsers();
 
@@ -35,9 +35,13 @@ public interface UserService {
 
     String generateOtp(String username) throws UnknownProfileException;
 
-    boolean verifyOtp(String userName, String otp);
+//    ResponseEntity<?> verifyOtp(String userName, String otp);
 
     ResponseEntity<?> signOut(HttpServletRequest req, HttpServletResponse res);
 
-    void resetPassword(String userName, String password);
+    ResponseEntity<?> resetPassword(HttpServletRequest request, HttpServletResponse response);
+
+//	ResponseEntity<?> verifyOtp(HttpServletRequest request, HttpServletRequest response);
+
+	ResponseEntity<?> verifyOtp(HttpServletRequest request, HttpServletResponse response);
 }
