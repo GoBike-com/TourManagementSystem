@@ -30,6 +30,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { config } from "../Constants";
 import Panel from "./Panel";
 import Button from "../../assets/components/CustomButtons/Button.js";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 // const PurpleSwitch = withStyles({
 //   switchBase: {
@@ -412,10 +413,10 @@ class Travel extends React.Component {
               <Link to={"/traveller/signin"} style={{ float: "right" }}>
                 <Button
                   size="sm"
-                  style={{ alignItems: "right", marginRight: "10px" }}
+                  style={{ alignItems: "right", marginRight: "10px",backgroundColor:"black" }}
                   onClick={this.handleSubmit}
                 >
-                  logout
+                  <ExitToAppIcon /> 
                 </Button>
               </Link>
             </Toolbar>

@@ -11,6 +11,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import { CSVLink, CSVDownload } from "react-csv";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 
 const StyledTableCell = withStyles((theme) => ({

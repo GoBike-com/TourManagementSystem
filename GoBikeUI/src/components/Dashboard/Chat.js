@@ -12,6 +12,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import ChatApp from '../Chat/ChatApp';
 import Store from '../Chat/Store';
 import { config } from '../Constants'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 
 class Chat extends React.Component {
@@ -163,11 +164,11 @@ class Chat extends React.Component {
             </div> */}
             
             <Link to={"/traveller/signin"} style={{float:"right"}}>
-              <Button size="sm" style={{alignItems:"right", marginRight:"10px", }}
+              <Button size="sm" style={{alignItems:"right", marginRight:"10px",backgroundColor:"black" }}
               
                 onClick= {this.handleSubmit}
               >
-                logout
+                <ExitToAppIcon />
               </Button>
             </Link>
             </Toolbar>

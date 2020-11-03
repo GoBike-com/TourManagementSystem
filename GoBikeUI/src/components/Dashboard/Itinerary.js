@@ -27,6 +27,8 @@ import Card from "@material-ui/core/Card";
 import image from "../../assets/img/Image3.jpg";
 import DisplayMapClass from "../Dashboard/Map";
 import Payment from "./Payment";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 
 class Itinerary extends React.Component {
   constructor(props) {
@@ -190,10 +192,10 @@ class Itinerary extends React.Component {
               <Link to={"/traveller/signin"} style={{ float: "right" }}>
                 <Button
                   size="sm"
-                  style={{ alignItems: "right", marginRight: "10px" }}
+                  style={{ alignItems: "right", marginRight: "10px",backgroundColor:"black" }}
                   onClick={this.handleSubmit}
                 >
-                  logout
+                <ExitToAppIcon />
                 </Button>
               </Link>
             </Toolbar>
