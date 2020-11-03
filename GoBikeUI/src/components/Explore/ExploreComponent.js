@@ -20,6 +20,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
+import {Link} from "react-router-dom";
 
 export default function ExploreComponent() {
     const [open, setOpen] = React.useState(false);
