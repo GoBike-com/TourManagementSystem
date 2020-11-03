@@ -350,8 +350,8 @@ class Travel extends React.Component {
                   title={flight.airline}
                   subheader = {flight.duration}
                   />
-               <Typography paragraph variant="h5">
-                    {flight.price}
+               <Typography style={{ display: 'end' }} paragraph variant="h5">
+                    ${flight.price}
                 </Typography>  
             </div>
            <div style={{ display: 'flex' }}>

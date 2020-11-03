@@ -148,39 +148,38 @@ class MainLoginForm extends React.Component {
         password:this.state.password,
       }),
     };
+
     fetch(targetUrl, requestOptions)
-      .then(response => {
-        console.log(response)
+      .then(data => {
+        console.log(data.ok);
         // check for error response
-        if (response.status == "200") {
-           this.props.history.push({pathname : '/traveller/success',state:{
-             username:this.state.username
-           }})
-          // this.state.isRegistered = "True";
-          // if (this.state.isRegistered == "True") {
-          //   console.log("redirecting to home page.....");
-          //   // this.props.history.push("/traveller/success");
+        // if (response.status == "200") {
+          
+        //   this.state.isRegistered = "True";
+          if (data.ok === true) {
+            this.setState({isRegistered : true})
+            console.log("redirecting to home page.....");
+            this.props.history.push({pathname : '/traveller/success',state:{
+              username:this.state.username
+            }});
+            // this.props.history.push("/traveller/success");
           //   return this.setState({isRegistered : true})
           //   // <Redirect to={'/traveller/success'} />
-          // }
+          }
           // get error message from body or default to response statusText
-        } else {
-          this.setState({isRegistered : false})
-          // return (
-          //   <Alert severity="error">
-          //     <AlertTitle>Error</AlertTitle>
-          //     <strong>Already registered</strong>
-          //   </Alert>
-          // );
+        // } 
+        else {
+          return this.setState({isRegistered : false})
+        
         }
-        // this.setState({ totalReactPackages: data.total })
-      })
+      //   // this.setState({ totalReactPackages: data.total })
+      // }})
       // .catch((error) => {
       //   // this.setState({ errorMessage: error.toString() });
       //   console.error("There was an error!", error);
       // });
-  };
-}
+  });
+}}
 
   responseFacebook = (response) => {
     this.setState({ username: response.email });
@@ -237,46 +236,46 @@ class MainLoginForm extends React.Component {
     this.setState({ open: !this.state.open });
   };
 
-  onSignInSubmit = (event) => {
-    event.preventDefault();
-    // this.handleClose();
-    this.setUpRecaptcha();
-    var pN = "+1-812-650-8064";
-    console.log(pN);
-    // setOpen(false);
-    var appVerifier = window.recaptchaVerifier;
+  // onSignInSubmit = (event) => {
+  //   event.preventDefault();
+  //   // this.handleClose();
+  //   this.setUpRecaptcha();
+  //   var pN = "+1-812-650-8064";
+  //   console.log(pN);
+  //   // setOpen(false);
+  //   var appVerifier = window.recaptchaVerifier;
 
-    console.log("recaptcha-verfied");
-    firebase
-      .auth()
-      .signInWithPhoneNumber(pN, appVerifier)
-      .then(function (confirmationResult) {
-        console.log("helloooooooo");
-        var code = window.prompt("Enter OTP");
-        window.confirmationResult = confirmationResult;
+  //   console.log("recaptcha-verfied");
+  //   firebase
+  //     .auth()
+  //     .signInWithPhoneNumber(pN, appVerifier)
+  //     .then(function (confirmationResult) {
+  //       console.log("helloooooooo");
+  //       var code = window.prompt("Enter OTP");
+  //       window.confirmationResult = confirmationResult;
 
-        confirmationResult
-          .confirm(code)
-          .then(function (result) {
-            // this.handleClose();
-            console.log("user is signed in");
-            this.props.history.push({pathname:"/traveller/success", state: {
-              username: this.state.userName,
-            }});
-            // ...
+  //       confirmationResult
+  //         .confirm(code)
+  //         .then(function (result) {
+  //           // this.handleClose();
+  //           console.log("user is signed in");
+  //           this.props.history.push({pathname:"/traveller/success", state: {
+  //             username: this.state.userName,
+  //           }});
+  //           // ...
 
-            console.log("user is signed in");
-          })
-          .catch(function (error) {
-            // User couldn't sign in (bad verification code?)
-            // ...
-          });
-      })
-      .catch(function (error) {
-        // Error; SMS not sent
-        // ...
-      });
-  };
+  //           console.log("user is signed in");
+  //         })
+  //         .catch(function (error) {
+  //           // User couldn't sign in (bad verification code?)
+  //           // ...
+  //         });
+  //     })
+  //     .catch(function (error) {
+  //       // Error; SMS not sent
+  //       // ...
+  //     });
+  // };
 
   websitename = "Get Set GoBike";
 
@@ -313,6 +312,7 @@ class MainLoginForm extends React.Component {
               <form className={classes.form} noValidate>
               {this.state.hasErr === true ? this.myalert("username and password are mandatory") : null}
               {this.state.isVerifiedUser === false ? this.myalert() : null}
+              {this.state.isRegistered === false ? this.myalert("entered credentials are not correct"):null}
                 <TextField
                   variant="outlined"
                   margin="normal"
@@ -341,9 +341,9 @@ class MainLoginForm extends React.Component {
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
                 />
-                <Link to={{pathname:"/traveller/success", state: {
+                {/* <Link to={{pathname:"/traveller/success", state: {
               username: this.state.username,
-            }}} >
+            }}} > */}
                 <Button
                   fullWidth
                   variant="contained"
@@ -353,7 +353,7 @@ class MainLoginForm extends React.Component {
                 >
                   Sign In
                 </Button>
-                </Link>
+                {/* </Link> */}
                 <Grid container>
                   <Grid item xs>
                   <Link style={{textDecorationLine:"none",textAlign:'left'}} to={"/traveller/forgetpassword"}>
