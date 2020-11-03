@@ -23,6 +23,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import image from "../../assets/img/img17.jpg";
 import ItineraryList from "./ItineraryList";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 
 

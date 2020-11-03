@@ -11,6 +11,8 @@ import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { config } from '../Constants'
 import ExploreComponent from "../Explore/ExploreComponent";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 
 class SearchComponent extends React.Component {
   constructor(props) {
@@ -151,8 +153,8 @@ class SearchComponent extends React.Component {
             </Typography>
             
             <Link to={"/traveller/signin"} style={{float:"right"}}>
-              <Button size="sm" style={{alignItems:"right", marginRight:"10px", }} onClick= {this.handleSubmit}>
-                logout
+              <Button size="sm" style={{alignItems:"right", marginRight:"10px",backgroundColor:"black" }} onClick= {this.handleSubmit}>
+                <ExitToAppIcon/>
               </Button>
             </Link>
             </Toolbar>

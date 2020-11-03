@@ -16,6 +16,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Search from './SearchComponent';
 import { config } from '../Constants'
 import Accomodations from '../Accomodations/Accomondations';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 
 class Accomodation extends React.Component {
   constructor(props) {
@@ -166,11 +168,11 @@ class Accomodation extends React.Component {
             </div> */}
             
             <Link to={"/traveller/signin"} style={{float:"right"}}>
-              <Button size="sm" style={{alignItems:"right", marginRight:"10px", }}
+              <Button size="sm" style={{alignItems:"right", marginRight:"10px",backgroundColor:"black" }}
               
                 onClick= {this.handleSubmit}
               >
-                logout
+                <ExitToAppIcon />
               </Button>
             </Link>
             </Toolbar>
