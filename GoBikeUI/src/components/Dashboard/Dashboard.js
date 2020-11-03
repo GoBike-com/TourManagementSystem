@@ -16,11 +16,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Search from './SearchComponent';
 import { config } from '../Constants'
 import ExploreComponent from "../Explore/ExploreComponent";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 
 
 
 class Dashboard extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -29,6 +31,8 @@ class Dashboard extends React.Component {
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  
 
   useStyles = makeStyles((theme) => ({
     root: {
@@ -99,6 +103,10 @@ class Dashboard extends React.Component {
      history.go(1);
    });
    }
+
+  header = 
+    window.sessionStorage.setItem("username", this.props.location.state.username);
+  
    
   handleSubmit = (event) => {
       event.preventDefault();
@@ -153,6 +161,7 @@ class Dashboard extends React.Component {
               GoBike
               <DirectionsBikeIcon className={this.classes.logo} />
             <Typography>Welcome {this.props.location.state.username}</Typography>
+            
             </Typography>
             {/* <div className={this.classes.search}>
               <div className={this.classes.searchIcon}>
@@ -170,11 +179,11 @@ class Dashboard extends React.Component {
             </div> */}
             
             <Link to={"/traveller/signin"} style={{float:"right"}}>
-              <Button size="sm" style={{alignItems:"right", marginRight:"10px", }}
+              <Button style={{alignItems:"right", marginRight:"10px", position:"relative", left:"90px", backgroundColor:"black" }}
               
                 onClick= {this.handleSubmit}
               >
-                logout
+                <ExitToAppIcon />
               </Button>
             </Link>
             </Toolbar>

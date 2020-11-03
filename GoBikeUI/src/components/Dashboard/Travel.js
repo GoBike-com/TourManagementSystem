@@ -1,22 +1,33 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import moment from "moment";
-import {Card,Typography, CardHeader,CardActions, 
-  CardContent,AppBar, Toolbar,Grid,TextField,
-  Button as Btn, Switch, FormControlLabel} from '@material-ui/core';
+import {
+  Card,
+  Typography,
+  CardHeader,
+  CardActions,
+  CardContent,
+  AppBar,
+  Toolbar,
+  Grid,
+  TextField,
+  Button as Btn,
+  Switch,
+  FormControlLabel,
+} from "@material-ui/core";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { red, purple } from '@material-ui/core/colors';
+import { red, purple } from "@material-ui/core/colors";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { config } from '../Constants'
+import { config } from "../Constants";
 import Panel from "./Panel";
 import Button from "../../assets/components/CustomButtons/Button.js";
 
@@ -45,10 +56,10 @@ class Travel extends React.Component {
       arrivalcity: "",
       countoftravellers: "",
       travellerclass: "",
-      stop:false,
-      roundtrip:false,
-      returnFlights:"",
-      flights:"",
+      stop: false,
+      roundtrip: false,
+      returnFlights: "",
+      flights: "",
     };
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -61,11 +72,11 @@ class Travel extends React.Component {
     this.handleCountoftravellers = this.handleCountoftravellers.bind(this);
     this.handletravellerclass = this.handletravellerclass.bind(this);
     this.handleAirportSearch = this.handleAirportSearch.bind(this);
-    this.handleStopClass = this.handleStopClass.bind(this)
-    this.handleRoundTrip = this.handleRoundTrip.bind(this)
-    this.handleFlightSearch = this.handleFlightSearch.bind(this)
-    this.renderFlights = this.renderFlights.bind(this)
-    this.addToItinerary = this.addToItinerary.bind(this)
+    this.handleStopClass = this.handleStopClass.bind(this);
+    this.handleRoundTrip = this.handleRoundTrip.bind(this);
+    this.handleFlightSearch = this.handleFlightSearch.bind(this);
+    this.renderFlights = this.renderFlights.bind(this);
+    this.addToItinerary = this.addToItinerary.bind(this);
     // this.handleChangeLeavingFrom2 = this.handleChangeLeavingFrom2.bind(this);
     // this.handleChangeLeavingFrom1 = this.handleChangeLeavingFrom1.bind(this);
   }
@@ -153,7 +164,7 @@ class Travel extends React.Component {
   handleCountoftravellers = (event) => {
     event.preventDefault();
     this.setState({ countoftravellers: event.target.value });
-  }
+  };
 
   addToItinerary = (event) => {
     event.preventDefault();
@@ -177,7 +188,6 @@ class Travel extends React.Component {
       .then((response) => {
         // check for error response
         if (response.status == "200") {
-         
         }
 
         // this.setState({ totalReactPackages: data.total })
@@ -186,24 +196,23 @@ class Travel extends React.Component {
         // this.setState({ errorMessage: error.toString() });
         console.error("There was an error!", error);
       });
-  }
+  };
 
-  handletravellerclass = (event,value) => {
+  handletravellerclass = (event, value) => {
     event.preventDefault();
     console.log(value);
     this.setState({ travellerclass: value });
-  }
+  };
 
-  
   handleStopClass = (event) => {
     event.preventDefault();
     this.setState({ stop: event.target.checked });
-  }
+  };
 
   handleRoundTrip = (event) => {
     event.preventDefault();
     this.setState({ roundtrip: event.target.checked });
-  }
+  };
 
   handleDateChange = (date) => {
     const arrivalDate = moment(date).format("YYYY-MM-DD");
@@ -217,7 +226,7 @@ class Travel extends React.Component {
   };
 
   handleDateChange1 = (date) => {
-    console.log(date)
+    console.log(date);
     const beginDate = moment(date).format("YYYY-MM-DD");
     console.log(beginDate);
     this.setState({ depatureDate: beginDate });
@@ -276,7 +285,7 @@ class Travel extends React.Component {
       body: JSON.stringify({
         source: this.state.departurecity[0].iataCode,
         destination: this.state.arrivalcity[0].iataCode,
-        travelDate:this.state.depatureDate,
+        travelDate: this.state.depatureDate,
         returnDate: this.state.arrivaldDate,
         nonStop: this.state.stop,
         adults: this.state.countoftravellers,
@@ -284,43 +293,49 @@ class Travel extends React.Component {
       }),
     };
     fetch(targetUrl, requestOptions)
-    .then(res => res.json())
-    .then((response) => {
-       if(response.flights.length === 0 && response.returnFlights.length === 0){
-          alert("No flights found for your search. Please select different route!")
-          console.log("test")
-       } else {
-         this.setState({
-          flights : response.flights,
-          returnFlights : response.returnFlights,
-         })
-       }
-    })
-    .catch((error) => {
-      console.error("There was an error!", error);
-    });
+      .then((res) => res.json())
+      .then((response) => {
+        if (
+          response.flights.length === 0 &&
+          response.returnFlights.length === 0
+        ) {
+          alert(
+            "No flights found for your search. Please select different route!"
+          );
+          console.log("test");
+        } else {
+          this.setState({
+            flights: response.flights,
+            returnFlights: response.returnFlights,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
   };
 
   handleAirportSearch = (query) => {
     //setIsLoading(true);
-    console.log(query)
-    var targetUrl = config.API_URL + "/travel/airport/search/"+query;
-    fetch(targetUrl,{
+    console.log(query);
+    var targetUrl = config.API_URL + "/travel/airport/search/" + query;
+    fetch(targetUrl, {
       method: "GET",
-       credentials: "include",
-       headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-     })
-     .then(res => res.json())
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
       .then((res) => {
-        console.log(res)
+        console.log(res);
         const options = res.data.map((i) => ({
           name: i.name,
-          iataCode: i.iataCode
+          iataCode: i.iataCode,
         }));
 
-       this.setState({ options: options,
-                      isLoading : true,
-                    });
+        this.setState({ options: options, isLoading: true });
         // setIsLoading(false);
       });
   };
@@ -336,59 +351,42 @@ class Travel extends React.Component {
   };
 
   renderFlights = (flights) => {
-    return (
-      flights.map(flight => {
-        return (
+    return flights.map((flight) => {
+      return (
         <div>
           <Card
             className={this.classes.root1}
             raised="true"
-            style={{ align : 'center'}}
+            style={{ backgroundColor:"lightblue" ,align: "center", width:"80%", marginLeft:"130px", marginBottom:"20px" }}
           >
-            <div style={{ display: 'flex' }}>
-              <CardHeader 
-                  title={flight.airline}
-                  subheader = {flight.duration}
-                  />
-               <Typography style={{ display: 'end' }} paragraph variant="h5">
-                    ${flight.price}
-                </Typography>  
+            <div style={{ display: "flex" }}>
+              <CardHeader title={flight.airline} subheader={flight.duration} />
+              <Typography style={{ flex: "true", display:"right", marginLeft:"500px",marginTop:"50px"}} paragraph variant="h5">
+                ${flight.price}
+              </Typography>
             </div>
-           <div style={{ display: 'flex' }}>
+            <div style={{ display: "flex" }}>
               <CardContent>
-                <Typography paragraph >
-                    {flight.deptIataCode}
-                </Typography>    
-                <Typography paragraph>
-                    {flight.takeOffTime}
-                </Typography>
-                <Typography paragraph>
-                    {flight.deptTerminal}
-                </Typography>
+                <Typography paragraph>{flight.deptIataCode}</Typography>
+                <Typography paragraph>{flight.takeOffTime}</Typography>
+                <Typography paragraph>{flight.deptTerminal}</Typography>
               </CardContent>
-              <CardContent>
-              <Typography paragraph>
-                    {flight.arrivalIataCode}
-                </Typography>
-                <Typography paragraph>
-                    {flight.arrivalTime}
-                </Typography>
-                <Typography paragraph>
-                    {flight.arrivalTerminal}
-                </Typography>
+              <CardContent style={{marginLeft:"400px"}}>
+                <Typography paragraph>{flight.arrivalIataCode}</Typography>
+                <Typography paragraph>{flight.arrivalTime}</Typography>
+                <Typography paragraph>{flight.arrivalTerminal}</Typography>
               </CardContent>
               <CardActions>
-                <Btn size="small" color="primary"  onClick={this.addToItinerary}>
+                <Btn size="small" color="primary" style={{backgroundColor:"indigo",color:"white",marginLeft:"20px"}} onClick={this.addToItinerary}>
                   Add to itinerary
                 </Btn>
-              </CardActions>   
-            </div> 
+              </CardActions>
+            </div>
           </Card>
         </div>
-        )
-      })
-    )
-  }
+      );
+    });
+  };
 
   render() {
     return (
@@ -428,51 +426,61 @@ class Travel extends React.Component {
             <Panel />
           </Grid>
           <Grid item xs={10}>
-            <h1 style={{ marginLeft: "20px" }}>Search your travel route</h1>
+            <h1 style={{ marginLeft: "100px" }}>Search your travel route</h1>
             <Card
               raised="true"
-              style={{ width: "85%", marginLeft: "100px", marginTop: "40px" }}
+              style={{ width: "90%", marginLeft: "70px", marginTop: "40px" }}
             >
               <div style={{ backgroundColor: "lightyellow" }}>
                 {/* // style={{ backgroundColor: "lightyellow" }}> */}
-                <div style={{ display: "inline-block" }}>
+                <div
+                  style={{
+                    display: "inline-block",
+                    marginLeft: "40px",
+                    marginTop: "15px",
+                  }}
+                >
                   <LocationOnIcon />
                   <AsyncTypeahead
                     id="source"
                     labelKey="name"
                     minLength={3}
-                    onChange={(selected) => this.setState({departurecity : selected})}
+                    onChange={(selected) =>
+                      this.setState({ departurecity: selected })
+                    }
                     onSearch={this.handleAirportSearch}
                     options={this.state.options}
                     placeholder="Enter source"
-                 />
+                  />
                 </div>
 
-                <div style={{ display: "inline-block" }}>
+                <div style={{ display: "inline-block", marginLeft: "40px" }}>
                   <LocationOnIcon />
                   <AsyncTypeahead
                     id="destination"
                     labelKey="name"
                     minLength={3}
-                    onChange={(selected) => this.setState({arrivalcity : selected})}
+                    onChange={(selected) =>
+                      this.setState({ arrivalcity: selected })
+                    }
                     onSearch={this.handleAirportSearch}
                     options={this.state.options}
                     placeholder="Enter source"
                     renderMenuItemChildren={(option, props) => (
-                    <React.Fragment>
-                      <span>{option.name}</span>
-                    </React.Fragment>
-                  )}
-                />
+                      <React.Fragment>
+                        <span>{option.name}</span>
+                      </React.Fragment>
+                    )}
+                  />
                 </div>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
-                    // style={{
-                    //   marginLeft: "15px",
-                    //   height: "20px",
-                    //   width: "20%",
-                    //   marginTop: "45px",
-                    // }}
+                    style={{
+                      marginLeft: "40px",
+                      height: "20px",
+                      width: "15%",
+                      marginTop: "20px",
+                    }}
                     disableToolbar
                     variant="inline"
                     format="yyyy-MM-dd"
@@ -490,12 +498,12 @@ class Travel extends React.Component {
                 {this.state.roundtrip && (
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
-                      // style={{
-                      //   marginLeft: "15px",
-                      //   marginTop: "45px",
-                      //   height: "20px",
-                      //   width: "20%",
-                      // }}
+                      style={{
+                        marginLeft: "40px",
+                        height: "20px",
+                        width: "15%",
+                        marginTop: "20px",
+                      }}
                       disableToolbar
                       variant="inline"
                       format="yyyy-MM-dd"
@@ -510,12 +518,75 @@ class Travel extends React.Component {
                     />
                   </MuiPickersUtilsProvider>
                 )}
+                
+                <div style={{ display: "inline-block", marginLeft: "40px" }}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={this.state.stop}
+                        onChange={this.handleStopClass}
+                        name="nonstop"
+                        color="primary"
+                      />
+                    }
+                    label="nonstop"
+                  />
+                </div>
+
                 <div style={{ display: "inline-block" }}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={this.state.roundtrip}
+                        onChange={this.handleRoundTrip}
+                        name="roundtrip"
+                        color="primary"
+                      />
+                    }
+                    label="roundtrip"
+                  />
+                </div>
+
+                {/* <div
+                  style={{
+                    marginLeft: "40px",
+                    height: "20px",
+                    width: "25%",
+                    paddingTop: "40px",
+                    paddingLeft:"50px",
+                    // display: "inline-block",
+                    // position: "absolute",
+                  }}
+                >
+                  <TextField
+                    id="count"
+                    label="No. of passengers"
+                    onChange={this.handleCountoftravellers}
+                    value={this.state.countoftravellers}
+                  />
+                </div> */}
+
+                <div 
+                style={{
+                    marginLeft: "40px",
+                    marginTop:"10px",
+                    height: "20px",
+                    width: "20%",
+                    // paddingTop: "40px",
+                    // paddingLeft:"50px",
+                    // display: "inline-block",
+                    // position: "absolute",
+                  }}>
+                
                   <TextField 
                     id="count" 
                     label="No. of passengers" 
                     onChange={this.handleCountoftravellers}
                     value={this.state.countoftravellers}
+                    variant="outlined"
+                    color="primary"
+                    size="medium"
+
                   />
                   {/* <Autocomplete
                     id="combo-box-demo3"
@@ -547,7 +618,7 @@ class Travel extends React.Component {
                   />*/}
                 </div>
 
-                <div style={{ display: "inline-block" }}>
+                <div>
                   <Autocomplete
                     id="combo-box-demo4"
                     options={this.travellerclass}
@@ -560,12 +631,14 @@ class Travel extends React.Component {
                       <TextField
                         {...params}
                         id="start"
-                        // style={{
-                        //   width: "200px",
-                        //   // marginTop: "5px",
-                        //   marginLeft: "10px",
-                        //   marginBottom: "10px",
-                        // }}
+                        style={{
+                          width: "200px",
+                          // marginTop: "5px",
+                          marginLeft: "300px",
+                          // marginBottom: "3px",
+                          position:"relative",
+                          bottom:"20px"
+                        }}
                         // select
                         label="class"
                         // value={value}
@@ -577,54 +650,37 @@ class Travel extends React.Component {
                     )}
                   />
                 </div>
-                <div style={{ display: "inline-block" }}>
-                  <FormControlLabel
-                      control={
-                        <Switch
-                          checked={this.state.roundtrip}
-                          onChange={this.handleRoundTrip}
-                          name="roundtrip"
-                          color="primary"
-                        />
-                      }
-                      label="roundtrip"
-                    />
-                  </div>
-                  <div style={{ display: "inline-block" }}>
-                    <FormControlLabel
-                        control={
-                          <Switch
-                            checked={this.state.stop}
-                            onChange={this.handleStopClass}
-                            name="nonstop"
-                            color="primary"
-                          />
-                        }
-                        label="nonstop"
-                      />
-                  </div>
+                <div style={{position:"relative",bottom:"80px"}}>
                 <Button
                   style={{
                     backgroundColor: "indigo",
                     width: "15%",
-                    // marginTop: "35px",
-                    // marginLeft: "15px",
+                    display:"relative",
+                    // paddingLeft:"200px",
+                    marginLeft: "700px",
                     // height: "55px",
-                    // fontSize: "18px",
-                    fontFamily: "Arial",
+                    fontSize: "18px",
+                    fontFamily: "Tahoma",
                     color: "white",
                   }}
                   onClick={this.handleFlightSearch}
                 >
                   Search
                 </Button>
+                </div>
+                
               </div>
             </Card>
-            <div style={{ width: "85%", marginLeft: "100px", marginTop: "40px"} }>
+            <div
+              style={{ width: "85%", marginLeft: "100px", marginTop: "40px" }}
+            >
               {this.state.flights && this.renderFlights(this.state.flights)}
-              {this.state.returnFlights &&this.renderFlights(this.state.returnFlights)}
+              {this.state.returnFlights &&
+                this.renderFlights(this.state.returnFlights)}
             </div>
-                  
+
+            <div>
+        </div>
           </Grid>
         </Grid>
       </Grid>
