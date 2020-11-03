@@ -6,23 +6,6 @@ import Typography from "@material-ui/core/Typography";
 
 
 
-// const DUMMY_DATA = [
-
-//     {
-//         senderID:'deepika',
-//         text:'hello'
-//     },
-//     {
-//         senderID:'will',
-//         text:'hello'
-//     },
-//     {
-//         senderID:'jyoti',
-//         text:'hello'
-//     }
-
-// ]
-
 class MessageList extends React.Component {
   render() {
     return (

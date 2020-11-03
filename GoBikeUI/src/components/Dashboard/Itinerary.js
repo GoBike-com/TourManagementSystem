@@ -161,6 +161,9 @@ class Itinerary extends React.Component {
     this.setState({showmap:true})
   }
 
+  header = 
+  window.sessionStorage.getItem("username");
+
   render() {
     return (
       <Grid>
@@ -180,6 +183,8 @@ class Itinerary extends React.Component {
               >
                 GoBike
                 <DirectionsBikeIcon className={this.classes.logo} />
+                <Typography>Welcome {this.header}</Typography>
+
               </Typography>
 
               <Link to={"/traveller/signin"} style={{ float: "right" }}>

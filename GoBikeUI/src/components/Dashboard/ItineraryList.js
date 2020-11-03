@@ -9,7 +9,8 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import { CSVLink, CSVDownload } from "react-csv";
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -115,6 +116,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const csvData = [
+  ["firstname", "lastname", "email"],
+  ["Ahmed", "Tomi", "ah@smthing.co.com"],
+  ["Raed", "Labes", "rl@smthing.co.com"],
+  ["Yezzi", "Min l3b", "ymin@cocococo.com"]
+];
+
 export default function ItineraryList() {
   const classes = useStyles();
 
@@ -123,6 +131,8 @@ export default function ItineraryList() {
 
     {/* <CircularProgress disableShrink />; */}
     <h1 style={{marginLeft: "120px"}}>View your itinerary</h1>
+    <div style={{marginLeft:"900px"}}><CSVLink style={{ color:"black"}} data={csvData}> Download your Itinerary<CloudDownloadIcon /></CSVLink></div>
+    
 
     <TableContainer
       component={Paper}

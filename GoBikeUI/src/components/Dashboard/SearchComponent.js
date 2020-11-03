@@ -22,6 +22,9 @@ class SearchComponent extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  header = 
+  window.sessionStorage.getItem("username");
+
   useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 2,
@@ -144,6 +147,7 @@ class SearchComponent extends React.Component {
             >
               GoBike
               <DirectionsBikeIcon className={this.classes.logo} />
+              <Typography>Welcome {this.header}</Typography>
             </Typography>
             
             <Link to={"/traveller/signin"} style={{float:"right"}}>
