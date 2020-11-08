@@ -22,7 +22,8 @@ public class Flight {
     private Long id;
 
     @ManyToOne
-    private Travel travel;
+    @JoinColumn(name = "USER_ITINERARY")
+    private UserItinerary userItinerary;
 
     @Column(name = "TYPE")
     private FlightType type;
@@ -59,6 +60,9 @@ public class Flight {
 
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
+
+    @Column(name="BOOKED")
+    private Boolean booked;
 
     @PrePersist
     void onCreate() {

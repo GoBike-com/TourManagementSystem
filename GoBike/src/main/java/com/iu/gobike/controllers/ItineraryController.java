@@ -1,11 +1,13 @@
 package com.iu.gobike.controllers;
 
 import com.iu.gobike.dto.AddTravelRequest;
-import com.iu.gobike.dto.SearchAirportResponse;
-import com.iu.gobike.service.TravelService;
+import com.iu.gobike.model.UserItinerary;
+import com.iu.gobike.service.ItineraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author jbhushan
@@ -16,16 +18,25 @@ import org.springframework.web.bind.annotation.*;
 public class ItineraryController {
 
     @Autowired
-    private TravelService travelService;
+    private ItineraryService itineraryService;
 
     /**
-     * This API is responsible for getting airport with the given keyword
-     * @return list of airports
+     * This API is responsible for saving selected flight details to itinerary
      */
     @PostMapping(path = "/travel", produces = "application/json")
     public ResponseEntity<String> addTravel(@PathVariable("username") String userName, @RequestBody AddTravelRequest request) {
-        //SearchAirportResponse response = travelService.searchAirports(keyword);
+         itineraryService.addTravel(request,userName);
          return  ResponseEntity.ok("");
 
+    }
+
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<List<UserItinerary>> getAllItineraries(@PathVariable("username") String username){
+      return ResponseEntity.ok(itineraryService.getAllItineraries(username));
+    }
+
+    @GetMapping(path="{id}", produces = "application/json")
+    public ResponseEntity<UserItinerary> getItineraryDetails(@PathVariable("id") String itineraryId){
+            return ResponseEntity.ok(itineraryService.getItinerary(itineraryId));
     }
 }

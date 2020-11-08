@@ -1,13 +1,13 @@
 package com.iu.gobike.repository;
 
-import com.iu.gobike.model.Itinerary;
 import org.springframework.data.repository.CrudRepository;
+import com.iu.gobike.model.Flight;
 import org.springframework.stereotype.Repository;
 
 /**
  * @author jbhushan
  */
 @Repository
-public interface ItineraryRepository extends CrudRepository<Itinerary, Long> {
+public interface FlightRepository extends CrudRepository<Flight, Long> {
 
 }
