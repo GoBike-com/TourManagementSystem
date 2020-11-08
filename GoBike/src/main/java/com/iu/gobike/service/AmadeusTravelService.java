@@ -1,6 +1,5 @@
 package com.iu.gobike.service;
 
-import com.iu.gobike.dto.BookFlightRequest;
 import com.iu.gobike.dto.SearchAirportResponse;
 import com.iu.gobike.dto.SearchFlightRequest;
 import com.iu.gobike.dto.SearchFlightResponse;
@@ -8,8 +7,10 @@ import com.iu.gobike.dto.SearchFlightResponse;
 /**
  * @author jbhushan
  */
-public interface TravelService {
+public interface AmadeusTravelService {
 
-    Boolean bookFlights(BookFlightRequest request);
+    SearchAirportResponse searchAirports(String keyword);
+
+    SearchFlightResponse searchFlights(SearchFlightRequest request);
 
 }
