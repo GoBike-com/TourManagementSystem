@@ -1,48 +1,50 @@
 package com.iu.gobike.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
+/**
+ * @author jbhushan
+ */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode
 @Builder
 @Entity
 @Table
-public class Restaurant {
+public class UserItinerary {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "NAME")
-    private String name;
+    @JoinColumn(name = "USER")
+    @ManyToOne
+    private User user;
 
-    @Column(name = "DESCRIPTION")
-    private String description;
+    @JoinColumn(name = "ITINERARY")
+    @ManyToOne
+    private Itinerary itinerary;
 
-    @Column(name = "WEBSITE_URL")
-    private String websiteURL;
-
-    @Column(name = "IMAGE_URL")
-    private String imageURL;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
-    @JoinColumn(name = "PLACE_ID")
-    private Place place;
+    @OneToMany
+    private List<Flight> flights;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
 
     @Column(name="LAST_MODIFIED_DATE")
     private Instant lastModifiedDate;
+
+    @Column(name="CREATED_BY")
+    private String createdBy;
+
+    @Column(name="MODIFIED_BY")
+    private String modifiedBy;
 
     @PrePersist
     void onCreate() {

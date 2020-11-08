@@ -1,11 +1,8 @@
 package com.iu.gobike.model;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.time.Instant;
 import java.util.List;
 

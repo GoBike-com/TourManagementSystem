@@ -20,7 +20,6 @@ public class ItineraryServiceImpl implements ItineraryService {
     @Override
     public String addTravel(AddTravelRequest request, String userName) {
         User user = userRepository.findByUserName(userName);
-
         tranformFlightDetails(request.getFlight());
         tranformFlightDetails(request.getReturnFlight());
         Flight returnFlight = Flight.builder().build();
