@@ -8,5 +8,5 @@ import com.iu.gobike.dto.SearchFlightResponse;
  */
 public interface ItineraryService {
 
-    String addTravel(AddTravelRequest request, String userName);
+    void addTravel(AddTravelRequest request, String userName);
 }

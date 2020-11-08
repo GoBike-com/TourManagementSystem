@@ -1,13 +1,13 @@
 package com.iu.gobike.model;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.List;
 
+/**
+ * This model is responsible for storing al the details for an itinerary
+ */
 @Getter
 @Setter
 @AllArgsConstructor
@@ -22,12 +22,14 @@ public class Itinerary {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @JoinColumn(name = "TRIP")
-    @ManyToOne
-    private Trip trip;
+    @Column(name = "NUM_OF_DAYS")
+    private Integer numberOfDays;
 
-    @Column(name = "DAY")
-    private Integer day;
+    @Column(name="START_DATE")
+    private Instant startDate;
+
+    @Column(name="END_DATE")
+    private Instant endDate;
 
     @Column(name = "DESCRIPTION")
     private String description;

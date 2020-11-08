@@ -18,5 +18,6 @@ public class AddTravelRequest {
     private int adults;
     private FlightInfo flight;
     private FlightInfo returnFlight;
+    private Long itineraryId;
 
 }
