@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author jbhushan
@@ -45,6 +46,12 @@ public class ItineraryServiceImpl implements ItineraryService {
         }
         saveFlightDetails(request,userItinerary);
 
+    }
+
+    @Override
+    public UserItinerary getItinerary(String id) {
+        Optional<UserItinerary> userItinerary = userItineraryRepository.findById(Long.valueOf(id));
+        return userItinerary.get();
     }
 
     private void saveFlightDetails(AddTravelRequest request, UserItinerary userItinerary) {

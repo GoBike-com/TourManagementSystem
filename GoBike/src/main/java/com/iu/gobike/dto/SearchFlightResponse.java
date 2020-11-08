@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class SearchFlightResponse {
-    //@Enumerated
     private String travelClass;
     private String travelDate;
     private String returnDate;

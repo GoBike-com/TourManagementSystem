@@ -52,8 +52,6 @@ public class UserServiceImpl implements UserService {
         
     public static final String SESSIONID = "sessionid";
 
-
-
     @Override
     public void register(RegisterUserRequest request, String password) throws EntityExistsException, InvalidKeySpecException, NoSuchAlgorithmException {
         String email = request.getEmail();

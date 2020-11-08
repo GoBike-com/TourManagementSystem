@@ -13,6 +13,4 @@ public interface UserItineraryRepository extends CrudRepository<UserItinerary, L
     UserItinerary findByUserId(Long userId);
 
     UserItinerary findByUserIdAndItineraryId(Long userId, Long itineraryId);
-
-
 }
