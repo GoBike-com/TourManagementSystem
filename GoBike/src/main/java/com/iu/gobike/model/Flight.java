@@ -61,6 +61,9 @@ public class Flight {
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
 
+    @Column(name="BOOKED")
+    private Boolean booked;
+
     @PrePersist
     void onCreate() {
         this.createdDate = this.lastModifiedDate = Instant.now();

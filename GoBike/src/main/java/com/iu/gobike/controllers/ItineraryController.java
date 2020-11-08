@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author jbhushan
  */
@@ -26,6 +28,11 @@ public class ItineraryController {
          itineraryService.addTravel(request,userName);
          return  ResponseEntity.ok("");
 
+    }
+
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<List<UserItinerary>> getAllItineraries(@PathVariable("username") String username){
+      return ResponseEntity.ok(itineraryService.getAllItineraries(username));
     }
 
     @GetMapping(path="{id}", produces = "application/json")

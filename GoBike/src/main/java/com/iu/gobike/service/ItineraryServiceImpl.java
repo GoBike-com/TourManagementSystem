@@ -37,8 +37,6 @@ public class ItineraryServiceImpl implements ItineraryService {
         UserItinerary userItinerary = null;
         if(request.getItineraryId()!=null){
             userItinerary = userItineraryRepository.findByUserIdAndItineraryId(user.getId(), request.getItineraryId());
-        } else {
-            userItinerary = userItineraryRepository.findByUserId(user.getId());
         }
         if(userItinerary == null) {
             Itinerary itinerary = Itinerary.builder().build();
@@ -52,6 +50,13 @@ public class ItineraryServiceImpl implements ItineraryService {
     public UserItinerary getItinerary(String id) {
         Optional<UserItinerary> userItinerary = userItineraryRepository.findById(Long.valueOf(id));
         return userItinerary.get();
+    }
+
+    @Override
+    public List<UserItinerary> getAllItineraries(String userName) {
+        User user = userRepository.findByUserName(userName);
+        List<UserItinerary> itineraries = userItineraryRepository.findByUserId(user.getId());
+        return null;
     }
 
     private void saveFlightDetails(AddTravelRequest request, UserItinerary userItinerary) {
