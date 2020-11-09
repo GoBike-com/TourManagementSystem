@@ -155,7 +155,7 @@ class Travel extends React.Component {
     this.setState({ countoftravellers: event.target.value });
   }
 
-  addToItinerary = (event) => {
+  addToItinerary(flight){
     var targetUrl = config.API_URL + "/itinerary/"+window.sessionStorage.getItem("username") + "/travel";
     const requestOptions = {
       method: "POST",
@@ -170,16 +170,16 @@ class Travel extends React.Component {
         adults: this.state.countoftravellers,
         travelClass: this.state.travellerclass,
         flight: {
-          price: event.price,
-          duration: event.duration,
-          takeOffTime: event.takeOffTime,
-          arrivalTime: event.arrivalTime,
-          airline: event.airline,
-          arrivalTerminal: event.arrivalTerminal,
-          deptTerminal : event.deptTerminal,
-          arrivalIataCode: event.arrivalIataCode,
-          deptIataCode : event.deptIataCode,
-          returnFlight: event.deptIataCode === this.state.arrivalIataCode
+            price: flight.price,
+            duration: flight.duration,
+            takeOffTime: flight.takeOffTime,
+            arrivalTime: flight.arrivalTime,
+            airline: flight.airline,
+            arrivalTerminal: flight.arrivalTerminal,
+            deptTerminal : flight.deptTerminal,
+            arrivalIataCode: flight.arrivalIataCode,
+            deptIataCode : flight.deptIataCode,
+            returnFlight: flight.deptIataCode === this.state.arrivalIataCode
         }
       }),
     };
@@ -388,7 +388,11 @@ class Travel extends React.Component {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Btn size="small" color="primary"  onClick={this.addToItinerary(flight)}>
+                <Btn size="small" color="primary" onClick={e => 
+                 {
+                  e.preventDefault()
+                  this.addToItinerary(flight)
+                 }}>
                   Add to itinerary
                 </Btn>
               </CardActions>   
