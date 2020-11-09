@@ -13,8 +13,8 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @Builder
-@Entity
-@Table
+//@Entity
+//@Table
 public class Travel {
 
     @Id
