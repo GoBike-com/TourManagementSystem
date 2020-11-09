@@ -81,18 +81,18 @@ public class ItineraryServiceImpl implements ItineraryService {
     private void saveFlightDetails(AddTravelRequest request, UserItinerary userItinerary) {
          List<Flight> flights =  new ArrayList<Flight>();
          if(request.getFlight() != null) {
-            flights.add(transformFlightDetails(request.getFlight(), userItinerary,FlightType.TRAVEL));
+            flights.add(transformFlightDetails(request.getFlight(), userItinerary));
         }
-         if(request.getReturnFlight() !=null) {
-             flights.add(transformFlightDetails(request.getReturnFlight(), userItinerary,FlightType.RETURN));
-         }
+//         if(request.getReturnFlight() !=null) {
+//             flights.add(transformFlightDetails(request.getReturnFlight(), userItinerary,FlightType.RETURN));
+//         }
          flightRepository.saveAll(flights);
     }
 
-    private Flight transformFlightDetails(FlightInfo flightInfo, UserItinerary userItinerary, FlightType flightType) {
+    private Flight transformFlightDetails(FlightInfo flightInfo, UserItinerary userItinerary) {
        return Flight.builder().airline(flightInfo.getAirline()).arrivalIataCode(flightInfo.getArrivalIataCode())
                 .arrivalTerminal(flightInfo.getArrivalTerminal()).deptIataCode(flightInfo.getDeptIataCode())
                 .deptTerminal(flightInfo.getDeptTerminal()).userItinerary(userItinerary).duration(flightInfo.getDuration())
-               .type(flightType).build();
+               .type(flightInfo.isReturnFlight()?FlightType.RETURN:FlightType.TRAVEL).build();
     }
 }

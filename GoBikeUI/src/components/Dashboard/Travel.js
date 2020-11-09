@@ -156,8 +156,7 @@ class Travel extends React.Component {
   }
 
   addToItinerary = (event) => {
-    event.preventDefault();
-    var targetUrl = config.API_URL + "/"+window.sessionStorage.getItem("username") + "/itinerary/travel";
+    var targetUrl = config.API_URL + "/itinerary/"+window.sessionStorage.getItem("username") + "/travel";
     const requestOptions = {
       method: "POST",
       credentials: "include",
@@ -170,6 +169,18 @@ class Travel extends React.Component {
         nonStop: this.state.stop,
         adults: this.state.countoftravellers,
         travelClass: this.state.travellerclass,
+        flight: {
+          price: event.price,
+          duration: event.duration,
+          takeOffTime: event.takeOffTime,
+          arrivalTime: event.arrivalTime,
+          airline: event.airline,
+          arrivalTerminal: event.arrivalTerminal,
+          deptTerminal : event.deptTerminal,
+          arrivalIataCode: event.arrivalIataCode,
+          deptIataCode : event.deptIataCode,
+          returnFlight: event.deptIataCode === this.state.arrivalIataCode
+        }
       }),
     };
 
@@ -377,7 +388,7 @@ class Travel extends React.Component {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Btn size="small" color="primary"  onClick={this.addToItinerary}>
+                <Btn size="small" color="primary"  onClick={this.addToItinerary(flight)}>
                   Add to itinerary
                 </Btn>
               </CardActions>   

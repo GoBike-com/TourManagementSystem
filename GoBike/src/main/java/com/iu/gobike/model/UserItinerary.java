@@ -27,7 +27,7 @@ public class UserItinerary {
     private User user;
 
     @JoinColumn(name = "ITINERARY")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Itinerary itinerary;
 
     @OneToMany(mappedBy = "userItinerary")
