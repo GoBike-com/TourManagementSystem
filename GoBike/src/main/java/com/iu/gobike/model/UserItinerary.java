@@ -33,6 +33,9 @@ public class UserItinerary {
     @OneToMany(mappedBy = "userItinerary")
     private List<Flight> flights;
 
+    @OneToMany(mappedBy = "userItinerary")
+    private List<Accommodation> accommodations;
+
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
 

@@ -31,6 +31,9 @@ public class Place implements Serializable {
     @Column(name = "STATE")
     private String state;
 
+    @Column(name = "CITY_CODE")
+    private String cityCode;
+
     @Column(name = "COUNTRY")
     private String country;
 
