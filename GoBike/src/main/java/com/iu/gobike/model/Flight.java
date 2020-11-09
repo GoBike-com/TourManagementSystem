@@ -34,6 +34,9 @@ public class Flight {
     @Column(name = "TRAVEL_CLASS")
     private String travelClass;
 
+    @Column(name = "PRICE")
+    private float price;
+
     @Column(name = "DURATION")
     private String duration;
 
@@ -65,7 +68,7 @@ public class Flight {
     private String modifiedBy;
 
     @Column(name="BOOKED")
-    private Boolean booked;
+    private boolean booked;
 
     @PrePersist
     void onCreate() {
