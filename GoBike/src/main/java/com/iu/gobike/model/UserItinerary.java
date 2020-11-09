@@ -13,10 +13,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
 @Entity
-@Table
+@Table(name="USER_ITINERARY")
 public class UserItinerary {
 
     @Id
@@ -28,10 +27,10 @@ public class UserItinerary {
     private User user;
 
     @JoinColumn(name = "ITINERARY")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Itinerary itinerary;
 
-    @OneToMany
+    @OneToMany(mappedBy = "userItinerary")
     private List<Flight> flights;
 
     @Column(name="CREATED_DATE", updatable = false)

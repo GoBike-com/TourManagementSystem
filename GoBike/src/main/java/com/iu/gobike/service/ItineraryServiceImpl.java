@@ -2,6 +2,9 @@ package com.iu.gobike.service;
 
 import com.iu.gobike.dto.AddTravelRequest;
 import com.iu.gobike.dto.FlightInfo;
+import com.iu.gobike.dto.GetItineraryDetailsResponse;
+import com.iu.gobike.dto.ItineraryDetail;
+import com.iu.gobike.enums.FlightType;
 import com.iu.gobike.model.Flight;
 import com.iu.gobike.model.Itinerary;
 import com.iu.gobike.model.User;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author jbhushan
@@ -42,6 +46,7 @@ public class ItineraryServiceImpl implements ItineraryService {
             Itinerary itinerary = Itinerary.builder().build();
             userItinerary = UserItinerary.builder().user(user).itinerary(itinerary).build();
         }
+        userItineraryRepository.save(userItinerary);
         saveFlightDetails(request,userItinerary);
 
     }
@@ -53,22 +58,41 @@ public class ItineraryServiceImpl implements ItineraryService {
     }
 
     @Override
-    public List<UserItinerary> getAllItineraries(String userName) {
+    public GetItineraryDetailsResponse getAllItineraries(String userName) {
         User user = userRepository.findByUserName(userName);
-        List<UserItinerary> itineraries = userItineraryRepository.findByUserId(user.getId());
-        return null;
+        List<UserItinerary> userItineraries = userItineraryRepository.findByUserId(user.getId());
+        return buildItineraryResponse(userItineraries,userName);
+    }
+
+    private GetItineraryDetailsResponse buildItineraryResponse(List<UserItinerary> userItineraries, String userName) {
+        List<ItineraryDetail> details = new ArrayList<ItineraryDetail>();
+        userItineraries.stream().map(userItinerary -> {
+            ItineraryDetail itineraryDetail = ItineraryDetail.builder()
+                    .flights(userItinerary.getFlights()).userItinerary(userItinerary.getId())
+                    .itinerary(userItinerary.getItinerary()).build();
+            details.add(itineraryDetail);
+            return details;
+        }).collect(Collectors.toList());
+        GetItineraryDetailsResponse response = GetItineraryDetailsResponse.builder().itineraryDetails(details)
+                .userName(userName).build();
+        return response;
     }
 
     private void saveFlightDetails(AddTravelRequest request, UserItinerary userItinerary) {
          List<Flight> flights =  new ArrayList<Flight>();
-         flights.add(transformFlightDetails(request.getFlight(),userItinerary));
-         flights.add(transformFlightDetails(request.getReturnFlight(),userItinerary));
+         if(request.getFlight() != null) {
+            flights.add(transformFlightDetails(request.getFlight(), userItinerary));
+        }
+//         if(request.getReturnFlight() !=null) {
+//             flights.add(transformFlightDetails(request.getReturnFlight(), userItinerary,FlightType.RETURN));
+//         }
          flightRepository.saveAll(flights);
     }
 
     private Flight transformFlightDetails(FlightInfo flightInfo, UserItinerary userItinerary) {
        return Flight.builder().airline(flightInfo.getAirline()).arrivalIataCode(flightInfo.getArrivalIataCode())
                 .arrivalTerminal(flightInfo.getArrivalTerminal()).deptIataCode(flightInfo.getDeptIataCode())
-                .deptTerminal(flightInfo.getDeptTerminal()).userItinerary(userItinerary).duration(flightInfo.getDuration()).build();
+                .deptTerminal(flightInfo.getDeptTerminal()).userItinerary(userItinerary).duration(flightInfo.getDuration())
+               .type(flightInfo.isReturnFlight()?FlightType.RETURN:FlightType.TRAVEL).build();
     }
 }

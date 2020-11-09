@@ -1,5 +1,6 @@
 package com.iu.gobike.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iu.gobike.enums.FlightType;
 import lombok.*;
 
@@ -23,9 +24,11 @@ public class Flight {
 
     @ManyToOne
     @JoinColumn(name = "USER_ITINERARY")
+    @JsonIgnore
     private UserItinerary userItinerary;
 
     @Column(name = "TYPE")
+    @Enumerated(EnumType.STRING)
     private FlightType type;
 
     @Column(name = "TRAVEL_CLASS")
