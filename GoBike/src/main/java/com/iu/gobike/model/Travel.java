@@ -36,9 +36,9 @@ public class Travel {
     @Column(name = "RETURN_DATE")
     private Instant returnDate;
 
-    @JoinColumn(name = "FLIGHT")
-    @OneToMany
-    private List<Flight> flight;
+  //  @JoinColumn(name = "FLIGHT")
+//    @OneToMany
+//    private List<Flight> flight;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
