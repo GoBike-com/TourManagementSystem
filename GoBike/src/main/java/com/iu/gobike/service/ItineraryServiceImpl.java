@@ -1,9 +1,6 @@
 package com.iu.gobike.service;
 
-import com.iu.gobike.dto.AddTravelRequest;
-import com.iu.gobike.dto.FlightInfo;
-import com.iu.gobike.dto.GetItineraryDetailsResponse;
-import com.iu.gobike.dto.ItineraryDetail;
+import com.iu.gobike.dto.*;
 import com.iu.gobike.enums.FlightType;
 import com.iu.gobike.model.Flight;
 import com.iu.gobike.model.Itinerary;
@@ -48,6 +45,10 @@ public class ItineraryServiceImpl implements ItineraryService {
         }
         userItineraryRepository.save(userItinerary);
         saveFlightDetails(request,userItinerary);
+    }
+
+    @Override
+    public void addAccommodation(AddAccommodationRequest request, String userName) {
 
     }
 
