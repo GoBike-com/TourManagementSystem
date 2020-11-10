@@ -267,7 +267,7 @@ class UserRegistrationForm extends React.Component {
 
         <CssBaseline />
         {this.state.isRegistered === true ? this.myDialogue() : this.state.isRegistered === false ? alert("Username or email is already registered"):null}
-        <div className={this.classes.root}>
+        {/* <div className={this.classes.root}>
           <AppBar position="static" style={{ backgroundColor: "indigo" }}>
             <Toolbar>
               <Typography
@@ -281,7 +281,7 @@ class UserRegistrationForm extends React.Component {
               </Typography>
             </Toolbar>
           </AppBar>
-        </div>
+        </div> */}
 
         {/* <Grid item xs={false} sm={4} md={7} 
          style={{
@@ -486,7 +486,5 @@ class UserRegistrationForm extends React.Component {
     );
   }
 }
-
-// export default withStyles(styles, { withTheme: true })(UserRegistrationForm);
 
 export default withRouter(UserRegistrationForm);
