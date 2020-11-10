@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const handleSubmit = (event) => {
+const logout = (event) => {
     event.preventDefault();
     const targetUrl = config.API_URL + "/user/logout";
 
@@ -39,6 +40,7 @@ const handleSubmit = (event) => {
                 // this.state.isLoggedOut = "True";
                 console.log("redirecting to home page.....");
                 localStorage.clear();
+                window.sessionStorage.clear();
                 window.location.href="/"
             }
         })
@@ -47,12 +49,26 @@ const handleSubmit = (event) => {
         });
 };
 
+const login = (event) => {
+    event.preventDefault();
+    window.location.href="/traveller/signin"
+}
+
+const displayButtons = (userName) =>{
+    return userName? <div><Button color="inherit" onClick={logout}>
+                             LOGOUT
+                    </Button></div> :
+                    <div>
+                       {/* <Link to={window.location.origin+"/traveller/signin"}> */}
+                            <Button color="inherit" onClick ={login}>
+                                LOGIN 
+                            </Button> 
+                       {/* </Link> */}
+                    </div>
+}
+
 export default function Header(props) {
     const classes = useStyles();
-
-    // displayButtons = (userName) =>{
-    //     return userName? <ExitToAppIcon />:<EnterToA
-    // }
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -76,9 +92,10 @@ export default function Header(props) {
                     <Typography variant="h6" className={classes.title}>
                         {props.pageName}
                     </Typography>
-                    <Button color="inherit" onClick={handleSubmit}>
+                    {displayButtons(props.username)}
+                    {/* <Button color="inherit" onClick={handleSubmit}>
                         {props.username && <ExitToAppIcon />}
-                    </Button>
+                    </Button> */}
                 </Toolbar>
             </AppBar>
         </div>

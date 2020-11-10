@@ -8,7 +8,6 @@ import LandingPage from "./components/LandingPage/LandingPage";
 import UserRegistrationPage from './components/UserRegistrationPage/UserRegistrationPage';
 import MainLoginForm from './components/Modal/MainLoginForm';
 // import SignupPage from './components/Modal/SignupPage';
-import Test from './components/Utility/Test';
 import Dashboard from './components/Dashboard/Dashboard';
 import ForgetPassword from './components/ForgetPassword/EmailPage';
 import OTPVerify from './components/OTP/OTPVerify';
