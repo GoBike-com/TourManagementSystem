@@ -1,23 +1,21 @@
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import moment from "moment";
 import {Card,Typography, CardHeader,CardActions, 
-  CardContent,AppBar, Toolbar,Grid,TextField,
+  CardContent,Grid,TextField,
   Button as Btn, Switch, FormControlLabel} from '@material-ui/core';
 import { fade, makeStyles } from "@material-ui/core/styles";
-import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { red, purple } from '@material-ui/core/colors';
+import { red } from '@material-ui/core/colors';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { config } from '../Constants'
-import Panel from "./Panel";
 import Button from "../../assets/components/CustomButtons/Button.js";
 
 // const PurpleSwitch = withStyles({
@@ -408,39 +406,7 @@ class Travel extends React.Component {
     return (
       <Grid>
         <CssBaseline />
-        <div className={this.classes.root}>
-          <AppBar position="static" style={{ backgroundColor: "indigo" }}>
-            <Toolbar>
-              <Typography
-                className={this.classes.title}
-                variant="h6"
-                noWrap
-                style={{
-                  fontSize: "24px",
-                  marginLeft: "275px",
-                  paddingRight: "800px",
-                }}
-              >
-                GoBike
-                <DirectionsBikeIcon className={this.classes.logo} />
-              </Typography>
-
-              <Link to={"/traveller/signin"} style={{ float: "right" }}>
-                <Button
-                  size="sm"
-                  style={{ alignItems: "right", marginRight: "10px" }}
-                  onClick={this.handleSubmit}
-                >
-                  logout
-                </Button>
-              </Link>
-            </Toolbar>
-          </AppBar>
-        </div>
         <Grid container>
-          <Grid item xs={2}>
-            <Panel />
-          </Grid>
           <Grid item xs={10}>
             <h1 style={{ marginLeft: "20px" }}>Search your travel route</h1>
             <Card

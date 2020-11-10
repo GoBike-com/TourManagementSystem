@@ -1,19 +1,8 @@
 import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
-import Panel from "./Panel";
-import { Grid, Paper } from "@material-ui/core";
-import { Link , withRouter } from "react-router-dom";
+import { Grid } from "@material-ui/core";
 import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Search from './SearchComponent';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -23,7 +12,6 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import image from "../../assets/img/img17.jpg";
 import ItineraryList from "./ItineraryList";
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 
 
