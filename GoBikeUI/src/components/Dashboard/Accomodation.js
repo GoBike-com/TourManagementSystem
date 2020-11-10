@@ -1,22 +1,10 @@
 import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
-import Panel from "./Panel";
-import { Grid, Paper } from "@material-ui/core";
-import { Link , withRouter } from "react-router-dom";
-import Button from "../../assets/components/CustomButtons/Button.js";
+import { Grid } from "@material-ui/core";
+import { withRouter } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Search from './SearchComponent';
 import { config } from '../Constants'
 import Accomodations from '../Accomodations/Accomondations';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 
 class Accomodation extends React.Component {
@@ -140,51 +128,7 @@ class Accomodation extends React.Component {
   return (
     <Grid>
        <CssBaseline />
-      <div className={this.classes.root}>
-        <AppBar position="static" style={{ backgroundColor: "indigo" }}>
-          <Toolbar>
-            <Typography
-              className={this.classes.title}
-              variant="h6"
-              noWrap
-              style={{ fontSize: "24px", marginLeft:"275px", paddingRight:"800px" }}
-            >
-              GoBike
-              <DirectionsBikeIcon className={this.classes.logo} />
-            </Typography>
-            {/* <div className={this.classes.search}>
-              <div className={this.classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: this.classes.inputRoot,
-                  input: this.classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-                style={{marginLeft:"100px"}}
-              />
-            </div> */}
-            
-            <Link to={"/traveller/signin"} style={{float:"right"}}>
-              <Button size="sm" style={{alignItems:"right", marginRight:"10px",backgroundColor:"black" }}
-              
-                onClick= {this.handleSubmit}
-              >
-                <ExitToAppIcon />
-              </Button>
-            </Link>
-            </Toolbar>
-
-            
-        
-        </AppBar>
-      </div>
       <Grid container >
-        <Grid item xs={2}>
-          <Panel />
-        </Grid>
         <Grid item xs={10} >
           <Accomodations/>
         </Grid>

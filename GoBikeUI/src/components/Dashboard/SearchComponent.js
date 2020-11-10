@@ -23,9 +23,9 @@ class SearchComponent extends React.Component {
     render() {
   return (
       <div>
-          <Header username={this.header} pageName="Explore Cities"/>
+          {/* <Header username={this.header} pageName="Explore Cities"/> */}
           <ExploreComponent />
-          <Footer />
+          {/* <Footer /> */}
       </div>
   );
 };
