@@ -1,5 +1,7 @@
 package com.iu.gobike.controllers;
 
+import com.iu.gobike.dto.HotelInfo;
+import com.iu.gobike.dto.SearchHotelRequest;
 import com.iu.gobike.model.Activity;
 import com.iu.gobike.model.Hotel;
 import com.iu.gobike.model.Place;
@@ -34,28 +36,32 @@ public class RestaurantController {
      * This API is responsible for getting all details for given restaurant name
      * @return Restaurant containing all the information
      */
-    @GetMapping(path = "/details/{name}", produces = "application/json")
-    public ResponseEntity<Restaurant> details(@PathVariable String name) {
-        Restaurant restaurant = restaurantService.getDetails(name);
-        return ResponseEntity.ok(restaurant);
-    }
+//    @GetMapping(path = "/details/{name}", produces = "application/json")
+//    public ResponseEntity<Restaurant> details(@PathVariable String name) {
+//        Restaurant restaurant = restaurantService.getDetails(name);
+//        return ResponseEntity.ok(restaurant);
+//    }
 
-    @PostMapping( produces = "application/json")
-    public ResponseEntity<Restaurant> create(@RequestBody Restaurant res) {
-        Restaurant restaurant = restaurantService.save(res);
-        return ResponseEntity.ok(restaurant);
-    }
+//    @PostMapping( produces = "application/json")
+//    public ResponseEntity<Restaurant> create(@RequestBody Restaurant res) {
+//        Restaurant restaurant = restaurantService.save(res);
+//        return ResponseEntity.ok(restaurant);
+//    }
 
-    @GetMapping( produces = "application/json")
-    public ResponseEntity<List<Restaurant> > findAll() {
-        List<Restaurant> restaurants = restaurantService.findAll();
-        return ResponseEntity.ok(restaurants);
-    }
+//    @GetMapping( produces = "application/json")
+//    public ResponseEntity<List<Restaurant> > findAll() {
+//        List<Restaurant> restaurants = restaurantService.findAll();
+//        return ResponseEntity.ok(restaurants);
+//    }
 
-    @GetMapping(path = "/city/{name}", produces = "application/json")
-    public ResponseEntity<List<Restaurant>> findByLocation(@PathVariable String name) {
-        List<Restaurant> restaurants = restaurantService.findByCity(name);
-        return ResponseEntity.ok(restaurants);
+    @PostMapping(path = "/city/hotels", produces = "application/json")
+    public ResponseEntity<List<HotelInfo>> findByLocation(@RequestBody SearchHotelRequest req) {
+    	System.out.println("hellloooooooooooooooooo");
+        List<HotelInfo> hn = restaurantService.searchHotels(req);
+        if(hn == null) {
+        	return ResponseEntity.ok(null);
+        }
+        return ResponseEntity.ok(hn);
     }
 
     @GetMapping(path = "/add")
