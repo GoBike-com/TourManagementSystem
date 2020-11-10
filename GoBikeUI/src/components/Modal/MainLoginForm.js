@@ -86,7 +86,7 @@ class MainLoginForm extends React.Component {
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.login = this.login.bind(this);
     this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
     this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
     this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -127,17 +127,15 @@ class MainLoginForm extends React.Component {
   };
 
 
-  handleSubmit = () => {
-    console.log("handleSubmit");
+  login = () => {
+    console.log("login");
 
     if(this.state.username === "" || this.state.password ===""){
       return this.setState({ hasErr : true })
     }
 
     if(this.state.username !== "" && this.state.password !== "" ){
-    var targetUrl = config.API_URL + "/user/login";
-
-    // var targetUrl = config.API_URL + "/user/register?password="+this.state.password;
+    var signUrl = config.API_URL + "/user/login";
     const requestOptions = {
       method: "POST",
       credentials: "include",
@@ -149,7 +147,7 @@ class MainLoginForm extends React.Component {
       }),
     };
 
-    fetch(targetUrl, requestOptions)
+    fetch(signUrl, requestOptions)
       .then(data => {
         console.log(data.ok);
         // check for error response
@@ -159,6 +157,7 @@ class MainLoginForm extends React.Component {
           if (data.ok === true) {
             this.setState({isRegistered : true})
             console.log("redirecting to home page.....");
+            window.sessionStorage.setItem("username",this.state.username)
             this.props.history.push({pathname : '/traveller/success',state:{
               username:this.state.username
             }});
@@ -349,7 +348,7 @@ class MainLoginForm extends React.Component {
                   variant="contained"
                   color="primary"
                   className={classes.submit}
-                  onClick={this.handleSubmit}
+                  onClick={this.login}
                 >
                   Sign In
                 </Button>
