@@ -50,6 +50,9 @@ const handleSubmit = (event) => {
 export default function Header(props) {
     const classes = useStyles();
 
+    // displayButtons = (userName) =>{
+    //     return userName? <ExitToAppIcon />:<EnterToA
+    // }
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -67,14 +70,14 @@ export default function Header(props) {
                     >
                         GoBike
                         <DirectionsBikeIcon className={classes.logo} />
-                        <Typography>Welcome {props.username}</Typography>
+                        <Typography>Welcome {props.username? props.username:'Guest'}</Typography>
                     </Typography>
 
                     <Typography variant="h6" className={classes.title}>
                         {props.pageName}
                     </Typography>
                     <Button color="inherit" onClick={handleSubmit}>
-                        <ExitToAppIcon />
+                        {props.username && <ExitToAppIcon />}
                     </Button>
                 </Toolbar>
             </AppBar>
