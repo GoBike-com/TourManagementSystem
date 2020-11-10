@@ -17,6 +17,7 @@ import Search from './SearchComponent';
 import { config } from '../Constants'
 import ExploreComponent from "../Explore/ExploreComponent";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Header from '../Header/Header';
 
 
 
@@ -148,6 +149,7 @@ class Dashboard extends React.Component {
 
   return (
     <Grid>
+        <Header username={this.props.location.state.username} pageName="Search"/>
        <CssBaseline />
       <div className={this.classes.root}>
         <AppBar position="static" style={{ backgroundColor: "indigo" }}>

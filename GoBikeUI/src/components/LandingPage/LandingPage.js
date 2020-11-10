@@ -237,7 +237,8 @@ const LandingPage = (props) => {
         {/* </Parallax> */}
         {/* </Grid> */}
       </Grid>
-        <Footer />
+        {/*Does really weird glitch*/}
+        {/*<Footer />*/}
     </div>
   );
 };
