@@ -1,6 +1,6 @@
 package com.iu.gobike.controllers;
 
-import com.iu.gobike.dto.BookFlightRequest;
+import com.iu.gobike.dto.BookRequest;
 import com.iu.gobike.dto.SearchAirportResponse;
 import com.iu.gobike.dto.SearchFlightRequest;
 import com.iu.gobike.dto.SearchFlightResponse;
@@ -49,7 +49,7 @@ public class TravelController {
      * @return list of airports
      */
     @PutMapping(path = "/flight/book", produces = "application/json")
-    public ResponseEntity<Boolean> bookFlight(@RequestBody BookFlightRequest request) {
+    public ResponseEntity<Boolean> bookFlight(@RequestBody BookRequest request) {
         return ResponseEntity.ok(travelService.bookFlights(request));
     }
 }

@@ -32,6 +32,15 @@ public class ItineraryController {
          return  ResponseEntity.ok("SAVED");
     }
 
+    /**
+     * This API is responsible for saving selected flight details to itinerary
+     */
+    @PostMapping(path = "/{username}/accommodation", produces = "application/json")
+    public ResponseEntity<String> addAccommodation(@PathVariable("username") String userName, @RequestBody AddTravelRequest request) {
+        itineraryService.addTravel(request,userName);
+        return  ResponseEntity.ok("SAVED");
+    }
+
     @GetMapping(path = "/{username}",produces = "application/json")
     public ResponseEntity<GetItineraryDetailsResponse> getAllItineraries(@PathVariable("username") String username){
         GetItineraryDetailsResponse response = itineraryService.getAllItineraries(username);
