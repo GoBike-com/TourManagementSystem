@@ -5,7 +5,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import Menus from './Menus';
@@ -25,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 const handleSubmit = (event) => {
     event.preventDefault();
-    var targetUrl = config.API_URL + "/user/logout";
+    const targetUrl = config.API_URL + "/user/logout";
 
     fetch(targetUrl,
         {
