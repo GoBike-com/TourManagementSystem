@@ -6,7 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import HomeIcon from '@material-ui/icons/Home';
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import Menus from './Menus';
 import {config} from "../Constants";
@@ -54,6 +54,17 @@ const login = (event) => {
     window.location.href="/traveller/signin"
 }
 
+const renderHome = (username) => {
+    window.location.href=username?"/traveller/success":"/"
+    // if(username) {
+    //     window.sessionStorage.setItem("username", username);
+    //     window.location.href="/traveller/success"
+    // }else{
+    //     window.location.href="/"
+    // }
+    // <Dashboard />
+}
+
 const displayButtons = (userName) =>{
     return userName? <div><Button color="inherit" onClick={logout}>
                              LOGOUT
@@ -92,10 +103,14 @@ export default function Header(props) {
                     <Typography variant="h6" className={classes.title}>
                         {props.pageName}
                     </Typography>
+                        <Button color="inherit" onClick={e => {
+                                                e.preventDefault()
+                                                renderHome(props.username)
+                                                }}>
+                             <HomeIcon />
+                        </Button>
                     {displayButtons(props.username)}
-                    {/* <Button color="inherit" onClick={handleSubmit}>
-                        {props.username && <ExitToAppIcon />}
-                    </Button> */}
+                    
                 </Toolbar>
             </AppBar>
         </div>

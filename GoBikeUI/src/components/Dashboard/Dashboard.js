@@ -19,7 +19,7 @@ class Dashboard extends React.Component {
    });
    }
 
-  header = window.sessionStorage.setItem("username", this.props.location.state.username);
+ // header = window.sessionStorage.setItem("username", this.props.location.state.username);
 
   render() {
   return (
