@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
+import Menus from './Menus';
 import {config} from "../Constants";
 
 const useStyles = makeStyles((theme) => ({
@@ -55,7 +56,8 @@ export default function Header(props) {
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                        <MenuIcon />
+                        {/*<MenuIcon />*/}
+                        <Menus />
                     </IconButton>
 
                     <Typography
