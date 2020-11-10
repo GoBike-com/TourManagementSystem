@@ -1,6 +1,6 @@
 package com.iu.gobike.service;
 
-import com.iu.gobike.dto.BookFlightRequest;
+import com.iu.gobike.dto.BookRequest;
 import com.iu.gobike.repository.FlightRepository;
 import com.iu.gobike.model.Flight;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class TravelServiceImpl implements TravelService{
     private FlightRepository flightRepository;
 
     @Override
-    public Boolean bookFlights(BookFlightRequest request) {
+    public Boolean bookFlights(BookRequest request) {
         Iterable<Flight> flights = flightRepository.findAllById(request.getIds());
         flights.forEach(flight -> flight.setBooked(true));
         flightRepository.saveAll(flights);

@@ -18,7 +18,6 @@ public class AddTravelRequest {
     private boolean nonStop;
     private int adults;
     private FlightInfo flight;
-    //private FlightInfo returnFlight;
     private Long itineraryId;
 
 }

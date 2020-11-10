@@ -15,6 +15,9 @@ public interface ItineraryService {
 
     void addTravel(AddTravelRequest request, String userName);
 
+    void addAccommodation(AddTravelRequest request, String userName);
+
     UserItinerary getItinerary(String id);
+
     GetItineraryDetailsResponse getAllItineraries(String userName);
 }

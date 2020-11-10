@@ -5,8 +5,8 @@ import com.iu.gobike.dto.BookRequest;
 /**
  * @author jbhushan
  */
-public interface TravelService {
+public interface AccomodationService {
 
-    Boolean bookFlights(BookRequest request);
+    Boolean book(BookRequest request);
 
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookFlightRequest {
+public class BookRequest {
 
     private String userName;
     private List<Long> ids;
