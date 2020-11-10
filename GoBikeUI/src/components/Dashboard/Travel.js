@@ -49,7 +49,6 @@ class Travel extends React.Component {
       flights:"",
     };
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleDateChange1 = this.handleDateChange1.bind(this);
     this.handleChangeMode = this.handleChangeMode.bind(this);
@@ -232,38 +231,6 @@ class Travel extends React.Component {
   };
 
   classes = this.useStyles;
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    var targetUrl = config.API_URL + "/user/logout";
-
-    fetch(targetUrl, {
-      method: "get",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((response) => {
-        // check for error response
-        if (response.status == "200") {
-          this.state.isLoggedOut = "True";
-          if (this.state.isLoggedOut == "True") {
-            console.log("redirecting to home page.....");
-            this.props.history.push("/traveller/signin");
-            // <Redirect to={'/traveller/success'} />
-          }
-          // get error message from body or default to response statusText
-        }
-
-        // this.setState({ totalReactPackages: data.total })
-      })
-      .catch((error) => {
-        // this.setState({ errorMessage: error.toString() });
-        console.error("There was an error!", error);
-      });
-  };
 
   handleFlightSearch = (event) => {
     event.preventDefault();

@@ -29,7 +29,6 @@ class Itinerary extends React.Component {
       showUnbookedItinerary:false,
     };
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.showPaymentPage = this.showPaymentPage.bind(this);
   }
 
@@ -102,38 +101,6 @@ class Itinerary extends React.Component {
   }));
 
   classes = this.useStyles;
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    var targetUrl = "http://localhost:8080/traveller/logout";
-
-    fetch(targetUrl, {
-      method: "post",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((response) => {
-        // check for error response
-        if (response.status == "200") {
-          this.state.isLoggedOut = "True";
-          if (this.state.isLoggedOut == "True") {
-            console.log("redirecting to home page.....");
-            this.props.history.push("/traveller/signin");
-            // <Redirect to={'/traveller/success'} />
-          }
-          // get error message from body or default to response statusText
-        }
-
-        // this.setState({ totalReactPackages: data.total })
-      })
-      .catch((error) => {
-        // this.setState({ errorMessage: error.toString() });
-        console.error("There was an error!", error);
-      });
-  };
 
   showPaymentPage = (event) => {
     event.preventDefault();
