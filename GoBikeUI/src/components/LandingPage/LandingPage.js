@@ -1,30 +1,15 @@
 import React from "react";
-import TabPanel from "../ExploreBar/TabPanel";
 import { Grid, Paper } from "@material-ui/core";
-import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-
 import classNames from "classnames";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
-import Tab from "@material-ui/core/Tab";
-import { Autorenew } from "@material-ui/icons";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 import SignupModal from "../Modal/SignupModal";
 import Recommendations from "../Recommendations/Recommendations.js";
-import { Link, withRouter } from "react-router-dom";
-import Header from "../../assets/components/Header/Header.js";
-// import Button from "../../assets/components/CustomButtons/Button.js";
-import HeaderLinks from "../../assets/components/Header/HeaderLinks.js";
-import GridContainer from "../../assets/components/Grid/GridContainer.js";
-import GridItem from "../../assets/components/Grid/GridItem.js";
-import mylog from "../../assets/img/OurLogo.jpg";
-import Parallax from "../../assets/components/Parallax/Parallax.js";
 import img13 from "../../assets/img/image13.jpg";
 import img14 from "../../assets/img/image14.jpg";
-import CardMedia from "@material-ui/core/CardMedia";
-
 import image from "../../assets/img/bikess.jpg";
+import Footer from  "../Footer/Footer"
 
 const LandingPage = (props) => {
   const [modal, setModal] = React.useState(false);
@@ -33,8 +18,6 @@ const LandingPage = (props) => {
 
   const useStyles = makeStyles({
     mainContainer: {
-    //   background: "linear-gradient(315deg, #0cbaba 0%, #380036 74%)",
-    //   height: 450,
       position: "relative",
     },
     root: {
@@ -254,6 +237,7 @@ const LandingPage = (props) => {
         {/* </Parallax> */}
         {/* </Grid> */}
       </Grid>
+        <Footer />
     </div>
   );
 };

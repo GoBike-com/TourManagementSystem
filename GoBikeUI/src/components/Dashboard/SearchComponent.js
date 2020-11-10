@@ -12,7 +12,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { config } from '../Constants'
 import ExploreComponent from "../Explore/ExploreComponent";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
+import Footer from '../Footer/Footer';
 
 class SearchComponent extends React.Component {
   constructor(props) {
@@ -172,6 +172,7 @@ class SearchComponent extends React.Component {
 
         </Grid>
       </Grid>
+        <Footer/>
     </Grid>
   );
 };
