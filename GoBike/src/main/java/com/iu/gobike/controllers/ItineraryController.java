@@ -1,5 +1,6 @@
 package com.iu.gobike.controllers;
 
+import com.iu.gobike.dto.AddAccommodationRequest;
 import com.iu.gobike.dto.AddTravelRequest;
 import com.iu.gobike.dto.GetItineraryDetailsResponse;
 import com.iu.gobike.model.UserItinerary;
@@ -36,8 +37,8 @@ public class ItineraryController {
      * This API is responsible for saving selected flight details to itinerary
      */
     @PostMapping(path = "/{username}/accommodation", produces = "application/json")
-    public ResponseEntity<String> addAccommodation(@PathVariable("username") String userName, @RequestBody AddTravelRequest request) {
-        itineraryService.addTravel(request,userName);
+    public ResponseEntity<String> addAccommodation(@PathVariable("username") String userName, @RequestBody AddAccommodationRequest request) {
+        itineraryService.addAccommodation(request,userName);
         return  ResponseEntity.ok("SAVED");
     }
 

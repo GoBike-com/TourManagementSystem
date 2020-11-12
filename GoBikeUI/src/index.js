@@ -33,11 +33,11 @@ ReactDOM.render(
     <Router history={hist}>
       <Route path="/" exact component={LandingPage} />
       <Route path="/traveller/signin" exact component={MainLoginForm} />
-      <Route path="/traveller/register" exact component={UserRegistrationPage} />
       <div>
         <Header username={userName}/>
           <div id="content">
             <Switch>
+              <Route path="/traveller/register" exact component={UserRegistrationPage} />
               <Route path="/traveller/forgetpassword" exact component={ForgetPassword} />
               <Route path="/traveller/otpverify" component={OTPVerify} />
               <Route path="/traveller/resetpassword" exact component={NewPassword} />
