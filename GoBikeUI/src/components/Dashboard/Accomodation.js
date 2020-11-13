@@ -5,18 +5,12 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
-import Panel from "./Panel";
-import { Grid, Paper } from "@material-ui/core";
-import { Link , withRouter } from "react-router-dom";
-import Button from "../../assets/components/CustomButtons/Button.js";
+import { Grid, Typography } from "@material-ui/core";
+import { withRouter } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Search from './SearchComponent';
-import { config } from '../Constants'
-
-
+import { config } from "../Constants";
+import Accomodations from "../Accomodations/Accomondations";
+import img1 from "../../assets/img/hotels1.jpg";
 
 class Accomodation extends React.Component {
   constructor(props) {
@@ -90,96 +84,70 @@ class Accomodation extends React.Component {
 
   classes = this.useStyles;
 
-  
+  componentDidMount() {
+    const { history } = this.props;
+    window.addEventListener("popstate", () => {
+      history.go(1);
+    });
+  }
+
   handleSubmit = (event) => {
-      event.preventDefault();
-      var targetUrl = config.API_URL + "/traveller/logout";
-  
-      fetch(targetUrl, 
-        {
-          method:'post',
-          credentials: 'include',
-          headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-      }
-      ).then(
-       response => {
-              // check for error response
-              if (response.status == "200") {
-                  this.state.isLoggedOut = "True";
-                  if(this.state.isLoggedOut == "True"){
-                      console.log("redirecting to home page.....");
-                      this.props.history.push('/traveller/signin')
-                      // <Redirect to={'/traveller/success'} />
-                  }
-                  // get error message from body or default to response statusText
-                  
-              }
-  
-              // this.setState({ totalReactPackages: data.total })
-          })
-          .catch(error => {
-              // this.setState({ errorMessage: error.toString() });
-              console.error('There was an error!', error);
-          });
-    };
-  
+    event.preventDefault();
+    var targetUrl = config.API_URL + "/user/logout";
+
+    fetch(targetUrl, {
+      method: "get",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((response) => {
+        // check for error response
+        if (response.status == "200") {
+          this.state.isLoggedOut = "True";
+          if (this.state.isLoggedOut == "True") {
+            this.state.isLoggedOut = "False";
+            console.log("redirecting to home page.....");
+            console.log(this.state.isLoggedOut);
+            localStorage.clear();
+            this.props.history.push("/traveller/signin");
+            // <Redirect to={'/traveller/success'} />
+          }
+          // get error message from body or default to response statusText
+        }
+
+        // this.setState({ totalReactPackages: data.total })
+      })
+      .catch((error) => {
+        // this.setState({ errorMessage: error.toString() });
+        console.error("There was an error!", error);
+      });
+  };
+
+ 
 
   render() {
-
-  return (
-    <Grid>
-       <CssBaseline />
-      <div className={this.classes.root}>
-        <AppBar position="static" style={{ backgroundColor: "indigo" }}>
-          <Toolbar>
-            <Typography
-              className={this.classes.title}
-              variant="h6"
-              noWrap
-              style={{ fontSize: "24px", marginLeft:"275px", paddingRight:"800px" }}
-            >
-              GoBike
-              <DirectionsBikeIcon className={this.classes.logo} />
-            </Typography>
-            {/* <div className={this.classes.search}>
-              <div className={this.classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: this.classes.inputRoot,
-                  input: this.classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-                style={{marginLeft:"100px"}}
-              />
-            </div> */}
+    return (
+      <Grid>
+        <CssBaseline />
+        <Grid container>
+          <div style={{ width: "100%", height: "200px", overflow: "hidden", backgroundColor:"indigo", margin:"2%" }}>
+            <img src={img1} style={{ height:"100%", width:"20%" }} />
+            <div style={{color:"white", float:"right", margin:"3%"}}>
+            <Typography style={{fontSize:"24px",fontWeight:"16px",fontStretch:"expanded"}}>Hotels, Villas, Apartments and more in GoBike</Typography>
+            <Typography style={{fontSize:"18px",fontWeight:"12px",fontStretch:"expanded"}}>Find deals for any season</Typography>
+            </div>
             
-            <Link to={"/traveller/signin"} style={{float:"right"}}>
-              <Button size="sm" style={{alignItems:"right", marginRight:"10px", }}
-              
-                onClick= {this.handleSubmit}
-              >
-                logout
-              </Button>
-            </Link>
-            </Toolbar>
-
-            
-        
-        </AppBar>
-      </div>
-      <Grid container >
-        <Grid item xs={2}>
-          <Panel />
-        </Grid>
-        <Grid item xs={10} >
+          </div>
+          {/* <Grid item xs={10} > */}
+          <Accomodations />
+          {/* </Grid> */}
         </Grid>
       </Grid>
-    </Grid>
-  );
-};
+    );
+  }
 }
 
 export default withRouter(Accomodation);
