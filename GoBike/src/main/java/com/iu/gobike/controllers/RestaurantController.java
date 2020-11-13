@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(path = "/restaurant")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*", allowCredentials = "true")
 public class RestaurantController {
 
     @Autowired
