@@ -12,6 +12,7 @@ import com.iu.gobike.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,24 @@ public class ItineraryServiceImpl implements ItineraryService {
 
     @Autowired
     private FlightRepository flightRepository;
+
+    @Override
+    public UserItinerary create(CreateItineraryRequest request, String userName) {
+        User user = userRepository.findByUserName(userName);
+        Instant startDate = Instant.now();
+        Instant endDate = Instant.now();
+        if(request.getStartDate() !=null){
+            startDate = Instant.parse(request.getStartDate());
+        }
+        if(request.getEndDate() !=null){
+            endDate = Instant.parse(request.getEndDate());
+        }
+        Itinerary itinerary = Itinerary.builder().name(request.getName())
+                .startDate(startDate).endDate(endDate).build();
+        UserItinerary userItinerary = UserItinerary.builder().itinerary(itinerary).user(user).build();
+        userItinerary = userItineraryRepository.save(userItinerary);
+        return userItinerary;
+    }
 
     @Override
     public void addTravel(AddTravelRequest request, String userName) {
