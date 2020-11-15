@@ -371,19 +371,12 @@ class Travel extends React.Component {
 
   render() {
     return (
-      <Grid    style={{
+      <Grid container justify="center" style={{
         backgroundImage: "url(" + image + ")",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         }} >
         <CssBaseline />
-        <Grid container justify="center"
-          style={{
-            //backgroundColor: "lightblue",
-            width: "100%",
-            display: "flex",
-            // marginLeft:"50px"
-          }}>
           <Grid>
             <h1 justify="center">Search your travel route</h1>
             <Card
@@ -534,7 +527,7 @@ class Travel extends React.Component {
                     </div>
                   </Grid>
                 </div>
-                <Grid align-content-xs-center>
+                <Grid justify="center" >
                     <Btn
                      color="primary"
                      variant="contained"
@@ -552,7 +545,6 @@ class Travel extends React.Component {
               </div>
             </Grid>      
         
-        </Grid>
       </Grid>
     );
   }

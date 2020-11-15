@@ -35,7 +35,6 @@ ReactDOM.render(
           <Header username={userName}/>
           <Route path="/" exact component={LandingPage} />
           <Route path="/traveller/signin" exact component={MainLoginForm} />
-          <div id="content">
             <Switch>
               <Route path="/traveller/register" exact component={UserRegistrationPage} />
               <Route path="/traveller/forgetpassword" exact component={ForgetPassword} />
@@ -51,7 +50,6 @@ ReactDOM.render(
               <Route path="/chat" exact component={Chat} />
               <Route path="/map" exact component={GobikeMap} />
             </Switch>
-          </div>
         <Footer/>
       </div>
     </Router>,
