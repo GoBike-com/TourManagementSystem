@@ -373,18 +373,24 @@ class Travel extends React.Component {
     return (
       <Grid>
         <CssBaseline />
-        <Grid container>
-          <Grid item xs={10}>
-            <h1 style={{ marginLeft: "20px" }}>Search your travel route</h1>
+        <Grid container
+          style={{
+            //backgroundColor: "lightblue",
+            width: "100%",
+            display: "flex",
+            // marginLeft:"50px"
+          }}>
+          <Grid>
+            <h1 style={{ align: "center" }}>Search your travel route</h1>
             <Card
               raised="true"
-              style={{ width: "85%", marginLeft: "100px", marginTop: "40px" }}
+              style={{ width: "100%"}}
             >
-              <div style={{ backgroundColor: "lightyellow" }}>
-                {/* // style={{ backgroundColor: "lightyellow" }}> */}
+              <div style={{width: "100%" }}>
                 <div style={{ display: "inline-block" }}>
                   <LocationOnIcon />
                   <AsyncTypeahead
+                   style={{ padding: "2%", marginRight:"4%" }}
                     id="source"
                     labelKey="name"
                     minLength={3}
@@ -400,11 +406,12 @@ class Travel extends React.Component {
                   <AsyncTypeahead
                     id="destination"
                     labelKey="name"
+                    style={{ padding: "2%", marginRight:"4%" }}
                     minLength={3}
                     onChange={(selected) => this.setState({arrivalcity : selected})}
                     onSearch={this.handleAirportSearch}
                     options={this.state.options}
-                    placeholder="Enter source"
+                    placeholder="Enter destination"
                     renderMenuItemChildren={(option, props) => (
                     <React.Fragment>
                       <span>{option.name}</span>
@@ -415,10 +422,8 @@ class Travel extends React.Component {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
                     // style={{
-                    //   marginLeft: "15px",
-                    //   height: "20px",
-                    //   width: "20%",
-                    //   marginTop: "45px",
+                    //   fontFamily:
+                    //     "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;",
                     // }}
                     disableToolbar
                     variant="inline"
@@ -464,34 +469,6 @@ class Travel extends React.Component {
                     onChange={this.handleCountoftravellers}
                     value={this.state.countoftravellers}
                   />
-                  {/* <Autocomplete
-                    id="combo-box-demo3"
-                    options={this.countoftravellers}
-                    // getOptionLabel={(option) => option.value}
-                    // style={{ width: "15%", display: "inline-block" }}
-                    autoSelect
-                    value={this.state.countoftravellers}
-                    onChange={this.handleCountoftravellers}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        id="start"
-                        // style={{
-                        //   width: "200px",
-                        //   // marginTop: "5px",
-                        //   marginLeft: "10px",
-                        //   marginBottom: "10px",
-                        // }}
-                        // select
-                        label="No. of passengers"
-                        // value={value}
-                        // onChange={this.handleChange}
-                        variant="outlined"
-                        color="primary"
-                        size="medium"
-                      />
-                    )} 
-                  />*/}
                 </div>
 
                 <div style={{ display: "inline-block" }}>
@@ -550,22 +527,19 @@ class Travel extends React.Component {
                         label="nonstop"
                       />
                   </div>
-                <Button
-                  style={{
-                    backgroundColor: "indigo",
-                    width: "15%",
-                    // marginTop: "35px",
-                    // marginLeft: "15px",
-                    // height: "55px",
-                    // fontSize: "18px",
-                    fontFamily: "Arial",
-                    color: "white",
-                  }}
-                  onClick={this.handleFlightSearch}
-                >
-                  Search
-                </Button>
-              </div>
+                </div>
+                <Grid align-content-xs-center>
+                    <Button
+                        style={{
+                          color: "primary",
+                          width: "15%",
+                          backgroundColor:"blue",
+                        }}
+                    onClick={this.handleFlightSearch}
+                  >
+                    Search
+                  </Button>
+                </Grid>   
             </Card>
             <div style={{ width: "85%", marginLeft: "100px", marginTop: "40px"} }>
               {this.state.flights && this.renderFlights(this.state.flights)}

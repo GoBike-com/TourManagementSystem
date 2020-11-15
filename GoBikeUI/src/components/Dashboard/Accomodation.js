@@ -14,10 +14,7 @@ class Accomodation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // isLoggedOut="",
     };
-    // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   useStyles = makeStyles((theme) => ({
@@ -88,43 +85,6 @@ class Accomodation extends React.Component {
       history.go(1);
     });
   }
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    var targetUrl = config.API_URL + "/user/logout";
-
-    fetch(targetUrl, {
-      method: "get",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((response) => {
-        // check for error response
-        if (response.status == "200") {
-          this.state.isLoggedOut = "True";
-          if (this.state.isLoggedOut == "True") {
-            this.state.isLoggedOut = "False";
-            console.log("redirecting to home page.....");
-            console.log(this.state.isLoggedOut);
-            localStorage.clear();
-            this.props.history.push("/traveller/signin");
-            // <Redirect to={'/traveller/success'} />
-          }
-          // get error message from body or default to response statusText
-        }
-
-        // this.setState({ totalReactPackages: data.total })
-      })
-      .catch((error) => {
-        // this.setState({ errorMessage: error.toString() });
-        console.error("There was an error!", error);
-      });
-  };
-
- 
 
   render() {
     return (
