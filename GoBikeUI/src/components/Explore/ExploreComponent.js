@@ -113,8 +113,7 @@ export default function ExploreComponent() {
         <div>
 
             {/*Place Name*/}
-            <Typography className={classes.placeTitle} variant="h1" component="h2" gutterBottom
-                        align="center">
+            <Typography className={classes.placeTitle} variant="h1" gutterBottom align="center">
                 {allDataLoaded ? placeData.name : ""}
             </Typography>
 
@@ -164,14 +163,15 @@ export default function ExploreComponent() {
                     />
                 )}
             />
+            <br/><br/><br/>
             <Divider variant="middle"/>
 
             {/*Things to Do*/}
             <div className={classes.gridRoot}>
+                <Typography variant="h2" >
+                    Things To Do
+                </Typography>
                 <GridList cellHeight={300} className={classes.gridList} cols={3}>
-                    <GridListTile key="Subheader" cols={3} style={{height: 'auto'}}>
-                        <ListSubheader component="div">Things to Do</ListSubheader>
-                    </GridListTile>
                     {allDataLoaded ? activityData() : ""}
                 </GridList>
             </div>
@@ -180,11 +180,9 @@ export default function ExploreComponent() {
 
             {/*Restaurants*/}
             <div className={classes.gridRoot}>
-                <GridList cellHeight={300} className={classes.gridList} cols={3}>
-                    <GridListTile key="Subheader" cols={3} style={{height: 'auto'}}>
-                        <ListSubheader component="div">Restaurants</ListSubheader>
-                    </GridListTile>
-                </GridList>
+                <Typography variant="h2" >
+                    Restaurants
+                </Typography>
                 <Grid container spacing={5}>
                     {allDataLoaded ? restaurantData() : ""}
                 </Grid>
@@ -196,7 +194,9 @@ export default function ExploreComponent() {
             <div className={classes.gridRoot}>
                 <GridList cellHeight={300} className={classes.gridList}>
                     <GridListTile key="Subheader" cols={2} style={{height: 'auto'}}>
-                        <ListSubheader component="div">Hotels</ListSubheader>
+                        <Typography variant="h2" >
+                            Hotels
+                        </Typography>
                     </GridListTile>
                     {allDataLoaded ? hotelData() : ""}
                 </GridList>
