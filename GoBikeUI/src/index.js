@@ -7,7 +7,6 @@ import { createBrowserHistory } from "history";
 import LandingPage from "./components/LandingPage/LandingPage";
 import UserRegistrationPage from './components/UserRegistrationPage/UserRegistrationPage';
 import MainLoginForm from './components/Modal/MainLoginForm';
-// import SignupPage from './components/Modal/SignupPage';
 import Dashboard from './components/Dashboard/Dashboard';
 import ForgetPassword from './components/ForgetPassword/EmailPage';
 import OTPVerify from './components/OTP/OTPVerify';
@@ -31,10 +30,10 @@ var userName = window.sessionStorage.getItem("username");
 
 ReactDOM.render(
     <Router history={hist}>
-      <Route path="/" exact component={LandingPage} />
-      <Route path="/traveller/signin" exact component={MainLoginForm} />
       <div>
-        <Header username={userName}/>
+          <Header username={userName}/>
+          <Route path="/" exact component={LandingPage} />
+          <Route path="/traveller/signin" exact component={MainLoginForm} />
           <div id="content">
             <Switch>
               <Route path="/traveller/register" exact component={UserRegistrationPage} />

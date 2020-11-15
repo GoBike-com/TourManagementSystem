@@ -1,8 +1,5 @@
 import React from "react";
 import ExploreComponent from "../Explore/ExploreComponent";
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
-
 
 class Dashboard extends React.Component {
 
@@ -24,9 +21,7 @@ class Dashboard extends React.Component {
   render() {
   return (
       <div>
-          {/* <Header username={this.props.location.state.username} pageName="Explore Cities"/> */}
           <ExploreComponent />
-          {/* <Footer /> */}
       </div>
   );
 };
