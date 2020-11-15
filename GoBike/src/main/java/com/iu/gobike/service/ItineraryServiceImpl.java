@@ -66,10 +66,7 @@ public class ItineraryServiceImpl implements ItineraryService {
         saveFlightDetails(request,userItinerary);
     }
 
-    @Override
-    public void addAccommodation(AddAccommodationRequest request, String userName) {
 
-    }
 
     @Override
     public UserItinerary getItinerary(String id) {
@@ -103,9 +100,6 @@ public class ItineraryServiceImpl implements ItineraryService {
          if(request.getFlight() != null) {
             flights.add(transformFlightDetails(request.getFlight(), userItinerary));
         }
-//         if(request.getReturnFlight() !=null) {
-//             flights.add(transformFlightDetails(request.getReturnFlight(), userItinerary,FlightType.RETURN));
-//         }
          flightRepository.saveAll(flights);
     }
 

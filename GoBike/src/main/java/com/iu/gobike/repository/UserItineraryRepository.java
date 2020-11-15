@@ -15,4 +15,6 @@ public interface UserItineraryRepository extends CrudRepository<UserItinerary, L
     List<UserItinerary> findByUserId(Long userId);
 
     UserItinerary findByUserIdAndItineraryId(Long userId, Long itineraryId);
+
+    UserItinerary findByUserUserNameAndItineraryName(String userName, String name);
 }
