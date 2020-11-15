@@ -371,9 +371,9 @@ class Travel extends React.Component {
 
   render() {
     return (
-      <Grid>
+      <Grid  justify="center" >
         <CssBaseline />
-        <Grid container
+        <Grid container justify="center"
           style={{
             //backgroundColor: "lightblue",
             width: "100%",
@@ -381,7 +381,7 @@ class Travel extends React.Component {
             // marginLeft:"50px"
           }}>
           <Grid>
-            <h1 style={{ align: "center" }}>Search your travel route</h1>
+            <h1 justify="center">Search your travel route</h1>
             <Card
               raised="true"
               style={{ width: "100%"}}
@@ -401,7 +401,6 @@ class Travel extends React.Component {
                       placeholder="Enter source"
                   />
                   </div>
-
                   <div style={{ display: "inline-block" }}>
                     <LocationOnIcon />
                     <AsyncTypeahead
@@ -532,16 +531,13 @@ class Travel extends React.Component {
                   </Grid>
                 </div>
                 <Grid align-content-xs-center>
-                    <Button
-                        style={{
-                          color: "primary",
-                          width: "15%",
-                          backgroundColor:"blue",
-                        }}
+                    <Btn
+                     color="primary"
+                     variant="contained"
                     onClick={this.handleFlightSearch}
                   >
                     Search
-                  </Button>
+                  </Btn>
                 </Grid>   
             </Card>
             </Grid>
