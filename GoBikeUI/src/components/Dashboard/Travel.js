@@ -318,7 +318,7 @@ class Travel extends React.Component {
           <Card
             className={this.classes.root1}
             raised="true"
-            style={{ align : 'center'}}
+            style={{ display: 'flex', margin:"2%"}}
           >
             <div style={{ display: 'flex' }}>
               <CardHeader 
@@ -387,66 +387,44 @@ class Travel extends React.Component {
               style={{ width: "100%"}}
             >
               <div style={{width: "100%" }}>
-                <div style={{ display: "inline-block" }}>
-                  <LocationOnIcon />
-                  <AsyncTypeahead
-                   style={{ padding: "2%", marginRight:"4%" }}
-                    id="source"
-                    labelKey="name"
-                    minLength={3}
-                    onChange={(selected) => this.setState({departurecity : selected})}
-                    onSearch={this.handleAirportSearch}
-                    options={this.state.options}
-                    placeholder="Enter source"
-                 />
-                </div>
-
-                <div style={{ display: "inline-block" }}>
-                  <LocationOnIcon />
-                  <AsyncTypeahead
-                    id="destination"
-                    labelKey="name"
+                  <Grid>
+                  <div style={{ display: "inline-block" }}>
+                    <LocationOnIcon />
+                    <AsyncTypeahead
                     style={{ padding: "2%", marginRight:"4%" }}
-                    minLength={3}
-                    onChange={(selected) => this.setState({arrivalcity : selected})}
-                    onSearch={this.handleAirportSearch}
-                    options={this.state.options}
-                    placeholder="Enter destination"
-                    renderMenuItemChildren={(option, props) => (
-                    <React.Fragment>
-                      <span>{option.name}</span>
-                    </React.Fragment>
-                  )}
-                />
-                </div>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
-                    // style={{
-                    //   fontFamily:
-                    //     "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;",
-                    // }}
-                    disableToolbar
-                    variant="inline"
-                    format="yyyy-MM-dd"
-                    size="small"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="Select departure date"
-                    color="primary"
-                    font="Helvetica"
-                    // inputFormat={(date) => moment(new Date()).format('MM-DD-YYYY')}
-                    value={this.state.depatureDate}
-                    onChange={this.handleDateChange1}
+                      id="source"
+                      labelKey="name"
+                      minLength={3}
+                      onChange={(selected) => this.setState({departurecity : selected})}
+                      onSearch={this.handleAirportSearch}
+                      options={this.state.options}
+                      placeholder="Enter source"
                   />
-                </MuiPickersUtilsProvider>
-                {this.state.roundtrip && (
+                  </div>
+
+                  <div style={{ display: "inline-block" }}>
+                    <LocationOnIcon />
+                    <AsyncTypeahead
+                      id="destination"
+                      labelKey="name"
+                      style={{ padding: "2%", marginRight:"4%" }}
+                      minLength={3}
+                      onChange={(selected) => this.setState({arrivalcity : selected})}
+                      onSearch={this.handleAirportSearch}
+                      options={this.state.options}
+                      placeholder="Enter destination"
+                      renderMenuItemChildren={(option, props) => (
+                      <React.Fragment>
+                        <span>{option.name}</span>
+                      </React.Fragment>
+                    )}
+                  />
+                  </div>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
                       // style={{
-                      //   marginLeft: "15px",
-                      //   marginTop: "45px",
-                      //   height: "20px",
-                      //   width: "20%",
+                      //   fontFamily:
+                      //     "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;",
                       // }}
                       disableToolbar
                       variant="inline"
@@ -454,79 +432,104 @@ class Travel extends React.Component {
                       size="small"
                       margin="normal"
                       id="date-picker-inline"
-                      label="Select returning date"
+                      label="Select departure date"
                       color="primary"
                       font="Helvetica"
-                      value={this.state.selectedDate}
-                      onChange={this.handleDateChange}
+                      // inputFormat={(date) => moment(new Date()).format('MM-DD-YYYY')}
+                      value={this.state.depatureDate}
+                      onChange={this.handleDateChange1}
                     />
                   </MuiPickersUtilsProvider>
-                )}
-                <div style={{ display: "inline-block" }}>
-                  <TextField 
-                    id="count" 
-                    label="No. of passengers" 
-                    onChange={this.handleCountoftravellers}
-                    value={this.state.countoftravellers}
-                  />
-                </div>
-
-                <div style={{ display: "inline-block" }}>
-                  <Autocomplete
-                    id="combo-box-demo4"
-                    options={this.travellerclass}
-                    // getOptionLabel={(option) => option.value}
-                    // style={{ width: "15%", display: "inline-block" }}
-                    autoSelect
-                    value={this.state.travellerclass}
-                    onChange={this.handletravellerclass}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        id="start"
+                  {this.state.roundtrip && (
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <KeyboardDatePicker
                         // style={{
-                        //   width: "200px",
-                        //   // marginTop: "5px",
-                        //   marginLeft: "10px",
-                        //   marginBottom: "10px",
+                        //   marginLeft: "15px",
+                        //   marginTop: "45px",
+                        //   height: "20px",
+                        //   width: "20%",
                         // }}
-                        // select
-                        label="class"
-                        // value={value}
-                        onChange={this.handleChange}
-                        variant="outlined"
+                        disableToolbar
+                        variant="inline"
+                        format="yyyy-MM-dd"
+                        size="small"
+                        margin="normal"
+                        id="date-picker-inline"
+                        label="Select returning date"
                         color="primary"
-                        size="medium"
+                        font="Helvetica"
+                        value={this.state.selectedDate}
+                        onChange={this.handleDateChange}
                       />
-                    )}
-                  />
-                </div>
-                <div style={{ display: "inline-block" }}>
-                  <FormControlLabel
-                      control={
-                        <Switch
-                          checked={this.state.roundtrip}
-                          onChange={this.handleRoundTrip}
-                          name="roundtrip"
-                          color="primary"
-                        />
-                      }
-                      label="roundtrip"
-                    />
-                  </div>
-                  <div style={{ display: "inline-block" }}>
-                    <FormControlLabel
-                        control={
-                          <Switch
-                            checked={this.state.stop}
-                            onChange={this.handleStopClass}
-                            name="nonstop"
+                    </MuiPickersUtilsProvider>
+                  )}
+                  </Grid>
+                  <Grid>
+                    <div style={{ display: "inline-block" }}>
+                      <TextField 
+                        id="count" 
+                        label="No. of passengers" 
+                        onChange={this.handleCountoftravellers}
+                        value={this.state.countoftravellers}
+                      />
+                    </div>
+                    <div style={{ display: "inline-block" }}>
+                      <Autocomplete
+                        id="combo-box-demo4"
+                        options={this.travellerclass}
+                        // getOptionLabel={(option) => option.value}
+                        // style={{ width: "15%", display: "inline-block" }}
+                        autoSelect
+                        value={this.state.travellerclass}
+                        onChange={this.handletravellerclass}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            id="start"
+                            // style={{
+                            //   width: "200px",
+                            //   // marginTop: "5px",
+                            //   marginLeft: "10px",
+                            //   marginBottom: "10px",
+                            // }}
+                            // select
+                            label="class"
+                            // value={value}
+                            onChange={this.handleChange}
+                            variant="outlined"
                             color="primary"
+                            size="medium"
                           />
-                        }
-                        label="nonstop"
+                        )}
                       />
-                  </div>
+                    </div>
+                    <div style={{ display: "inline-block" }}>
+                      <FormControlLabel
+                          control={
+                            <Switch
+                              checked={this.state.roundtrip}
+                              onChange={this.handleRoundTrip}
+                              name="roundtrip"
+                              color="primary"
+                            />
+                          }
+                          label="roundtrip"
+                        />
+                      </div>
+                    <div style={{ display: "inline-block" }}>
+                      <FormControlLabel
+                          control={
+                            <Switch
+                              checked={this.state.stop}
+                              onChange={this.handleStopClass}
+                              name="nonstop"
+                              color="primary"
+                            />
+                          }
+                          label="nonstop"
+                        />
+                    </div>
+                  </Grid>
                 </div>
                 <Grid align-content-xs-center>
                     <Button
@@ -541,12 +544,14 @@ class Travel extends React.Component {
                   </Button>
                 </Grid>   
             </Card>
-            <div style={{ width: "85%", marginLeft: "100px", marginTop: "40px"} }>
-              {this.state.flights && this.renderFlights(this.state.flights)}
-              {this.state.returnFlights &&this.renderFlights(this.state.returnFlights)}
-            </div>
-                  
-          </Grid>
+            </Grid>
+            <Grid>
+              <div style={{ width: "85%", marginLeft: "100px", marginTop: "40px"} }>
+                {this.state.flights && this.renderFlights(this.state.flights)}
+                {this.state.returnFlights &&this.renderFlights(this.state.returnFlights)}
+              </div>
+            </Grid>      
+        
         </Grid>
       </Grid>
     );
