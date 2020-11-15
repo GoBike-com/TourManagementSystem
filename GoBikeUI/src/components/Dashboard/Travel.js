@@ -16,7 +16,7 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { config } from '../Constants'
-import Button from "../../assets/components/CustomButtons/Button.js";
+import image from "../../assets/img/travel.png";
 
 // const PurpleSwitch = withStyles({
 //   switchBase: {
@@ -371,7 +371,11 @@ class Travel extends React.Component {
 
   render() {
     return (
-      <Grid  justify="center" >
+      <Grid    style={{
+        backgroundImage: "url(" + image + ")",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        }} >
         <CssBaseline />
         <Grid container justify="center"
           style={{
