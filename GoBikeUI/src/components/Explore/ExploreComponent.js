@@ -9,7 +9,9 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
-import ListSubheader from "@material-ui/core/ListSubheader";
+import LocalActivityIcon from '@material-ui/icons/LocalActivity';
+import RestaurantIcon from '@material-ui/icons/Restaurant';
+import HotelIcon from '@material-ui/icons/Hotel';
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
@@ -170,6 +172,7 @@ export default function ExploreComponent() {
             <div className={classes.gridRoot}>
                 <Typography variant="h2" >
                     Things To Do
+                    <LocalActivityIcon />
                 </Typography>
                 <GridList cellHeight={300} className={classes.gridList} cols={3}>
                     {allDataLoaded ? activityData() : ""}
@@ -182,6 +185,7 @@ export default function ExploreComponent() {
             <div className={classes.gridRoot}>
                 <Typography variant="h2" >
                     Restaurants
+                    <RestaurantIcon />
                 </Typography>
                 <Grid container spacing={5}>
                     {allDataLoaded ? restaurantData() : ""}
@@ -196,6 +200,7 @@ export default function ExploreComponent() {
                     <GridListTile key="Subheader" cols={2} style={{height: 'auto'}}>
                         <Typography variant="h2" >
                             Hotels
+                            <HotelIcon />
                         </Typography>
                     </GridListTile>
                     {allDataLoaded ? hotelData() : ""}
