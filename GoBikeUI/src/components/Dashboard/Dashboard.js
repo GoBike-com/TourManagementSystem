@@ -1,5 +1,5 @@
 import React from "react";
-import ExploreComponent from "../Explore/ExploreComponent";
+import NewItinerary from "../Itinerary/NewItinerary";
 
 class Dashboard extends React.Component {
 
@@ -16,12 +16,10 @@ class Dashboard extends React.Component {
    });
    }
 
- // header = window.sessionStorage.setItem("username", this.props.location.state.username);
-
   render() {
   return (
       <div>
-          <ExploreComponent />
+          <NewItinerary />
       </div>
   );
 };

@@ -14,6 +14,7 @@ import NewPassword from './components/ForgetPassword/NewPassword';
 import SearchComponent from './components/Dashboard/SearchComponent';
 import Accomodation from './components/Dashboard/Accomodation';
 import Itinerary from './components/Dashboard/Itinerary';
+import NewItinerary from './components/Itinerary/NewItinerary';
 import Travel from './components/Dashboard/Travel';
 import Review from './components/Dashboard/Review';
 import Chat from './components/Dashboard/Chat';
@@ -44,6 +45,7 @@ ReactDOM.render(
               <Route path="/search" exact component={SearchComponent} />
               <Route path="/accomodation" exact component={Accomodation} />
               <Route path="/itinerary" exact component={Itinerary} />
+              <Route path="/newitinerary" exact component={NewItinerary} />
               <Route path="/travel" exact component={Travel} />
               <Route path="/review" exact component={Review} />
               <Route path="/chat" exact component={Chat} />
