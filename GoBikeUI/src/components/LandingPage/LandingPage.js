@@ -96,7 +96,6 @@ const LandingPage = (props) => {
           >
             Our star recommendations for your next trip
           </h4>
-
           <Recommendations />
         </Grid>
 

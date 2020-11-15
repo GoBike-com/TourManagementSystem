@@ -21,6 +21,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 
+
 export default function ExploreComponent() {
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
@@ -110,10 +111,22 @@ export default function ExploreComponent() {
 
     return (
         <div>
+
+            {/*Place Name*/}
+            <Typography className={classes.placeTitle} variant="h1" component="h2" gutterBottom
+                        align="center">
+                {allDataLoaded ? placeData.name : ""}
+            </Typography>
+
+            {/*Short Place Description*/}
+            <Typography variant="body1" gutterBottom align={"center"}>
+                {allDataLoaded ? placeData.description : ""}
+            </Typography>
+
             <Autocomplete
                 clearOnBlur={false}
                 id="searchbar"
-                style={{ width: 300 }}
+                containerStyle = {{ alignItems:'center', justifyContent:'center' }}
                 open={open}
                 onOpen={() => {
                     setOpen(true);
@@ -137,7 +150,7 @@ export default function ExploreComponent() {
                 renderInput={(params) => (
                     <TextField
                         {...params}
-                        label="Search..."
+                        label="Search places..."
                         variant="outlined"
                         InputProps={{
                             ...params.InputProps,
@@ -151,17 +164,6 @@ export default function ExploreComponent() {
                     />
                 )}
             />
-
-            {/*Place Name*/}
-            <Typography className={classes.placeTitle} variant="h1" component="h2" gutterBottom
-                        align="center">
-                {allDataLoaded ? placeData.name : ""}
-            </Typography>
-
-            {/*Short Place Description*/}
-            <Typography variant="body1" gutterBottom align={"center"}>
-                {allDataLoaded ? placeData.description : ""}
-            </Typography>
             <Divider variant="middle"/>
 
             {/*Things to Do*/}
