@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -37,7 +36,6 @@ const logout = (event) => {
         response => {
             // check for error response
             if (response.status == "200") {
-                // this.state.isLoggedOut = "True";
                 console.log("redirecting to home page.....");
                 localStorage.clear();
                 window.sessionStorage.clear();
@@ -56,13 +54,6 @@ const login = (event) => {
 
 const renderHome = (username) => {
     window.location.href=username?"/traveller/success":"/"
-    // if(username) {
-    //     window.sessionStorage.setItem("username", username);
-    //     window.location.href="/traveller/success"
-    // }else{
-    //     window.location.href="/"
-    // }
-    // <Dashboard />
 }
 
 const displayButtons = (userName) =>{

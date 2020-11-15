@@ -1,8 +1,5 @@
 import React from "react";
-import ExploreComponent from "../Explore/ExploreComponent";
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
-
+import NewItinerary from "../Itinerary/NewItinerary";
 
 class Dashboard extends React.Component {
 
@@ -19,14 +16,10 @@ class Dashboard extends React.Component {
    });
    }
 
- // header = window.sessionStorage.setItem("username", this.props.location.state.username);
-
   render() {
   return (
       <div>
-          {/* <Header username={this.props.location.state.username} pageName="Explore Cities"/> */}
-          <ExploreComponent />
-          {/* <Footer /> */}
+          <NewItinerary />
       </div>
   );
 };
