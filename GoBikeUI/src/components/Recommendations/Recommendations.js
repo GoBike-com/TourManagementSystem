@@ -5,7 +5,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import classNames from "classnames";
+import ShareIcon from '@material-ui/icons/Share';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Paper } from "@material-ui/core";
@@ -13,8 +13,7 @@ import { Grid, Paper } from "@material-ui/core";
 const Recommendations = (props) => {
   const useStyles = makeStyles({
     card: {
-      maxWidth: 345,
-    //   margin: "5px",
+      maxWidth: 345
     },
   });
 
@@ -51,7 +50,7 @@ const Recommendations = (props) => {
               </CardActionArea>
               <CardActions>
                 <Button size="small" color="primary">
-                  Share
+                  <ShareIcon />
                 </Button>
                 <Button size="small" color="primary">
                   Learn More
@@ -85,7 +84,7 @@ const Recommendations = (props) => {
               </CardActionArea>
               <CardActions>
                 <Button size="small" color="primary">
-                  Share
+                  <ShareIcon />
                 </Button>
                 <Button size="small" color="primary">
                   Learn More
@@ -119,7 +118,7 @@ const Recommendations = (props) => {
               </CardActionArea>
               <CardActions>
                 <Button size="small" color="primary">
-                  Share
+                  <ShareIcon />
                 </Button>
                 <Button size="small" color="primary">
                   Learn More
@@ -153,7 +152,7 @@ const Recommendations = (props) => {
               </CardActionArea>
               <CardActions>
                 <Button size="small" color="primary">
-                  Share
+                  <ShareIcon />
                 </Button>
                 <Button size="small" color="primary">
                   Learn More

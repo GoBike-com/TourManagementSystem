@@ -3,13 +3,10 @@ import { Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import classNames from "classnames";
-import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
-import SignupModal from "../Modal/SignupModal";
 import Recommendations from "../Recommendations/Recommendations.js";
 import img13 from "../../assets/img/image13.jpg";
 import img14 from "../../assets/img/image14.jpg";
 import image from "../../assets/img/bikess.jpg";
-import Typography from "@material-ui/core/Typography";
 
 const LandingPage = (props) => {
   const useStyles = makeStyles({
