@@ -22,6 +22,9 @@ public class Itinerary {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "NAME")
+    private String name;
+
     @Column(name = "NUM_OF_DAYS")
     private Integer numberOfDays;
 

@@ -6,6 +6,9 @@ import org.json.simple.parser.ParseException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -18,6 +21,12 @@ public class GoBikeUtil {
 
     public static String generateRandomNumber(int from, int to) {
         return Integer.toString(new Random().nextInt(to - from) + from);
+    }
+
+    public static Instant convert(String date) throws java.text.ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = sdf.parse(date);
+        return d.toInstant();
     }
 
     public static Map<String, String> getPostBodyInAMap(HttpServletRequest request) {

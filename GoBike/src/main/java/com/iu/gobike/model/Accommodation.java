@@ -41,7 +41,7 @@ public class Accommodation {
     private String cityName;
 
     @Column(name = "POSTAL_CODE")
-    private String postal_code;
+    private String postalCode;
 
     @Column(name = "CHECK_IN")
     @NonNull
@@ -67,7 +67,7 @@ public class Accommodation {
     private Long fax;
 
     @Column(name = "ADDRESS")
-    private Long address;
+    private String address;
 
     @Column(name = "booked")
     private boolean booked;
@@ -83,6 +83,9 @@ public class Accommodation {
 
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
+
+    @Column(name="RATINGS")
+    private Integer ratings;
 
     @ManyToOne
     @JoinColumn(name = "USER_ITINERARY")
