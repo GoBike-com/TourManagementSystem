@@ -383,12 +383,12 @@ class Travel extends React.Component {
               raised="true"
               style={{ width: "100%"}}
             >
-              <div style={{width: "100%" }}>
+              <div style={{width: "100%"}}>
                   <Grid>
-                  <div style={{ display: "inline-block" }}>
+                  <div style={{ display: "inline-block", padding: "4%" }}>
                     <LocationOnIcon />
                     <AsyncTypeahead
-                    style={{ padding: "2%", marginRight:"4%" }}
+                    style={{margin:"4%" }}
                       id="source"
                       labelKey="name"
                       minLength={3}
@@ -398,12 +398,12 @@ class Travel extends React.Component {
                       placeholder="Enter source"
                   />
                   </div>
-                  <div style={{ display: "inline-block" }}>
+                  <div style={{ display: "inline-block", padding: "4%"  }}>
                     <LocationOnIcon />
                     <AsyncTypeahead
                       id="destination"
                       labelKey="name"
-                      style={{ padding: "2%", marginRight:"4%" }}
+                      style={{ padding: "2%", margin:"4%" }}
                       minLength={3}
                       onChange={(selected) => this.setState({arrivalcity : selected})}
                       onSearch={this.handleAirportSearch}
@@ -418,10 +418,9 @@ class Travel extends React.Component {
                   </div>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
-                      // style={{
-                      //   fontFamily:
-                      //     "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;",
-                      // }}
+                      style={{
+                        padding: "4%"
+                      }}
                       disableToolbar
                       variant="inline"
                       format="yyyy-MM-dd"
@@ -439,12 +438,9 @@ class Travel extends React.Component {
                   {this.state.roundtrip && (
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <KeyboardDatePicker
-                        // style={{
-                        //   marginLeft: "15px",
-                        //   marginTop: "45px",
-                        //   height: "20px",
-                        //   width: "20%",
-                        // }}
+                        style={{
+                          padding: "4%"
+                        }}
                         disableToolbar
                         variant="inline"
                         format="yyyy-MM-dd"
@@ -461,7 +457,7 @@ class Travel extends React.Component {
                   )}
                   </Grid>
                   <Grid>
-                    <div style={{ display: "inline-block" }}>
+                    <div style={{ display: "inline-block", padding:"2%"}}>
                       <TextField 
                         id="count" 
                         label="No. of passengers" 
@@ -469,7 +465,7 @@ class Travel extends React.Component {
                         value={this.state.countoftravellers}
                       />
                     </div>
-                    <div style={{ display: "inline-block" }}>
+                    <div style={{ display: "inline-block", padding:"2%"}}>
                       <Autocomplete
                         id="combo-box-demo4"
                         options={this.travellerclass}
