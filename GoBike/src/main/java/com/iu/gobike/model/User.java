@@ -66,9 +66,6 @@ public class User {
     @Column(name="otp")
     public String otp;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserItinerary> userItineraries;
-
     @PrePersist
     void onCreate() {
         this.createdDate = this.lastModifiedDate = Instant.now();
