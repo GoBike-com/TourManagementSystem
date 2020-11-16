@@ -20,6 +20,36 @@ class NewItinerary extends React.Component {
         this.addItinerary = this.addItinerary.bind(this);
     }
 
+    componentDidMount() {
+        this.getAllItineraries();
+    }
+
+    getAllItineraries = () => {
+        const targetGetUrl = config.API_URL + "/itinerary/" + window.sessionStorage.getItem("username");
+        fetch(targetGetUrl, {
+            method:'get',
+            headers: {Accept: 'application/json'},
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                for (let i = 0; i < data.length; i++) {
+                    const itinerary = data[i].itinerary;
+                    this.setState({
+                        itineraries: this.state.itineraries.concat({
+                            name: itinerary.name,
+                            startDate: itinerary.startDate,
+                            endDate: itinerary.endDate,
+                        })
+                    });
+                }
+
+            })
+            .catch((error) => {
+                console.log(error);
+                alert(error);
+            });
+    };
+
     addItinerary = (event) => {
         event.preventDefault();
 
@@ -40,43 +70,13 @@ class NewItinerary extends React.Component {
             fetch(targetCreateUrl, requestOptions)
                 .then((response) => {
                     if (response.status == "200") {
-                        alert("success");
-                    } else {
-                        alert("Error")
+                        this.getAllItineraries();
                     }
                 })
                 .catch((error) => {
                     alert(error);
                     console.error("There was an error!", error);
                 });
-
-
-
-            // alert("getting itineraries");
-            // const targetUrl = config.API_URL + "/itinerary/" + window.sessionStorage.getItem("username");
-            // fetch(targetUrl, {
-            //     method:'get',
-            //     headers: {Accept: 'application/json'},
-            // })
-            //     .then((response) => response.json())
-            //     .then((data) => {
-            //         // const results = String(data).split(",");
-            //         alert(data);
-            //
-            //         // this.setState({
-            //         //     itineraries: this.state.itineraries.concat({
-            //         //         name: itineraryName,
-            //         //         startDate: "",
-            //         //         endDate: ""
-            //         //     })
-            //         // });
-            //
-            //     })
-            //     .catch((error) => {
-            //         console.log(error);
-            //         alert(error);
-            //     });
-
 
             // window.location.href = "/search"
         }
