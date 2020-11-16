@@ -68,7 +68,7 @@ public class Flight {
     private String modifiedBy;
 
     @Column(name="BOOKED")
-    private boolean booked;
+    private Boolean booked;
 
     @PrePersist
     void onCreate() {

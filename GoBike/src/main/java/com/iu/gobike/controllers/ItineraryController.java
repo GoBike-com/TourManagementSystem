@@ -7,8 +7,11 @@ import com.iu.gobike.model.UserItinerary;
 import com.iu.gobike.repository.UserItineraryRepository;
 import com.iu.gobike.service.ItineraryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 
 /**
  * @author jbhushan
@@ -29,7 +32,12 @@ public class ItineraryController {
      */
     @PostMapping(path = "/{username}", produces = "application/json")
     public ResponseEntity<UserItinerary> create(@PathVariable("username") String userName, @RequestBody CreateItineraryRequest createItineraryRequest) {
-        UserItinerary userItinerary = itineraryService.create(createItineraryRequest,userName);
+        UserItinerary userItinerary = null;
+        try {
+            userItinerary = itineraryService.create(createItineraryRequest,userName);
+        } catch (ParseException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
         return  ResponseEntity.ok(userItinerary);
     }
 

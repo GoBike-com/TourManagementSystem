@@ -9,9 +9,11 @@ import com.iu.gobike.model.UserItinerary;
 import com.iu.gobike.repository.FlightRepository;
 import com.iu.gobike.repository.UserItineraryRepository;
 import com.iu.gobike.repository.UserRepository;
+import com.iu.gobike.util.GoBikeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,15 +36,15 @@ public class ItineraryServiceImpl implements ItineraryService {
     private FlightRepository flightRepository;
 
     @Override
-    public UserItinerary create(CreateItineraryRequest request, String userName) {
+    public UserItinerary create(CreateItineraryRequest request, String userName) throws ParseException {
         User user = userRepository.findByUserName(userName);
         Instant startDate = Instant.now();
         Instant endDate = Instant.now();
         if(request.getStartDate() !=null){
-            startDate = Instant.parse(request.getStartDate());
+            startDate = GoBikeUtil.convert(request.getStartDate());
         }
         if(request.getEndDate() !=null){
-            endDate = Instant.parse(request.getEndDate());
+            endDate = GoBikeUtil.convert(request.getEndDate());
         }
         Itinerary itinerary = Itinerary.builder().name(request.getName())
                 .startDate(startDate).endDate(endDate).build();

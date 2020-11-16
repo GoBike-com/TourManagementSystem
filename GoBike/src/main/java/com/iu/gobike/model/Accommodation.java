@@ -70,7 +70,7 @@ public class Accommodation {
     private String address;
 
     @Column(name = "booked")
-    private boolean booked;
+    private Boolean booked;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;

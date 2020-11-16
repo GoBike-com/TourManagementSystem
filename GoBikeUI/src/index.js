@@ -43,7 +43,7 @@ ReactDOM.render(
               <Route path="/traveller/success" exact component={Dashboard} />
               <Route path="/search" exact component={SearchComponent} />
               <Route path="/accomodation" exact component={Accomodation} />
-              <Route path="/itinerary" exact component={Itinerary} />
+              <Route path="/itinerary" exact component={NewItinerary} />
               <Route path="/newitinerary" exact component={NewItinerary} />
               <Route path="/travel" exact component={Travel} />
               <Route path="/review" exact component={Review} />
