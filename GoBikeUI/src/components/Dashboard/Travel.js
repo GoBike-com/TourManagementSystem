@@ -3,34 +3,14 @@ import { withRouter } from "react-router-dom";
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import moment from "moment";
 import {Card,Typography, CardHeader,CardActions, 
-  CardContent,Grid,TextField, CircularProgress,
+  CardContent,Grid,TextField,
   Button as Btn, Switch, FormControlLabel} from '@material-ui/core';
 import { fade, makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { red } from '@material-ui/core/colors';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
 import { config } from '../Constants'
 import image from "../../assets/img/travel.png";
-
-// const PurpleSwitch = withStyles({
-//   switchBase: {
-//     color: purple[300],
-//     '&$checked': {
-//       color: purple[500],
-//     },
-//     '&$checked + $track': {
-//       backgroundColor: purple[500],
-//     },
-//   },
-//   checked: {},
-//   track: {},
-// })(Switch);
 
 class Travel extends React.Component {
   constructor(props) {
@@ -41,16 +21,18 @@ class Travel extends React.Component {
       departurecity: "",
       arrivalcity: "",
       countoftravellers: "",
-      travellerclass: "",
+      travellerclass: "ECONOMY",
       stop:false,
       roundtrip:false,
       returnFlights:"",
       flights:"",
-      loading:false
+      loading:false,
+      depatureDate:moment().format("YYYY-MM-DD"),
+      returnDate:moment().format("YYYY-MM-DD")
     };
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
-    this.handleDateChange = this.handleDateChange.bind(this);
-    this.handleDateChange1 = this.handleDateChange1.bind(this);
+    this.handleReturnDate = this.handleReturnDate.bind(this);
+    this.handleDeptDate = this.handleDeptDate.bind(this);
     this.handleChangeMode = this.handleChangeMode.bind(this);
     this.handleResetMode = this.handleResetMode.bind(this);
     this.handleChangeLeavingFrom = this.handleChangeLeavingFrom.bind(this);
@@ -162,7 +144,7 @@ class Travel extends React.Component {
         // source: this.state.departurecity[0].iataCode,
         // destination: this.state.arrivalcity[0].iataCode,
         travelDate: this.state.depatureDate,
-        returnDate: this.state.arrivaldDate,
+        returnDate: this.state.returnDate,
         nonStop: this.state.stop,
         adults: this.state.countoftravellers,
         travelClass: this.state.travellerclass,
@@ -212,9 +194,9 @@ class Travel extends React.Component {
     this.setState({ roundtrip: event.target.checked });
   }
 
-  handleDateChange = (date) => {
-    const arrivalDate = moment(date).format("YYYY-MM-DD");
-    this.setState({ selectedDate: arrivalDate });
+  handleReturnDate = (date) => {
+    const returnDate = moment(date.target.value).format("YYYY-MM-DD");
+    this.setState({ selectedDate: returnDate });
   };
 
   handleChangeArrivalAt = (event, value) => {
@@ -223,9 +205,9 @@ class Travel extends React.Component {
     this.setState({ arrivalcity: value });
   };
 
-  handleDateChange1 = (date) => {
+  handleDeptDate = (date) => {
     console.log(date)
-    const beginDate = moment(date).format("YYYY-MM-DD");
+    const beginDate = moment(date.target.value).format("YYYY-MM-DD");
     console.log(beginDate);
     this.setState({ depatureDate: beginDate });
   };
@@ -236,13 +218,6 @@ class Travel extends React.Component {
     event.preventDefault();
     this.state.loading = true;
 
-    console.log("departure date " + this.state.depatureDate);
-    console.log("arrival date " + this.state.selectedDate);
-    console.log("arrival city " + this.state.arrivalcity);
-    console.log("departure city " + this.state.departurecity);
-    console.log("no of travellers " + this.state.countoftravellers);
-    console.log("traveller class " + this.state.travellerclass);
-
     var targetUrl = config.API_URL + "/travel/search/flight";
     const requestOptions = {
       method: "POST",
@@ -252,7 +227,7 @@ class Travel extends React.Component {
         source: this.state.departurecity[0].iataCode,
         destination: this.state.arrivalcity[0].iataCode,
         travelDate:this.state.depatureDate,
-        returnDate: this.state.arrivaldDate,
+        returnDate: this.state.returnDate,
         nonStop: this.state.stop,
         adults: this.state.countoftravellers,
         travelClass: this.state.travellerclass,
@@ -372,14 +347,19 @@ class Travel extends React.Component {
 
   render() {
     return (
-      <Grid container justify="center" style={{
-        backgroundImage: "url(" + image + ")",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        }} >
+      // <div style={{height: "100%",}} >
+        <Grid container justify="center" style={{
+          backgroundImage: "url(" + image + ")",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          height: 'auto !important',
+          // minHeight: "100%",
+          maxheight:"100vh" - "50px",
+          }} >
+          
         <CssBaseline />
           <Grid>
-            <h1 justify="center">Search your travel route</h1>
+            <h1 style={{textAlign: "center"}}>Search your travel route</h1>
             <Card
               raised="true"
               style={{ width: "100%"}}
@@ -387,9 +367,11 @@ class Travel extends React.Component {
               <div style={{width: "100%"}}>
                   <Grid>
                   <div style={{ display: "inline-block", padding: "4%" }}>
-                    <LocationOnIcon />
+                      <Typography>
+                      Source
+                    </Typography>
                     <AsyncTypeahead
-                    style={{margin:"4%" }}
+                   // style={{margin:"4%" }}
                       id="source"
                       labelKey="name"
                       minLength={3}
@@ -400,11 +382,15 @@ class Travel extends React.Component {
                   />
                   </div>
                   <div style={{ display: "inline-block", padding: "4%"  }}>
-                    <LocationOnIcon />
+                      <Typography
+                      //   style={{margin:"4%"}}
+                      >
+                      Destination
+                    </Typography>
                     <AsyncTypeahead
                       id="destination"
                       labelKey="name"
-                      style={{ padding: "2%", margin:"4%" }}
+                    //  style={{ padding: "2%", margin:"4%" }}
                       minLength={3}
                       onChange={(selected) => this.setState({arrivalcity : selected})}
                       onSearch={this.handleAirportSearch}
@@ -417,53 +403,46 @@ class Travel extends React.Component {
                     )}
                   />
                   </div>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                      style={{
-                        padding: "4%"
-                      }}
-                      disableToolbar
-                      variant="inline"
-                      format="yyyy-MM-dd"
-                      size="small"
-                      margin="normal"
-                      id="date-picker-inline"
-                      label="Select departure date"
-                      color="primary"
-                      font="Helvetica"
-                      // inputFormat={(date) => moment(new Date()).format('MM-DD-YYYY')}
-                      value={this.state.depatureDate}
-                      onChange={this.handleDateChange1}
-                    />
-                  </MuiPickersUtilsProvider>
-                  {this.state.roundtrip && (
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <KeyboardDatePicker
-                        style={{
-                          padding: "4%"
-                        }}
-                        disableToolbar
-                        variant="inline"
-                        format="yyyy-MM-dd"
-                        size="small"
-                        margin="normal"
-                        id="date-picker-inline"
-                        label="Select returning date"
-                        color="primary"
-                        font="Helvetica"
-                        value={this.state.selectedDate}
-                        onChange={this.handleDateChange}
-                      />
-                    </MuiPickersUtilsProvider>
-                  )}
+                  </Grid>
+                  <Grid>
+                  <div style={{ display: "inline", padding: "4%"  }}>
+                       <TextField
+                            id="date"
+                            label="Departure Date"
+                            type="date"
+                            value={this.state.depatureDate}
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            onChange={this.handleDeptDate}
+                        />
+                        </div>
+                        <div style={{ display: "inline", padding: "4%"  }}>
+                        {this.state.roundtrip && (
+                          <TextField
+                            id="date"
+                            label="Return Date"
+                            type="date"
+                            // className={classes.textField}
+                            value={this.state.returnDate}
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            onChange={this.handleReturnDate}
+                          />
+                        )}
+                  </div>
                   </Grid>
                   <Grid>
                     <div style={{ display: "inline-block", padding:"2%"}}>
                       <TextField 
                         id="count" 
-                        label="No. of passengers" 
+                        label="Traveler" 
                         onChange={this.handleCountoftravellers}
                         value={this.state.countoftravellers}
+                        style={{
+                          width: "70px",
+                        }}
                       />
                     </div>
                     <div style={{ display: "inline-block", padding:"2%"}}>
@@ -471,7 +450,7 @@ class Travel extends React.Component {
                         id="combo-box-demo4"
                         options={this.travellerclass}
                         // getOptionLabel={(option) => option.value}
-                        // style={{ width: "15%", display: "inline-block" }}
+                        style={{ width: "250px" }}
                         autoSelect
                         value={this.state.travellerclass}
                         onChange={this.handletravellerclass}
@@ -480,14 +459,11 @@ class Travel extends React.Component {
                             {...params}
                             id="start"
                             // style={{
-                            //   width: "200px",
-                            //   // marginTop: "5px",
-                            //   marginLeft: "10px",
-                            //   marginBottom: "10px",
+                            //   width: "250px",
                             // }}
                             // select
                             label="class"
-                            // value={value}
+                            //value={value}
                             onChange={this.handleChange}
                             variant="outlined"
                             color="primary"
@@ -496,7 +472,9 @@ class Travel extends React.Component {
                         )}
                       />
                     </div>
-                    <div style={{ display: "inline-block", padding:"2%"}}>
+                    {/* </Grid>
+                    <Grid> */}
+                    <div style={{ display: "inline", padding:"2%"}}>
                       <FormControlLabel
                           control={
                             <Switch
@@ -509,7 +487,7 @@ class Travel extends React.Component {
                           label="roundtrip"
                         />
                       </div>
-                    <div style={{ display: "inline-block", padding:"2%"}}>
+                    <div style={{ display: "inline", padding:"2%"}}>
                       <FormControlLabel
                           control={
                             <Switch
@@ -536,14 +514,14 @@ class Travel extends React.Component {
             </Card>
             </Grid>
             <Grid>
-              <div style={{ width: "85%", marginLeft: "100px", marginTop: "40px"} }>
+              <div style={{ width: "85%", marginLeft: "100px", marginTop: "40px", display: "inline-block"} }>
                 {this.state.flights && this.renderFlights(this.state.flights)}
                 {this.state.returnFlights &&this.renderFlights(this.state.returnFlights)}
                 {/* {this.state.loading &&  <CircularProgress />}   */}
               </div>
-            </Grid>    
-           
+            </Grid>        
       </Grid>
+      // </div>
     );
   }
 }
