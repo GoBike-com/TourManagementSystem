@@ -4,10 +4,8 @@ import com.iu.gobike.dto.AddAccommodationRequest;
 import com.iu.gobike.dto.BookRequest;
 import com.iu.gobike.dto.HotelInfo;
 import com.iu.gobike.model.Accommodation;
-import com.iu.gobike.model.Flight;
 import com.iu.gobike.model.UserItinerary;
 import com.iu.gobike.repository.AccommodationRepository;
-import com.iu.gobike.repository.FlightRepository;
 import com.iu.gobike.repository.UserItineraryRepository;
 import com.iu.gobike.util.GoBikeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +42,7 @@ public class AccomodationServiceImpl implements AccomodationService{
                 .checkIn(GoBikeUtil.convert(request.getCheckInDate())).checkOut(GoBikeUtil.convert(request.getCheckInDate()))
                 .contact(Long.parseLong(hotelInfo.getPhonenumber())).cityName(request.getCity()).numOfPerson(request.getAdults())
                 .postalCode(hotelInfo.getPostalCode()).ratings(Integer.parseInt(hotelInfo.getRating()))
-                .userItinerary(userItinerary).build();
+                .createdBy(userName).modifiedBy(userName).userItinerary(userItinerary).build();
         userItinerary.getAccommodations().add(accommodation);
         accommodationRepository.save(accommodation);
         //userItinerary.setAccommodations(List.of(accommodation));

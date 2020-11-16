@@ -1,6 +1,9 @@
 package com.iu.gobike.service;
 
+import com.iu.gobike.dto.AddTravelRequest;
 import com.iu.gobike.dto.BookRequest;
+
+import java.text.ParseException;
 
 /**
  * @author jbhushan
@@ -8,5 +11,7 @@ import com.iu.gobike.dto.BookRequest;
 public interface TravelService {
 
     Boolean bookFlights(BookRequest request);
+
+    void addFlight(AddTravelRequest request, String userName) throws ParseException;
 
 }

@@ -47,8 +47,9 @@ public class ItineraryServiceImpl implements ItineraryService {
             endDate = GoBikeUtil.convert(request.getEndDate());
         }
         Itinerary itinerary = Itinerary.builder().name(request.getName())
-                .startDate(startDate).endDate(endDate).build();
-        UserItinerary userItinerary = UserItinerary.builder().itinerary(itinerary).user(user).build();
+                .startDate(startDate).endDate(endDate).createdBy(userName).modifiedBy(userName).build();
+        UserItinerary userItinerary = UserItinerary.builder().itinerary(itinerary).user(user)
+                .createdBy(userName).modifiedBy(userName).build();
         userItinerary = userItineraryRepository.save(userItinerary);
         return userItinerary;
     }

@@ -1,14 +1,14 @@
 package com.iu.gobike.controllers;
 
-import com.iu.gobike.dto.BookRequest;
-import com.iu.gobike.dto.SearchAirportResponse;
-import com.iu.gobike.dto.SearchFlightRequest;
-import com.iu.gobike.dto.SearchFlightResponse;
+import com.iu.gobike.dto.*;
 import com.iu.gobike.service.AmadeusTravelService;
 import com.iu.gobike.service.TravelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 
 /**
  * @author jbhushan
@@ -51,5 +51,20 @@ public class TravelController {
     @PutMapping(path = "/flight/book", produces = "application/json")
     public ResponseEntity<Boolean> bookFlight(@RequestBody BookRequest request) {
         return ResponseEntity.ok(travelService.bookFlights(request));
+    }
+
+    /**
+     * This API is responsible for saving flight details to itinerary
+     */
+    @PutMapping(path = "/flight/{username}", produces = "application/json")
+    public ResponseEntity<String> addFlight(@PathVariable("username") String userName, @RequestBody AddTravelRequest request) {
+        ResponseEntity<String> responseEntity = null;
+        try {
+            travelService.addFlight(request,userName);
+            responseEntity = ResponseEntity.ok("SAVED");
+        } catch (ParseException e) {
+            responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return responseEntity;
     }
 }
