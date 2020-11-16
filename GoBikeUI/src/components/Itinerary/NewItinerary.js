@@ -9,6 +9,8 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {config} from "../Constants";
 import fetch from "cross-fetch";
+import Divider from "@material-ui/core/Divider";
+import AccordionActions from "@material-ui/core/AccordionActions";
 
 
 class NewItinerary extends React.Component {
@@ -32,14 +34,26 @@ class NewItinerary extends React.Component {
         })
             .then((response) => response.json())
             .then((data) => {
+                this.setState({itineraries: []});
+
                 for (let i = 0; i < data.length; i++) {
-                    const itinerary = data[i].itinerary;
+                    const itineraryData = data[i].itinerary;
+
+                    const itinerary = {
+                        name: itineraryData.name,
+                        startDate: itineraryData.startDate,
+                        endDate: itineraryData.endDate,
+                        createdDate: itineraryData.createdDate,
+                        flights: [],
+                        accommodations: [],
+                        place: ""
+                    };
+
+                    const groupMemberData = data[i].user;
+                    itinerary.groupMembers = groupMemberData.firstName + " " + groupMemberData.lastName;
+
                     this.setState({
-                        itineraries: this.state.itineraries.concat({
-                            name: itinerary.name,
-                            startDate: itinerary.startDate,
-                            endDate: itinerary.endDate,
-                        })
+                        itineraries: this.state.itineraries.concat(itinerary)
                     });
                 }
 
@@ -138,15 +152,38 @@ class NewItinerary extends React.Component {
                                     aria-controls="panel1a-content"
                                     id="panel1a-header"
                                 >
-                                    <Typography className={classes.heading}>
+                                    <Typography className={classes.heading} variant="h3">
                                         {itinerary.name}
                                     </Typography>
                                 </AccordionSummary>
+                                <Divider />
                                 <AccordionDetails>
                                     <Typography>
-                                        This will include information about your itinerary, or a link to another page with details.
+                                        This will include information about your itinerary, as well as a description if applicable.
                                     </Typography>
                                 </AccordionDetails>
+                                <AccordionDetails>
+                                    <Typography>
+                                        <b>Created By: </b>{itinerary.groupMembers}
+                                    </Typography>
+                                </AccordionDetails>
+                                <AccordionDetails>
+                                    <Typography>
+                                        <b>Start Date: </b>{itinerary.startDate}
+                                    </Typography>
+                                </AccordionDetails>
+                                <AccordionDetails>
+                                    <Typography>
+                                        <b>End Date: </b>{itinerary.endDate}
+                                    </Typography>
+                                </AccordionDetails>
+                                <Divider />
+                                <AccordionActions>
+                                    <Button size="small">Share</Button>
+                                    <Button size="small" color="primary">
+                                        Edit
+                                    </Button>
+                                </AccordionActions>
                             </Accordion>
                             <br/>
                         </div>
@@ -158,3 +195,4 @@ class NewItinerary extends React.Component {
 }
 
 export default NewItinerary;
+
