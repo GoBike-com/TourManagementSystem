@@ -52,7 +52,7 @@ public class Accommodation {
     private Instant checkOut;
 
     @Column(name = "AMOUNT")
-    private float amount;
+    private Float amount;
 
     @Column(name = "NUM_OF_ROOM")
     private Integer numOfRoom;

@@ -2,7 +2,6 @@ package com.iu.gobike.controllers;
 
 import com.iu.gobike.dto.AddTravelRequest;
 import com.iu.gobike.dto.CreateItineraryRequest;
-import com.iu.gobike.dto.GetItineraryDetailsResponse;
 import com.iu.gobike.model.UserItinerary;
 import com.iu.gobike.repository.UserItineraryRepository;
 import com.iu.gobike.service.ItineraryService;
@@ -12,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * @author jbhushan
@@ -51,14 +51,20 @@ public class ItineraryController {
     }
 
     @GetMapping(path = "/{username}",produces = "application/json")
-    public ResponseEntity<GetItineraryDetailsResponse> getAllItineraries(@PathVariable("username") String username){
-        GetItineraryDetailsResponse response = itineraryService.getAllItineraries(username);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<List<UserItinerary>> getAllItineraries(@PathVariable("username") String username){
+        ResponseEntity responseEntity = null;
+        List<UserItinerary> itineraries = itineraryService.getAllItineraries(username);
+        if(itineraries != null){
+            responseEntity = ResponseEntity.ok(itineraries);
+        } else {
+            responseEntity = ResponseEntity.noContent().build();
+        }
+       return responseEntity;
     }
 
-    @GetMapping(path="/{username}/{id}", produces = "application/json")
-    public ResponseEntity<UserItinerary> getItineraryDetails(@PathVariable("id") String itineraryId){
-            return ResponseEntity.ok(itineraryService.getItinerary(itineraryId));
+    @GetMapping(path="/{username}/{name}", produces = "application/json")
+    public ResponseEntity<UserItinerary> getItineraryDetails(@PathVariable("username") String userName, @PathVariable("name") String name){
+            return ResponseEntity.ok(itineraryService.getItinerary(userName, name));
     }
 
     @GetMapping( produces = "application/json")

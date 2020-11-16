@@ -71,16 +71,15 @@ public class ItineraryServiceImpl implements ItineraryService {
 
 
     @Override
-    public UserItinerary getItinerary(String id) {
-        Optional<UserItinerary> userItinerary = userItineraryRepository.findById(Long.valueOf(id));
-        return userItinerary.get();
+    public UserItinerary getItinerary(String userName, String name) {
+        return userItineraryRepository.findByUserUserNameAndItineraryName(userName,name);
     }
 
     @Override
-    public GetItineraryDetailsResponse getAllItineraries(String userName) {
+    public List<UserItinerary> getAllItineraries(String userName) {
         User user = userRepository.findByUserName(userName);
-        List<UserItinerary> userItineraries = userItineraryRepository.findByUserId(user.getId());
-        return buildItineraryResponse(userItineraries,userName);
+        return userItineraryRepository.findByUserId(user.getId());
+       // return buildItineraryResponse(userItineraries,userName);
     }
 
     private GetItineraryDetailsResponse buildItineraryResponse(List<UserItinerary> userItineraries, String userName) {
