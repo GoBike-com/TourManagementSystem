@@ -5,12 +5,14 @@ import com.iu.gobike.dto.CreateItineraryRequest;
 import com.iu.gobike.dto.GetItineraryDetailsResponse;
 import com.iu.gobike.model.UserItinerary;
 
+import java.text.ParseException;
+
 /**
  * @author jbhushan
  */
 public interface ItineraryService {
 
-    UserItinerary create(CreateItineraryRequest request, String userName);
+    UserItinerary create(CreateItineraryRequest request, String userName) throws ParseException;
 
     void addTravel(AddTravelRequest request, String userName);
 
