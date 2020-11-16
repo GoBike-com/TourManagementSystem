@@ -65,6 +65,12 @@ export default function Menus() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
+                <MenuItem onClick={(event) => handleSelectedMenu(event,'itinerary')}>
+                    <ListItemIcon>
+                        <DescriptionIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Itineraries" />
+                </MenuItem>
                 <MenuItem onClick={(event) => handleSelectedMenu(event,'search')}>
                     <ListItemIcon>
                         <LocationSearchingIcon fontSize="small" />
@@ -82,12 +88,6 @@ export default function Menus() {
                         <HomeIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText primary="Accommodation" />
-                </MenuItem>
-                <MenuItem onClick={(event) => handleSelectedMenu(event,'itinerary')}>
-                    <ListItemIcon>
-                        <DescriptionIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText primary="Itinerary" />
                 </MenuItem>
                 <MenuItem onClick={(event) => handleSelectedMenu(event,'chat')}>
                     <ListItemIcon>
