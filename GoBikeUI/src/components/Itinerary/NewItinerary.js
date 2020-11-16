@@ -7,6 +7,8 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {config} from "../Constants";
+import fetch from "cross-fetch";
 
 
 class NewItinerary extends React.Component {
@@ -20,12 +22,62 @@ class NewItinerary extends React.Component {
 
     addItinerary = (event) => {
         event.preventDefault();
+
         const itineraryName = prompt("What do you want to call this new itinerary?");
         if (itineraryName) {
-            //TODO: Call to create a new itinerary, delete below setState call
-            this.setState({
-                itineraries: this.state.itineraries.concat({name: itineraryName})
-            });
+            const targetCreateUrl = config.API_URL + "/itinerary/" + window.sessionStorage.getItem("username");
+            const requestOptions = {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: itineraryName,
+                    startDate: "2020-12-21",
+                    endDate: "2020-12-25"
+                }),
+            };
+
+            fetch(targetCreateUrl, requestOptions)
+                .then((response) => {
+                    if (response.status == "200") {
+                        alert("success");
+                    } else {
+                        alert("Error")
+                    }
+                })
+                .catch((error) => {
+                    alert(error);
+                    console.error("There was an error!", error);
+                });
+
+
+
+            // alert("getting itineraries");
+            // const targetUrl = config.API_URL + "/itinerary/" + window.sessionStorage.getItem("username");
+            // fetch(targetUrl, {
+            //     method:'get',
+            //     headers: {Accept: 'application/json'},
+            // })
+            //     .then((response) => response.json())
+            //     .then((data) => {
+            //         // const results = String(data).split(",");
+            //         alert(data);
+            //
+            //         // this.setState({
+            //         //     itineraries: this.state.itineraries.concat({
+            //         //         name: itineraryName,
+            //         //         startDate: "",
+            //         //         endDate: ""
+            //         //     })
+            //         // });
+            //
+            //     })
+            //     .catch((error) => {
+            //         console.log(error);
+            //         alert(error);
+            //     });
+
+
             // window.location.href = "/search"
         }
     };
