@@ -28,7 +28,7 @@ class Travel extends React.Component {
       flights:"",
       loading:false,
       depatureDate:moment().format("YYYY-MM-DD"),
-      returnDate:moment().format("YYYY-MM-DD")
+      //returnDate:moment().format("YYYY-MM-DD")
     };
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
     this.handleReturnDate = this.handleReturnDate.bind(this);
@@ -294,40 +294,32 @@ class Travel extends React.Component {
           <Card
             className={this.classes.root1}
             raised="true"
-            style={{ display: 'flex', margin:"2%"}}
+            style={{ margin:"2%"}}
           >
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', background:'lightblue' }}>
               <CardHeader 
                   title={flight.airline}
                   subheader = {flight.duration}
-                  />
-               <Typography style={{ display: 'end' }} paragraph variant="h5">
-                    ${flight.price}
-                </Typography>  
+                  /> 
             </div>
-           <div style={{ display: 'flex' }}>
-              <CardContent>
-                <Typography paragraph >
-                    {flight.deptIataCode}
-                </Typography>    
-                <Typography paragraph>
-                    {flight.takeOffTime}
-                </Typography>
-                <Typography paragraph>
-                    {flight.deptTerminal}
-                </Typography>
-              </CardContent>
-              <CardContent>
-              <Typography paragraph>
-                    {flight.arrivalIataCode}
-                </Typography>
-                <Typography paragraph>
-                    {flight.arrivalTime}
-                </Typography>
-                <Typography paragraph>
-                    {flight.arrivalTerminal}
-                </Typography>
-              </CardContent>
+              <div style={{ display: 'flex' }}>
+                <CardContent>
+                  <Typography paragraph >
+                      {flight.deptIataCode}-{flight.arrivalIataCode}
+                  </Typography>    
+                  <Typography paragraph>
+                      {flight.takeOffTime} -  {flight.arrivalTime}
+                  </Typography>
+                  <Typography paragraph>
+                      {flight.deptTerminal} -  {flight.arrivalTerminal}
+                  </Typography>
+                </CardContent>
+                <CardContent>
+                  <Typography style={{ display: 'end' }} paragraph variant="h5">
+                      ${flight.price}
+                  </Typography> 
+                </CardContent>
+              </div>
               <CardActions>
                 <Btn size="small" color="primary" onClick={e => 
                  {
@@ -336,8 +328,7 @@ class Travel extends React.Component {
                  }}>
                   Add to itinerary
                 </Btn>
-              </CardActions>   
-            </div> 
+              </CardActions> 
           </Card>
         </div>
         )
