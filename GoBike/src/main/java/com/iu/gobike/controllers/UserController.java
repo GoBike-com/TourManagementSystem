@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,11 @@ public class UserController {
     @GetMapping(path = "/{username}")
     public ResponseEntity<User> findUser(@PathVariable String username) {
         return ResponseEntity.ok(userService.findByUserName(username));
+    }
+
+    @GetMapping(path = "/search/{username}")
+    public ResponseEntity<List<String>> search(@PathVariable String username) {
+        return ResponseEntity.ok(userService.search(username));
     }
 
     /**
