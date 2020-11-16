@@ -38,7 +38,7 @@ public class User {
 
     @Column(name = "USER_NAME",unique = true)
     @NotNull
-    private String userName;
+        private String userName;
 
     @Column(name ="PASSWORD")
     @NotNull

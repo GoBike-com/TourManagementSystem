@@ -66,13 +66,11 @@ public class UserController {
 
     /**
      * This API is responsible for successfully login User with the given credential
-     * @param userName
-     * @param password
      * @return return User Details on success else Authorization Error
      */
-    @CrossOrigin
-    @PostMapping(path = "/login", consumes = "application/json")
-    public ResponseEntity<User> login(HttpServletRequest request, HttpServletResponse response) {
+   // @CrossOrigin
+    @PostMapping(path = "/login", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<User> login(HttpServletRequest request) {
         ResponseEntity<User> responseEntity= null;
         try {
             Map<String, String> postBody = getPostBodyInAMap(request);
@@ -85,7 +83,7 @@ public class UserController {
 //        	
 //            System.out.println("usernameeeeeeeeeeeeeeeeeeee" + session.getAttribute("username"));
             
-            User user = userService.login(username,password, request,response);
+            User user = userService.login(username,password, request);
             responseEntity = ResponseEntity.ok(user);
         } catch (AuthenticationException e) {
             responseEntity = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

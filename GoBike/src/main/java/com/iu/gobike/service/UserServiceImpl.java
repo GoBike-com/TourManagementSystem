@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(String userName, String password, HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException {
+    public User login(String userName, String password, HttpServletRequest request) throws AuthenticationException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException {
         log.info("Request for login");
         User user = userRepository.findByUserName(userName);
         if(user != null){
@@ -175,7 +175,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> resetPassword(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> resetPassword(HttpServletRequest request,HttpServletResponse response) {
     	boolean isPasswordChanged = false;
 
         Map<String, Object> result = new HashMap<>();

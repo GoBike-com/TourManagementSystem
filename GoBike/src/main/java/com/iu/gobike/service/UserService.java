@@ -25,7 +25,7 @@ public interface UserService {
 
     void register(RegisterUserRequest registerUserRequest, String password) throws EntityExistsException, InvalidKeySpecException, NoSuchAlgorithmException;
 
-    User login(String userName, String password,HttpServletRequest request, HttpServletResponse response ) throws AuthenticationException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException;
+    User login(String userName, String password,HttpServletRequest request ) throws AuthenticationException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException;
 
 //    ResponseEntity<?> resetPassword(ResetPasswordRequest request) throws ResetPasswordException, InvalidKeySpecException, NoSuchAlgorithmException;
 
@@ -39,7 +39,7 @@ public interface UserService {
 
     ResponseEntity<?> signOut(HttpServletRequest req, HttpServletResponse res);
 
-    ResponseEntity<?> resetPassword(HttpServletRequest request, HttpServletResponse response);
+    ResponseEntity<?> resetPassword(HttpServletRequest request,HttpServletResponse response);
 
 //	ResponseEntity<?> verifyOtp(HttpServletRequest request, HttpServletRequest response);
 
