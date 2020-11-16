@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -64,6 +65,9 @@ public class User {
 
     @Column(name="otp")
     public String otp;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserItinerary> userItineraries;
 
     @PrePersist
     void onCreate() {

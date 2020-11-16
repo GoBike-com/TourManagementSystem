@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import moment from "moment";
 import {Card,Typography, CardHeader,CardActions, 
-  CardContent,Grid,TextField,
+  CardContent,Grid,TextField, CircularProgress,
   Button as Btn, Switch, FormControlLabel} from '@material-ui/core';
 import { fade, makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -37,7 +37,6 @@ class Travel extends React.Component {
     super(props);
     this.state = {
       currency: "",
-      searchResult: "",
       onewayflag: "",
       departurecity: "",
       arrivalcity: "",
@@ -47,6 +46,7 @@ class Travel extends React.Component {
       roundtrip:false,
       returnFlights:"",
       flights:"",
+      loading:false
     };
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
@@ -234,7 +234,7 @@ class Travel extends React.Component {
 
   handleFlightSearch = (event) => {
     event.preventDefault();
-    this.state.searchResult = true;
+    this.state.loading = true;
 
     console.log("departure date " + this.state.depatureDate);
     console.log("arrival date " + this.state.selectedDate);
@@ -261,6 +261,7 @@ class Travel extends React.Component {
     fetch(targetUrl, requestOptions)
     .then(res => res.json())
     .then((response) => {
+      this.state.loading = false;
        if(response.flights.length === 0 && response.returnFlights.length === 0){
           alert("No flights found for your search. Please select different route!")
           console.log("test")
@@ -495,7 +496,7 @@ class Travel extends React.Component {
                         )}
                       />
                     </div>
-                    <div style={{ display: "inline-block" }}>
+                    <div style={{ display: "inline-block", padding:"2%"}}>
                       <FormControlLabel
                           control={
                             <Switch
@@ -508,7 +509,7 @@ class Travel extends React.Component {
                           label="roundtrip"
                         />
                       </div>
-                    <div style={{ display: "inline-block" }}>
+                    <div style={{ display: "inline-block", padding:"2%"}}>
                       <FormControlLabel
                           control={
                             <Switch
@@ -523,7 +524,7 @@ class Travel extends React.Component {
                     </div>
                   </Grid>
                 </div>
-                <Grid justify="center" >
+                <Grid style={{ position: "center", paddingLeft:"40%", paddingBottom: "2%"}} >
                     <Btn
                      color="primary"
                      variant="contained"
@@ -538,9 +539,10 @@ class Travel extends React.Component {
               <div style={{ width: "85%", marginLeft: "100px", marginTop: "40px"} }>
                 {this.state.flights && this.renderFlights(this.state.flights)}
                 {this.state.returnFlights &&this.renderFlights(this.state.returnFlights)}
+                {/* {this.state.loading &&  <CircularProgress />}   */}
               </div>
-            </Grid>      
-        
+            </Grid>    
+           
       </Grid>
     );
   }

@@ -6,6 +6,7 @@ import com.iu.gobike.dto.GetItineraryDetailsResponse;
 import com.iu.gobike.model.UserItinerary;
 
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * @author jbhushan
@@ -16,7 +17,7 @@ public interface ItineraryService {
 
     void addTravel(AddTravelRequest request, String userName);
 
-    UserItinerary getItinerary(String id);
+    UserItinerary getItinerary(String userName, String name);
 
-    GetItineraryDetailsResponse getAllItineraries(String userName);
+    List<UserItinerary> getAllItineraries(String userName);
 }

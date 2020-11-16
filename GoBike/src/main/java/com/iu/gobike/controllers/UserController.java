@@ -1,8 +1,6 @@
 package com.iu.gobike.controllers;
 
 import com.iu.gobike.dto.RegisterUserRequest;
-import com.iu.gobike.dto.ResetPasswordRequest;
-import com.iu.gobike.exception.ResetPasswordException;
 import com.iu.gobike.model.User;
 import com.iu.gobike.service.UserService;
 import org.hibernate.UnknownProfileException;
@@ -14,18 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
+import javax.persistence.EntityExistsException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import javax.naming.AuthenticationException;
-import javax.persistence.EntityExistsException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
 
 /**
  * @author jbhushan
@@ -34,7 +28,6 @@ import javax.servlet.http.HttpSessionEvent;
 @RequestMapping(path = "/user")
 @CrossOrigin(origins = "*",allowedHeaders = "*", allowCredentials = "true")
 public class UserController {
-
 
     @Autowired
     private UserService userService;

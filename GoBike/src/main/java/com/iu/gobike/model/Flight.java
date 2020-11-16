@@ -35,7 +35,7 @@ public class Flight {
     private String travelClass;
 
     @Column(name = "PRICE")
-    private float price;
+    private Float price;
 
     @Column(name = "DURATION")
     private String duration;
