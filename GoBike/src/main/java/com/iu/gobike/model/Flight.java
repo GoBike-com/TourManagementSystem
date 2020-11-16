@@ -55,6 +55,12 @@ public class Flight {
     @Column(name = "DEPT_CODE")
     private String deptIataCode;
 
+    @Column(name="DEPT_TIME", updatable = false)
+    private Instant deptTime;
+
+    @Column(name="ARRIVAL_TIME")
+    private Instant arrivalTime;
+
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
 
