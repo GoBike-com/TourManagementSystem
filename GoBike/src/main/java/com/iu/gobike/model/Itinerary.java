@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 /**
  * This model is responsible for storing al the details for an itinerary
@@ -48,6 +49,9 @@ public class Itinerary {
 
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
+
+//    @OneToMany(mappedBy = "itinerary", fetch = FetchType.LAZY)
+//    private List<UserItinerary> itineraries;
 
     @PrePersist
     void onCreate() {
