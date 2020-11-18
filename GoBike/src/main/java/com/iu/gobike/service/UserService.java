@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
 /**
  * @author jbhushan
@@ -32,6 +33,8 @@ public interface UserService {
     Iterable<User> getAllUsers();
 
     User findByUserName(String userName);
+
+    List<String> search(String userName);
 
     String generateOtp(String username) throws UnknownProfileException;
 

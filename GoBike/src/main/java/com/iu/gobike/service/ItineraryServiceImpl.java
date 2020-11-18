@@ -7,6 +7,7 @@ import com.iu.gobike.model.Itinerary;
 import com.iu.gobike.model.User;
 import com.iu.gobike.model.UserItinerary;
 import com.iu.gobike.repository.FlightRepository;
+import com.iu.gobike.repository.ItineraryRepository;
 import com.iu.gobike.repository.UserItineraryRepository;
 import com.iu.gobike.repository.UserRepository;
 import com.iu.gobike.util.GoBikeUtil;
@@ -17,7 +18,7 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -31,6 +32,9 @@ public class ItineraryServiceImpl implements ItineraryService {
 
     @Autowired
     private UserItineraryRepository userItineraryRepository;
+
+    @Autowired
+    private ItineraryRepository itineraryRepository;
 
     @Autowired
     private FlightRepository flightRepository;
@@ -55,6 +59,18 @@ public class ItineraryServiceImpl implements ItineraryService {
     }
 
     @Override
+    public Itinerary addUser(AddUserToItineraryRequest request) {
+        UserItinerary userItinerary = userItineraryRepository
+                .findByUserUserNameAndItineraryName(request.getUserName(), request.getItineraryName());
+        Itinerary itinerary = userItinerary.getItinerary();
+        User newUser = userRepository.findByUserName(request.getNewUserName());
+        UserItinerary newUserItinerary = UserItinerary.builder().itinerary(itinerary).user(newUser)
+                .createdBy(request.getUserName()).modifiedBy(request.getUserName()).build();
+        userItineraryRepository.save(newUserItinerary);
+        return itinerary;
+    }
+
+    @Override
     public void addTravel(AddTravelRequest request, String userName) {
         User user = userRepository.findByUserName(userName);
         UserItinerary userItinerary = null;
@@ -69,26 +85,30 @@ public class ItineraryServiceImpl implements ItineraryService {
         saveFlightDetails(request,userItinerary);
     }
 
-
-
     @Override
-    public UserItinerary getItinerary(String userName, String name) {
-        return userItineraryRepository.findByUserUserNameAndItineraryName(userName,name);
+    public ItineraryDetail getItinerary(String userName, String name) {
+        UserItinerary userItinerary = userItineraryRepository.findByUserUserNameAndItineraryName(userName,name);
+        Set<User> users =  userItineraryRepository.findByItineraryName(userItinerary.getItinerary().getName());
+        ItineraryDetail itineraryDetail = ItineraryDetail.builder().accommodations(userItinerary.getAccommodations())
+                .flights(userItinerary.getFlights()).users(users).itinerary(userItinerary.getItinerary()).build();
+        return itineraryDetail;
     }
 
     @Override
-    public List<UserItinerary> getAllItineraries(String userName) {
+    public GetItineraryDetailsResponse getAllItineraries(String userName) {
         User user = userRepository.findByUserName(userName);
-        return userItineraryRepository.findByUserId(user.getId());
-       // return buildItineraryResponse(userItineraries,userName);
+        List<UserItinerary> u = userItineraryRepository.findByUserId(user.getId());
+       return  buildItineraryResponse(u,userName);
     }
 
     private GetItineraryDetailsResponse buildItineraryResponse(List<UserItinerary> userItineraries, String userName) {
         List<ItineraryDetail> details = new ArrayList<ItineraryDetail>();
         userItineraries.stream().map(userItinerary -> {
             ItineraryDetail itineraryDetail = ItineraryDetail.builder()
-                    .flights(userItinerary.getFlights()).userItinerary(userItinerary.getId())
+                    .flights(userItinerary.getFlights()).accommodations(userItinerary.getAccommodations())
                     .itinerary(userItinerary.getItinerary()).build();
+            Set<User> users = userItineraryRepository.findByItineraryName(userItinerary.getItinerary().getName());
+            itineraryDetail.setUsers(users);
             details.add(itineraryDetail);
             return details;
         }).collect(Collectors.toList());

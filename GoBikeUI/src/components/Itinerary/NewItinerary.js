@@ -36,22 +36,23 @@ class NewItinerary extends React.Component {
             .then((data) => {
                 this.setState({itineraries: []});
 
-                for (let i = 0; i < data.length; i++) {
-                    const itineraryData = data[i].itinerary;
+                for (let i = 0; i < data.itineraryDetails.length; i++) {
+                    const itineraryData = data.itineraryDetails[i];
 
                     const itinerary = {
-                        name: itineraryData.name,
-                        startDate: itineraryData.startDate,
-                        endDate: itineraryData.endDate,
-                        createdDate: itineraryData.createdDate,
-                        flights: [],
-                        accommodations: [],
+                        name: itineraryData.itinerary.name,
+                        startDate: itineraryData.itinerary.startDate,
+                        endDate: itineraryData.itinerary.endDate,
+                        createdDate: itineraryData.itinerary.createdDate,
+                        createdBy: itineraryData.itinerary.createdBy,
+                        flights: itineraryData.flights,
+                        accommodations: itineraryData.accommodations,
                         place: ""
                     };
 
-                    const groupMemberData = data[i].user;
-                    itinerary.groupMembers = groupMemberData.firstName + " " + groupMemberData.lastName;
-
+                    const groupMemberData = itineraryData.users;
+                   // itinerary.groupMembers = groupMemberData.firstName + " " + groupMemberData.lastName;
+                  // itinerary.groupMembers = groupMemberData
                     this.setState({
                         itineraries: this.state.itineraries.concat(itinerary)
                     });
@@ -164,7 +165,7 @@ class NewItinerary extends React.Component {
                                 </AccordionDetails>
                                 <AccordionDetails>
                                     <Typography>
-                                        <b>Created By: </b>{itinerary.groupMembers}
+                                        <b>Created By: </b>{itinerary.createdBy}
                                     </Typography>
                                 </AccordionDetails>
                                 <AccordionDetails>

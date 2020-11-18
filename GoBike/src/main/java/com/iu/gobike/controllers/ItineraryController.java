@@ -1,7 +1,7 @@
 package com.iu.gobike.controllers;
 
-import com.iu.gobike.dto.AddTravelRequest;
-import com.iu.gobike.dto.CreateItineraryRequest;
+import com.iu.gobike.dto.*;
+import com.iu.gobike.model.Itinerary;
 import com.iu.gobike.model.UserItinerary;
 import com.iu.gobike.repository.UserItineraryRepository;
 import com.iu.gobike.service.ItineraryService;
@@ -42,6 +42,20 @@ public class ItineraryController {
     }
 
     /**
+     * This API is responsible for creating new itinerary
+     */
+    @PostMapping(path = "/adduser", produces = "application/json")
+    public ResponseEntity<Itinerary> addUserToItinerary(@RequestBody AddUserToItineraryRequest createItineraryRequest) {
+        Itinerary itinerary = null;
+        try {
+            itinerary = itineraryService.addUser(createItineraryRequest);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return  ResponseEntity.ok(itinerary);
+    }
+
+    /**
      * This API is responsible for saving selected flight details to itinerary
      */
     @PostMapping(path = "/{username}/travel", produces = "application/json")
@@ -51,9 +65,9 @@ public class ItineraryController {
     }
 
     @GetMapping(path = "/{username}",produces = "application/json")
-    public ResponseEntity<List<UserItinerary>> getAllItineraries(@PathVariable("username") String username){
+    public ResponseEntity<GetItineraryDetailsResponse> getAllItineraries(@PathVariable("username") String username){
         ResponseEntity responseEntity = null;
-        List<UserItinerary> itineraries = itineraryService.getAllItineraries(username);
+        GetItineraryDetailsResponse itineraries = itineraryService.getAllItineraries(username);
         if(itineraries != null){
             responseEntity = ResponseEntity.ok(itineraries);
         } else {
@@ -63,7 +77,7 @@ public class ItineraryController {
     }
 
     @GetMapping(path="/{username}/{name}", produces = "application/json")
-    public ResponseEntity<UserItinerary> getItineraryDetails(@PathVariable("username") String userName, @PathVariable("name") String name){
+    public ResponseEntity<ItineraryDetail> getItineraryDetails(@PathVariable("username") String userName, @PathVariable("name") String name){
             return ResponseEntity.ok(itineraryService.getItinerary(userName, name));
     }
 
