@@ -1,4 +1,5 @@
 import React from "react";
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
@@ -6,25 +7,46 @@ import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
+import {DialogContent,Dialog,DialogTitle,DialogActions} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {config} from "../Constants";
 import fetch from "cross-fetch";
 import Divider from "@material-ui/core/Divider";
 import AccordionActions from "@material-ui/core/AccordionActions";
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 
 class NewItinerary extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            itineraries: []
+            itineraries: [],
+            open:false,
+            user:'',
+            itineraryName:''
         };
         this.addItinerary = this.addItinerary.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleUserSearch = this.handleUserSearch.bind(this);
     }
 
     componentDidMount() {
         this.getAllItineraries();
     }
+
+    handleOpen = (name) => {
+        this.setState({
+            open:true,
+            itineraryName:name
+        })
+    }
+
+     handleClose = () => {
+        this.setState({
+            open:false
+        })
+      };
 
     getAllItineraries = () => {
         const targetGetUrl = config.API_URL + "/itinerary/" + window.sessionStorage.getItem("username");
@@ -64,6 +86,53 @@ class NewItinerary extends React.Component {
                 alert(error);
             });
     };
+
+    share = () => {
+        console.log(this.state.user)
+        var targetUrl = config.API_URL + "/itinerary/adduser";
+        const requestOptions = {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                userName: window.sessionStorage.getItem("username"),
+                itineraryName: this.state.itineraryName,
+                newUserName: this.state.user[0]
+            }),
+        };
+
+        fetch(targetUrl, requestOptions)
+                .then((response) => {
+                    if (response.status == "200") {
+                       alert("User was added!")
+                       this.setState({
+                           open:false
+                       })
+                    }
+                })
+                .catch((error) => {
+                    alert(error);
+                    console.error("There was an error!", error);
+                });
+    }
+
+    handleUserSearch = (query) => {
+        //setIsLoading(true);
+        console.log(query)
+        var targetUrl = config.API_URL + "/user/search/"+query;
+        fetch(targetUrl,{
+          method: "GET",
+           credentials: "include",
+           headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+         })
+         .then(res => res.json())
+          .then((res) => {
+            console.log(res)
+           this.setState({ options: res,
+                        });
+            // setIsLoading(false);
+          });
+      };
 
     addItinerary = (event) => {
         event.preventDefault();
@@ -105,6 +174,17 @@ class NewItinerary extends React.Component {
             fontSize: theme.typography.pxToRem(15),
             fontWeight: theme.typography.fontWeightRegular,
         },
+        modal: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+          paper: {
+            backgroundColor: theme.palette.background.paper,
+            border: '2px solid #000',
+            boxShadow: theme.shadows[5],
+            padding: theme.spacing(2, 4, 3),
+          },
     }));
 
     render() {
@@ -180,7 +260,11 @@ class NewItinerary extends React.Component {
                                 </AccordionDetails>
                                 <Divider />
                                 <AccordionActions>
-                                    <Button size="small">Share</Button>
+                                    <Button size="small" onClick={e => 
+                                            {
+                                            e.preventDefault()
+                                            this.handleOpen(itinerary.name)
+                                            }}>Share</Button>
                                     <Button size="small" color="primary">
                                         Edit
                                     </Button>
@@ -189,6 +273,37 @@ class NewItinerary extends React.Component {
                             <br/>
                         </div>
                     ))}
+                    <Dialog
+                        open={this.state.open}
+                        onClose={this.handleClose}
+                        className={classes.modal}
+                        >
+                        <DialogTitle 
+                            style={{backgroundColor: '#0d47a1'}} id="simple-dialog-title">
+                                Share with other traveler
+                        </DialogTitle>
+                        <DialogContent>
+                            <div style = {{display:'flex'}}>
+                                <Typography>
+                                    UserName:
+                                </Typography>
+                                <AsyncTypeahead
+                                    id="source"
+                                    labelKey="name"
+                                    minLength={2}
+                                    onChange={(selected) => this.setState({user : selected})}
+                                    onSearch={this.handleUserSearch}
+                                    options={this.state.options}
+                                    placeholder="Search user.."
+                                />
+                            </div>
+                                <DialogActions>
+                                <Button size="small" color="primary" onClick = {this.share}>
+                                    Share
+                                </Button>
+                            </DialogActions>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             );
         }
