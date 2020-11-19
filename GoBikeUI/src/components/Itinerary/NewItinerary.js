@@ -298,9 +298,11 @@ class NewItinerary extends React.Component {
                                 />
                             </div>
                                 <DialogActions>
-                                <Button size="small" color="primary" onClick = {this.share}>
+                                {this.state.user ===''?<Button size="small" color="primary" disabled>
                                     Share
-                                </Button>
+                                </Button> :<Button size="small" color="primary" onClick = {this.share}>
+                                    Share
+                                </Button>}
                             </DialogActions>
                         </DialogContent>
                     </Dialog>
