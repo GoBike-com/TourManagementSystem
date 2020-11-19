@@ -6,7 +6,7 @@ import {Card,Typography, CardHeader,CardActions,
   CardContent,Grid,TextField,
   Button as Btn, Switch, FormControlLabel} from '@material-ui/core';
 import { fade, makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import Alert from '@material-ui/lab/Alert';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { red } from '@material-ui/core/colors';
 import { config } from '../Constants'
@@ -28,6 +28,7 @@ class Travel extends React.Component {
       flights:"",
       loading:false,
       depatureDate:moment().format("YYYY-MM-DD"),
+      error:false
       //returnDate:moment().format("YYYY-MM-DD")
     };
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
@@ -218,38 +219,50 @@ class Travel extends React.Component {
     event.preventDefault();
     this.state.loading = true;
 
-    var targetUrl = config.API_URL + "/travel/search/flight";
-    const requestOptions = {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        source: this.state.departurecity[0].iataCode,
-        destination: this.state.arrivalcity[0].iataCode,
-        travelDate:this.state.depatureDate,
-        returnDate: this.state.returnDate,
-        nonStop: this.state.stop,
-        adults: this.state.countoftravellers,
-        travelClass: this.state.travellerclass,
-      }),
-    };
-    fetch(targetUrl, requestOptions)
-    .then(res => res.json())
-    .then((response) => {
-      this.state.loading = false;
-       if(response.flights.length === 0 && response.returnFlights.length === 0){
-          alert("No flights found for your search. Please select different route!")
-          console.log("test")
-       } else {
-         this.setState({
-          flights : response.flights,
-          returnFlights : response.returnFlights,
-         })
-       }
-    })
-    .catch((error) => {
-      console.error("There was an error!", error);
-    });
+    if(this.state.departurecity ==='' ||
+      this.state.arrivalcity === '' ||
+      this.state.countoftravellers === '') {
+        this.setState({
+          error : true
+        })
+    } else {
+        this.setState({
+          error : false
+        })
+
+        var targetUrl = config.API_URL + "/travel/search/flight";
+        const requestOptions = {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            source: this.state.departurecity[0].iataCode,
+            destination: this.state.arrivalcity[0].iataCode,
+            travelDate:this.state.depatureDate,
+            returnDate: this.state.returnDate,
+            nonStop: this.state.stop,
+            adults: this.state.countoftravellers,
+            travelClass: this.state.travellerclass,
+          }),
+        };
+        fetch(targetUrl, requestOptions)
+        .then(res => res.json())
+        .then((response) => {
+          this.state.loading = false;
+          if(response.flights.length === 0 && response.returnFlights.length === 0){
+              alert("No flights found for your search. Please select different route!")
+              console.log("test")
+          } else {
+            this.setState({
+              flights : response.flights,
+              returnFlights : response.returnFlights,
+            })
+          }
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    } 
   };
 
   handleAirportSearch = (query) => {
@@ -296,7 +309,7 @@ class Travel extends React.Component {
             raised="true"
             style={{ margin:"2%"}}
           >
-            <div style={{ display: 'flex', background:'lightblue' }}>
+            <div style={{ display: 'flex', background:'#0d47a1' }}>
               <CardHeader 
                   title={flight.airline}
                   subheader = {flight.duration}
@@ -337,136 +350,61 @@ class Travel extends React.Component {
   }
 
   render() {
-    return (
-      // <div style={{height: "100%",}} >
-        <Grid container justify="center" style={{
-          backgroundImage: "url(" + image + ")",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          height: 'auto !important',
-          // minHeight: "100%",
-          maxheight:"100vh" - "50px",
-          }} >
-          
-        <CssBaseline />
-          <Grid>
-            <h1 style={{textAlign: "center"}}>Search your travel route</h1>
-            <Card
-              raised="true"
-              style={{ width: "100%"}}
-            >
-              <div style={{width: "100%"}}>
-                  <Grid>
-                  <div style={{ display: "inline-block", padding: "4%" }}>
-                      <Typography>
-                      Source
-                    </Typography>
-                    <AsyncTypeahead
-                   // style={{margin:"4%" }}
-                      id="source"
-                      labelKey="name"
-                      minLength={3}
-                      onChange={(selected) => this.setState({departurecity : selected})}
-                      onSearch={this.handleAirportSearch}
-                      options={this.state.options}
-                      placeholder="Enter source"
-                  />
-                  </div>
-                  <div style={{ display: "inline-block", padding: "4%"  }}>
-                      <Typography
-                      //   style={{margin:"4%"}}
-                      >
-                      Destination
-                    </Typography>
-                    <AsyncTypeahead
-                      id="destination"
-                      labelKey="name"
-                    //  style={{ padding: "2%", margin:"4%" }}
-                      minLength={3}
-                      onChange={(selected) => this.setState({arrivalcity : selected})}
-                      onSearch={this.handleAirportSearch}
-                      options={this.state.options}
-                      placeholder="Enter destination"
-                      renderMenuItemChildren={(option, props) => (
-                      <React.Fragment>
-                        <span>{option.name}</span>
-                      </React.Fragment>
-                    )}
-                  />
-                  </div>
-                  </Grid>
-                  <Grid>
-                  <div style={{ display: "inline", padding: "4%"  }}>
-                       <TextField
-                            id="date"
-                            label="Departure Date"
-                            type="date"
-                            value={this.state.depatureDate}
-                            InputLabelProps={{
-                              shrink: true,
-                            }}
-                            onChange={this.handleDeptDate}
-                        />
-                        </div>
-                        <div style={{ display: "inline", padding: "4%"  }}>
-                        {this.state.roundtrip && (
-                          <TextField
-                            id="date"
-                            label="Return Date"
-                            type="date"
-                            // className={classes.textField}
-                            value={this.state.returnDate}
-                            InputLabelProps={{
-                              shrink: true,
-                            }}
-                            onChange={this.handleReturnDate}
-                          />
-                        )}
-                  </div>
-                  </Grid>
-                  <Grid>
-                    <div style={{ display: "inline-block", padding:"2%"}}>
-                      <TextField 
-                        id="count" 
-                        label="Traveler" 
-                        onChange={this.handleCountoftravellers}
-                        value={this.state.countoftravellers}
-                        style={{
-                          width: "70px",
-                        }}
-                      />
-                    </div>
-                    <div style={{ display: "inline-block", padding:"2%"}}>
+    return(
+        <div
+          style={{
+            backgroundImage: "url(" + image + ")",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            minHeight: "100vh",
+          }}
+        >
+           <Grid container justify="center">
+              <div style={{ display: "inline-block"}}>
+                <h1 style={{textAlign: "center"}}>Search your travel route</h1>
+                {this.state.error && 
+                  <Alert severity="error">Please populate required fields for searching flights</Alert>
+                } 
+              </div>
+              <Card
+                raised="true"
+                style={{ width: "75%"}}
+              >
+                <div style={{ display: "flex"}}>
+                    <div style={{ paddingLeft: "4%",paddingTop: "4%",paddingRight: "4%" }}>
                       <Autocomplete
-                        id="combo-box-demo4"
-                        options={this.travellerclass}
-                        // getOptionLabel={(option) => option.value}
-                        style={{ width: "250px" }}
-                        autoSelect
-                        value={this.state.travellerclass}
-                        onChange={this.handletravellerclass}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            id="start"
-                            // style={{
-                            //   width: "250px",
-                            // }}
-                            // select
-                            label="class"
-                            //value={value}
-                            onChange={this.handleChange}
-                            variant="outlined"
-                            color="primary"
-                            size="medium"
-                          />
+                          id="combo-box-demo4"
+                          options={this.travellerclass}
+                          style={{ width: "180px" }}
+                          autoSelect
+                          value={this.state.travellerclass}
+                          onChange={this.handletravellerclass}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              id="start"
+                              margin="normal"
+                              label="Class"
+                              onChange={this.handleChange}
+                              color="primary"
+                              size="small"
+                            />
                         )}
                       />
                     </div>
-                    {/* </Grid>
-                    <Grid> */}
-                    <div style={{ display: "inline", padding:"2%"}}>
-                      <FormControlLabel
+                    <div style={{ paddingLeft: "4%",paddingTop: "5.5%",paddingRight: "12%" }}>
+                        <TextField 
+                            id="count" 
+                            label="Traveler" 
+                            onChange={this.handleCountoftravellers}
+                            value={this.state.countoftravellers}
+                            style={{
+                              width: "70px",
+                            }}
+                        />
+                    </div>
+                    <div style={{ paddingLeft: "4%",paddingTop: "8%",paddingRight: "8%" }}>
+                        <FormControlLabel
                           control={
                             <Switch
                               checked={this.state.roundtrip}
@@ -477,9 +415,9 @@ class Travel extends React.Component {
                           }
                           label="roundtrip"
                         />
-                      </div>
-                    <div style={{ display: "inline", padding:"2%"}}>
-                      <FormControlLabel
+                    </div>
+                    <div style={{ paddingLeft: "4%",paddingTop: "8%",paddingRight: "4%" }}>
+                        <FormControlLabel
                           control={
                             <Switch
                               checked={this.state.stop}
@@ -491,28 +429,86 @@ class Travel extends React.Component {
                           label="nonstop"
                         />
                     </div>
-                  </Grid>
                 </div>
-                <Grid style={{ position: "center", paddingLeft:"40%", paddingBottom: "2%"}} >
+                <div style={{ display: "flex"}}>  
+                    <div style={{ display: "inline-block", padding: "4%" }}>
+                      <Typography> Source </Typography>
+                      <AsyncTypeahead
+                        // style={{margin:"4%" }}
+                            id="source"
+                            labelKey="name"
+                            minLength={3}
+                            onChange={(selected) => this.setState({departurecity : selected})}
+                            onSearch={this.handleAirportSearch}
+                            options={this.state.options}
+                            placeholder="Enter source"
+                        />
+                    </div>
+                    <div style={{ display: "inline-block", padding: "4%"  }}>
+                        <Typography>Destination</Typography>
+                        <AsyncTypeahead
+                          id="destination"
+                          labelKey="name"
+                        //  style={{ padding: "2%", margin:"4%" }}
+                          minLength={3}
+                          onChange={(selected) => this.setState({arrivalcity : selected})}
+                          onSearch={this.handleAirportSearch}
+                          options={this.state.options}
+                          placeholder="Enter destination"
+                          renderMenuItemChildren={(option, props) => (
+                          <React.Fragment>
+                            <span>{option.name}</span>
+                          </React.Fragment>
+                        )}
+                        />
+                    </div>
+                    <div style={{ padding: "4%"}}>
+                        <TextField
+                              id="date"
+                              label="Departure Date"
+                              type="date"
+                              value={this.state.depatureDate}
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              onChange={this.handleDeptDate}
+                          />
+                    </div>
+                    <div style={{padding: "4%"}}>
+                        {this.state.roundtrip && (
+                        <TextField
+                              id="date"
+                              label="Return Date"
+                              type="date"
+                              // className={classes.textField}
+                              value={this.state.returnDate}
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              onChange={this.handleReturnDate}
+                            />
+                          )}
+                    </div>
+                  </div>
+                <div style={{ paddingLeft: "43%",paddingBottom: "2%"}} >
                     <Btn
-                     color="primary"
-                     variant="contained"
-                    onClick={this.handleFlightSearch}
-                  >
-                    Search
-                  </Btn>
-                </Grid>   
-            </Card>
-            </Grid>
-            <Grid>
-              <div style={{ width: "85%", marginLeft: "100px", marginTop: "40px", display: "inline-block"} }>
+                      color="primary"
+                      variant="contained"
+                      onClick={this.handleFlightSearch}
+                      >
+                      Search
+                    </Btn>
+                </div> 
+              </Card>
+           </Grid>
+           <Grid container justify="center">
+              <div style={{display: "inline-block"} }>
                 {this.state.flights && this.renderFlights(this.state.flights)}
                 {this.state.returnFlights &&this.renderFlights(this.state.returnFlights)}
-                {/* {this.state.loading &&  <CircularProgress />}   */}
               </div>
-            </Grid>        
-      </Grid>
-      // </div>
+           </Grid>
+        </div>
+
     );
   }
 }
