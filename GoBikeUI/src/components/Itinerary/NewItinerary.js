@@ -105,6 +105,9 @@ class NewItinerary extends React.Component {
                 .then((response) => {
                     if (response.status == "200") {
                        alert("User was added!")
+                       this.setState({
+                           open:false
+                       })
                     }
                 })
                 .catch((error) => {
@@ -287,7 +290,7 @@ class NewItinerary extends React.Component {
                                 <AsyncTypeahead
                                     id="source"
                                     labelKey="name"
-                                    minLength={3}
+                                    minLength={2}
                                     onChange={(selected) => this.setState({user : selected})}
                                     onSearch={this.handleUserSearch}
                                     options={this.state.options}
