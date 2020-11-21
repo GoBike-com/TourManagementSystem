@@ -9,7 +9,9 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
-import ListSubheader from "@material-ui/core/ListSubheader";
+import LocalActivityIcon from '@material-ui/icons/LocalActivity';
+import RestaurantIcon from '@material-ui/icons/Restaurant';
+import HotelIcon from '@material-ui/icons/Hotel';
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
@@ -20,7 +22,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
-import {Link} from "react-router-dom";
+
 
 export default function ExploreComponent() {
     const [open, setOpen] = React.useState(false);
@@ -111,10 +113,21 @@ export default function ExploreComponent() {
 
     return (
         <div>
+
+            {/*Place Name*/}
+            <Typography className={classes.placeTitle} variant="h1" gutterBottom align="center">
+                {allDataLoaded ? placeData.name : ""}
+            </Typography>
+
+            {/*Short Place Description*/}
+            <Typography variant="body1" gutterBottom align={"center"}>
+                {allDataLoaded ? placeData.description : ""}
+            </Typography>
+
             <Autocomplete
                 clearOnBlur={false}
                 id="searchbar"
-                style={{ width: 300 }}
+                containerStyle = {{ alignItems:'center', justifyContent:'center' }}
                 open={open}
                 onOpen={() => {
                     setOpen(true);
@@ -138,7 +151,7 @@ export default function ExploreComponent() {
                 renderInput={(params) => (
                     <TextField
                         {...params}
-                        label="Search..."
+                        label="Search places..."
                         variant="outlined"
                         InputProps={{
                             ...params.InputProps,
@@ -152,25 +165,16 @@ export default function ExploreComponent() {
                     />
                 )}
             />
-
-            {/*Place Name*/}
-            <Typography className={classes.placeTitle} variant="h1" component="h2" gutterBottom
-                        align="center">
-                {allDataLoaded ? placeData.name : ""}
-            </Typography>
-
-            {/*Short Place Description*/}
-            <Typography variant="body1" gutterBottom align={"center"}>
-                {allDataLoaded ? placeData.description : ""}
-            </Typography>
+            <br/><br/><br/>
             <Divider variant="middle"/>
 
             {/*Things to Do*/}
             <div className={classes.gridRoot}>
+                <Typography variant="h2" >
+                    Things To Do
+                    <LocalActivityIcon />
+                </Typography>
                 <GridList cellHeight={300} className={classes.gridList} cols={3}>
-                    <GridListTile key="Subheader" cols={3} style={{height: 'auto'}}>
-                        <ListSubheader component="div">Things to Do</ListSubheader>
-                    </GridListTile>
                     {allDataLoaded ? activityData() : ""}
                 </GridList>
             </div>
@@ -179,11 +183,10 @@ export default function ExploreComponent() {
 
             {/*Restaurants*/}
             <div className={classes.gridRoot}>
-                <GridList cellHeight={300} className={classes.gridList} cols={3}>
-                    <GridListTile key="Subheader" cols={3} style={{height: 'auto'}}>
-                        <ListSubheader component="div">Restaurants</ListSubheader>
-                    </GridListTile>
-                </GridList>
+                <Typography variant="h2" >
+                    Restaurants
+                    <RestaurantIcon />
+                </Typography>
                 <Grid container spacing={5}>
                     {allDataLoaded ? restaurantData() : ""}
                 </Grid>
@@ -195,7 +198,10 @@ export default function ExploreComponent() {
             <div className={classes.gridRoot}>
                 <GridList cellHeight={300} className={classes.gridList}>
                     <GridListTile key="Subheader" cols={2} style={{height: 'auto'}}>
-                        <ListSubheader component="div">Hotels</ListSubheader>
+                        <Typography variant="h2" >
+                            Hotels
+                            <HotelIcon />
+                        </Typography>
                     </GridListTile>
                     {allDataLoaded ? hotelData() : ""}
                 </GridList>

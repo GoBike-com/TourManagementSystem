@@ -1,67 +1,60 @@
 package com.iu.gobike.service;
 
-import com.iu.gobike.amadeus.helper.AmadeusHelper;
-import com.iu.gobike.amadeus.model.travel.Dictionary;
-import com.iu.gobike.amadeus.model.travel.Flight;
+import com.iu.gobike.dto.AddTravelRequest;
+import com.iu.gobike.dto.BookRequest;
 import com.iu.gobike.dto.FlightInfo;
-import com.iu.gobike.dto.SearchAirportResponse;
-import com.iu.gobike.dto.SearchFlightRequest;
-import com.iu.gobike.amadeus.dto.SearchFlightAmadeusResponse;
-import com.iu.gobike.dto.SearchFlightResponse;
-import com.iu.gobike.util.AmadeusRestTemplate;
+import com.iu.gobike.enums.FlightType;
+import com.iu.gobike.model.Flight;
+import com.iu.gobike.model.UserItinerary;
+import com.iu.gobike.repository.FlightRepository;
+import com.iu.gobike.repository.UserItineraryRepository;
+import com.iu.gobike.util.GoBikeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.time.Instant;
 
 /**
  * @author jbhushan
  */
 @Component
-public class TravelServiceImpl implements TravelService {
+public class TravelServiceImpl implements TravelService{
 
     @Autowired
-    AmadeusRestTemplate amadeusRestTemplate;
+    private FlightRepository flightRepository;
+
+    @Autowired
+    private UserItineraryRepository userItineraryRepository;
 
     @Override
-    public SearchAirportResponse searchAirports(String keyword) {
-        ResponseEntity<SearchAirportResponse> r = amadeusRestTemplate.get("v1/reference-data/locations?subType=CITY&countryCode=US&view=LIGHT&keyword="+keyword, SearchAirportResponse.class);
-        return r.getBody();
+    public Boolean bookFlights(BookRequest request) {
+        Iterable<Flight> flights = flightRepository.findAllById(request.getIds());
+        flights.forEach(flight -> flight.setBooked(true));
+        flightRepository.saveAll(flights);
+        return Boolean.TRUE;
     }
 
     @Override
-    public SearchFlightResponse searchFlights(SearchFlightRequest request) {
-        String url = "v2/shopping/flight-offers?currencyCode=USD&originLocationCode=" + request.getSource() +
-                "&destinationLocationCode=" + request.getDestination() + "&departureDate=" + request.getTravelDate() +
-                "&adults=" + request.getAdults()+"&nonStop="+request.isNonStop()+"&travelClass="+request.getTravelClass();
-        String returnDate = request.getReturnDate();
-        if(returnDate!=null){
-            url = url+"&returnDate="+returnDate;
-        }
-        ResponseEntity<SearchFlightAmadeusResponse> r = amadeusRestTemplate.get(url, SearchFlightAmadeusResponse.class);
-        //Populate flight information
-        List<FlightInfo> flightDetails= AmadeusHelper.extractFlightDetails(r.getBody());
-        return buildResponse(flightDetails,request );
-    }
+    public void addFlight(AddTravelRequest request, String userName) throws ParseException {
+        UserItinerary userItinerary = userItineraryRepository.findByUserUserNameAndItineraryName(userName, request.getItineraryName());
+        FlightInfo flightInfo = request.getFlight();
 
-    private SearchFlightResponse buildResponse(List<FlightInfo> flightDetails, SearchFlightRequest request ){
-        SearchFlightResponse response = SearchFlightResponse.builder().travelDate(request.getTravelDate())
-                .returnDate(request.getReturnDate()).adults(request.getAdults()).travelClass(request.getTravelClass()).build();
-         List<FlightInfo> flights = new ArrayList<FlightInfo>();
-         List<FlightInfo> returnFlights = new ArrayList<FlightInfo>();
-        String source = request.getSource();
-        for(FlightInfo flightInfo : flightDetails){
-           if(flightInfo.getDeptIataCode().equals(source)){
-               flights.add(flightInfo);
-           }else{
-               returnFlights.add(flightInfo);
-           }
+        Instant deptTime = Instant.now();
+        if(flightInfo.getTakeOffTime() != null){
+            deptTime = GoBikeUtil.convert(flightInfo.getTakeOffTime());
         }
-        response.setFlights(flights);
-        response.setReturnFlights(returnFlights);
-        return response;
+        Instant arrivalTime = Instant.now();
+        if(flightInfo.getArrivalTime() != null){
+            arrivalTime = GoBikeUtil.convert(flightInfo.getArrivalTime());
+        }
+
+        Flight flight = Flight.builder().airline(flightInfo.getAirline()).arrivalIataCode(flightInfo.getArrivalIataCode())
+                .arrivalTerminal(flightInfo.getArrivalTerminal()).deptIataCode(flightInfo.getDeptIataCode())
+                .deptTerminal(flightInfo.getDeptTerminal()).userItinerary(userItinerary).duration(flightInfo.getDuration())
+                .createdBy(userName).modifiedBy(userName).deptTime(deptTime).arrivalTime(arrivalTime)
+                .type(flightInfo.isReturnFlight()? FlightType.RETURN:FlightType.TRAVEL).build();
+
+        flightRepository.save(flight);
     }
 }

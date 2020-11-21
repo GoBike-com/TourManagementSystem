@@ -1,45 +1,40 @@
 package com.iu.gobike.model;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
+/**
+ * @author jbhushan
+ */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode
 @Builder
 @Entity
-@Table
-public class Accomodation {
+@Table(name="USER_ITINERARY")
+public class UserItinerary {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "BOOKING_NUMBER")
-    private Long bookingNumber;
-
     @JoinColumn(name = "USER")
     @ManyToOne
     private User user;
 
-    @Column(name = "CHECK_IN")
-    @NonNull
-    private Instant checkIn;
+    @JoinColumn(name = "ITINERARY")
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Itinerary itinerary;
 
-    @Column(name = "CHECK_OUT")
-    @NonNull
-    private Instant checkOut;
+    @OneToMany(mappedBy = "userItinerary")
+    private List<Flight> flights;
 
-    @Column(name = "Amount")
-    private Integer amount;
+    @OneToMany(mappedBy = "userItinerary")
+    private List<Accommodation> accommodations;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;

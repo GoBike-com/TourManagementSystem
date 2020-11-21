@@ -86,7 +86,7 @@ class MainLoginForm extends React.Component {
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.login = this.login.bind(this);
     this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
     this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
     this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -127,17 +127,15 @@ class MainLoginForm extends React.Component {
   };
 
 
-  handleSubmit = () => {
-    console.log("handleSubmit");
+  login = () => {
+    console.log("login");
 
     if(this.state.username === "" || this.state.password ===""){
       return this.setState({ hasErr : true })
     }
 
     if(this.state.username !== "" && this.state.password !== "" ){
-    var targetUrl = config.API_URL + "/user/login";
-
-    // var targetUrl = config.API_URL + "/user/register?password="+this.state.password;
+    var signUrl = config.API_URL + "/user/login";
     const requestOptions = {
       method: "POST",
       credentials: "include",
@@ -149,35 +147,22 @@ class MainLoginForm extends React.Component {
       }),
     };
 
-    fetch(targetUrl, requestOptions)
+    fetch(signUrl, requestOptions)
       .then(data => {
         console.log(data.ok);
-        // check for error response
-        // if (response.status == "200") {
-          
-        //   this.state.isRegistered = "True";
           if (data.ok === true) {
             this.setState({isRegistered : true})
             console.log("redirecting to home page.....");
+            window.sessionStorage.setItem("username",this.state.username)
+            // window.sessionStorage.setItem("itineraries",null)
             this.props.history.push({pathname : '/traveller/success',state:{
               username:this.state.username
             }});
-            // this.props.history.push("/traveller/success");
-          //   return this.setState({isRegistered : true})
-          //   // <Redirect to={'/traveller/success'} />
           }
-          // get error message from body or default to response statusText
-        // } 
         else {
           return this.setState({isRegistered : false})
         
         }
-      //   // this.setState({ totalReactPackages: data.total })
-      // }})
-      // .catch((error) => {
-      //   // this.setState({ errorMessage: error.toString() });
-      //   console.error("There was an error!", error);
-      // });
   });
 }}
 
@@ -220,7 +205,6 @@ class MainLoginForm extends React.Component {
       {
         size: "visible",
         callback: function (response) {
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
           console.log("captcha verified");
           this.onSignInSubmit();
         },
@@ -235,47 +219,6 @@ class MainLoginForm extends React.Component {
   handleClose = (event) => {
     this.setState({ open: !this.state.open });
   };
-
-  // onSignInSubmit = (event) => {
-  //   event.preventDefault();
-  //   // this.handleClose();
-  //   this.setUpRecaptcha();
-  //   var pN = "+1-812-650-8064";
-  //   console.log(pN);
-  //   // setOpen(false);
-  //   var appVerifier = window.recaptchaVerifier;
-
-  //   console.log("recaptcha-verfied");
-  //   firebase
-  //     .auth()
-  //     .signInWithPhoneNumber(pN, appVerifier)
-  //     .then(function (confirmationResult) {
-  //       console.log("helloooooooo");
-  //       var code = window.prompt("Enter OTP");
-  //       window.confirmationResult = confirmationResult;
-
-  //       confirmationResult
-  //         .confirm(code)
-  //         .then(function (result) {
-  //           // this.handleClose();
-  //           console.log("user is signed in");
-  //           this.props.history.push({pathname:"/traveller/success", state: {
-  //             username: this.state.userName,
-  //           }});
-  //           // ...
-
-  //           console.log("user is signed in");
-  //         })
-  //         .catch(function (error) {
-  //           // User couldn't sign in (bad verification code?)
-  //           // ...
-  //         });
-  //     })
-  //     .catch(function (error) {
-  //       // Error; SMS not sent
-  //       // ...
-  //     });
-  // };
 
   websitename = "Get Set GoBike";
 
@@ -349,7 +292,7 @@ class MainLoginForm extends React.Component {
                   variant="contained"
                   color="primary"
                   className={classes.submit}
-                  onClick={this.handleSubmit}
+                  onClick={this.login}
                 >
                   Sign In
                 </Button>
@@ -368,71 +311,36 @@ class MainLoginForm extends React.Component {
                 </Grid>
                 <Grid container>
                   <Grid item xs={12} xm={8}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyItems: "center",
-                        alignItems: "center",
-                        marginLeft: "240px",
-                      }}
-                    >
-                      {" "}
-                      Login with
-                      <a
-                        href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`}
+                      <Button
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          className={classes.submit}
+                          onClick={this.login}
+                          href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`}
                       >
+                        Login with GitHub
                         <GitHubIcon />
-                      </a>
-                    </div>
-                  </Grid>
-
-                  
-                  <Grid item xs={12} xm={8}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyItems: "center",
-                        alignItems: "center",
-                        marginLeft: "200px",
-                      }}
-                    >
-                      <div>
-                        <FacebookLogin
-                          appId="337521753991514"
-                          size="small"
-                          width="30px"
-                          autoLoad={false}
-                          fields="name,email,picture"
-                          callback={this.responseFacebook}
-                          buttonStyle={{borderRadius:"6px",marginTop:"6px",width:"180px",height:"45px",fontSize:"13px"}}
-                          render={(renderProps) => (
+                      </Button>
+                    <FacebookLogin
+                        appId="337521753991514"
+                        size="small"
+                        width="70px"
+                        autoLoad={false}
+                        fields="name,email,picture"
+                        callback={this.responseFacebook}
+                        buttonStyle={{borderRadius:"6px",marginTop:"6px",width:"100%",fontSize:"13px"}}
+                        render={(renderProps) => (
                             <Button
-                              justIcon
-                              target="_blank"
-                              color="primary"
-                              onClick={renderProps.onClick}
+                                justIcon
+                                target="_blank"
+                                color="primary"
+                                onClick={renderProps.onClick}
                             >
-                              
+
                             </Button>
-                          )}
-                        />
-                      </div>
-                    </div>
-                  </Grid>
-                  <Grid item xs={12} xm={8}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyItems: "center",
-                        alignItems: "center",
-                        marginLeft: "200px",
-                        marginTop:"10px"
-                      }}
-                    >
-                      <div>
-                        <FormDialog />
-                      </div>
-                    </div>
+                        )}
+                    />
                   </Grid>
                 </Grid>
               </form>
@@ -447,4 +355,3 @@ class MainLoginForm extends React.Component {
 export default withRouter(
   withStyles(styles, { withTheme: true })(MainLoginForm)
 );
-// export default withRouter(MainLoginForm);

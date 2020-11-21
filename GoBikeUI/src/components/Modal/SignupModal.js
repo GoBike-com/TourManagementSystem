@@ -67,14 +67,14 @@ export default function SignupModal() {
     <React.Fragment>
       <Link to={"traveller/signin"}>
                   <Button className={classes.ButtonGrp1}>
-                      Sign in
+                      Need a Login ? 
                   </Button> 
                   </Link>
-                  <Link to={"traveller/login"}>
+                  {/* <Link to={"traveller/login"}>
                   <Button className={classes.ButtonGrp2}>
                       Login
                   </Button> 
-                  </Link>
+                  </Link> */}
     </React.Fragment>
       
            

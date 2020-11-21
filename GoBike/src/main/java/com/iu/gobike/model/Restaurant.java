@@ -2,6 +2,7 @@ package com.iu.gobike.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+
 import javax.persistence.*;
 import java.time.Instant;
 

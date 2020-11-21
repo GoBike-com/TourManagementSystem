@@ -1,20 +1,10 @@
 import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
-import Panel from "./Panel";
-import { Grid, Paper } from "@material-ui/core";
-import { Link, withRouter } from "react-router-dom";
+import { Grid } from "@material-ui/core";
+import { withRouter } from "react-router-dom";
 import Button from "../../assets/components/CustomButtons/Button.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Search from "./SearchComponent";
-import ItineraryList from "./ItineraryList";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
@@ -24,9 +14,9 @@ import Avatar from "@material-ui/core/Avatar";
 import someJson from "./someJson.js";
 import FlightIcon from "@material-ui/icons/Flight";
 import Card from "@material-ui/core/Card";
-import image from "../../assets/img/Image3.jpg";
 import DisplayMapClass from "../Dashboard/Map";
 import Payment from "./Payment";
+
 
 class Itinerary extends React.Component {
   constructor(props) {
@@ -39,7 +29,6 @@ class Itinerary extends React.Component {
       showUnbookedItinerary:false,
     };
     // this.handleEmailIDChange = this.handleEmailIDChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.showPaymentPage = this.showPaymentPage.bind(this);
   }
 
@@ -113,38 +102,6 @@ class Itinerary extends React.Component {
 
   classes = this.useStyles;
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    var targetUrl = "http://localhost:8080/traveller/logout";
-
-    fetch(targetUrl, {
-      method: "post",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((response) => {
-        // check for error response
-        if (response.status == "200") {
-          this.state.isLoggedOut = "True";
-          if (this.state.isLoggedOut == "True") {
-            console.log("redirecting to home page.....");
-            this.props.history.push("/traveller/signin");
-            // <Redirect to={'/traveller/success'} />
-          }
-          // get error message from body or default to response statusText
-        }
-
-        // this.setState({ totalReactPackages: data.total })
-      })
-      .catch((error) => {
-        // this.setState({ errorMessage: error.toString() });
-        console.error("There was an error!", error);
-      });
-  };
-
   showPaymentPage = (event) => {
     event.preventDefault();
     this.setState({paymentpage:true});
@@ -161,47 +118,16 @@ class Itinerary extends React.Component {
     this.setState({showmap:true})
   }
 
+  header = 
+  window.sessionStorage.getItem("username");
+
   render() {
     return (
       <Grid>
         <CssBaseline />
-        <div className={this.classes.root}>
-          <AppBar position="static" style={{ backgroundColor: "indigo" }}>
-            <Toolbar>
-              <Typography
-                className={this.classes.title}
-                variant="h6"
-                noWrap
-                style={{
-                  fontSize: "24px",
-                  marginLeft: "275px",
-                  paddingRight: "800px",
-                }}
-              >
-                GoBike
-                <DirectionsBikeIcon className={this.classes.logo} />
-              </Typography>
-
-              <Link to={"/traveller/signin"} style={{ float: "right" }}>
-                <Button
-                  size="sm"
-                  style={{ alignItems: "right", marginRight: "10px" }}
-                  onClick={this.handleSubmit}
-                >
-                  logout
-                </Button>
-              </Link>
-            </Toolbar>
-          </AppBar>
-        </div>
         <Grid container>
-          <Grid item xs={2}>
-            <Panel />
-          </Grid>
           <Grid item xs={10}>
           {console.log(this.state.paymentpage)}
-
-
             {this.state.showUnbookedItinerary === false ?
             <div>
              

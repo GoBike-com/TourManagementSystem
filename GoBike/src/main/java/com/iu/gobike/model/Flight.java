@@ -1,5 +1,6 @@
 package com.iu.gobike.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iu.gobike.enums.FlightType;
 import lombok.*;
 
@@ -22,13 +23,19 @@ public class Flight {
     private Long id;
 
     @ManyToOne
-    private Travel travel;
+    @JoinColumn(name = "USER_ITINERARY")
+    @JsonIgnore
+    private UserItinerary userItinerary;
 
     @Column(name = "TYPE")
+    @Enumerated(EnumType.STRING)
     private FlightType type;
 
     @Column(name = "TRAVEL_CLASS")
     private String travelClass;
+
+    @Column(name = "PRICE")
+    private Float price;
 
     @Column(name = "DURATION")
     private String duration;
@@ -48,6 +55,12 @@ public class Flight {
     @Column(name = "DEPT_CODE")
     private String deptIataCode;
 
+    @Column(name="DEPT_TIME", updatable = false)
+    private Instant deptTime;
+
+    @Column(name="ARRIVAL_TIME")
+    private Instant arrivalTime;
+
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
 
@@ -59,6 +72,9 @@ public class Flight {
 
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
+
+    @Column(name="BOOKED")
+    private Boolean booked;
 
     @PrePersist
     void onCreate() {

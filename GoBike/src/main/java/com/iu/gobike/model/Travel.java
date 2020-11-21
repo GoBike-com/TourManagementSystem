@@ -1,11 +1,8 @@
 package com.iu.gobike.model;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.time.Instant;
 import java.util.List;
 
@@ -16,8 +13,8 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @Builder
-@Entity
-@Table
+//@Entity
+//@Table
 public class Travel {
 
     @Id
@@ -39,9 +36,9 @@ public class Travel {
     @Column(name = "RETURN_DATE")
     private Instant returnDate;
 
-    @JoinColumn(name = "FLIGHT")
-    @OneToMany
-    private List<Flight> flight;
+  //  @JoinColumn(name = "FLIGHT")
+//    @OneToMany
+//    private List<Flight> flight;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;

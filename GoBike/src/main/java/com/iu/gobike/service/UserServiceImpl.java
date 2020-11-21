@@ -34,6 +34,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -51,8 +52,6 @@ public class UserServiceImpl implements UserService {
     private String secretKey;
         
     public static final String SESSIONID = "sessionid";
-
-
 
     @Override
     public void register(RegisterUserRequest request, String password) throws EntityExistsException, InvalidKeySpecException, NoSuchAlgorithmException {
@@ -117,6 +116,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUserName(String userName) {
         return userRepository.findByUserName(userName);
+    }
+
+    @Override
+    public List<String> search(String userName) {
+        return userRepository.findAllUsers(userName);
     }
 
     @Override

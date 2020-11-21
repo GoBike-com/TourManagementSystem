@@ -24,4 +24,5 @@ public class FlightInfo {
     private String deptTerminal;
     private String arrivalIataCode;
     private String deptIataCode;
+    private boolean returnFlight;
 }

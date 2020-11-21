@@ -126,21 +126,6 @@ class EnterEmailForm extends React.Component {
     // }
     return (
       <div>
-        <div className={this.classes.root}>
-          <AppBar position="static" style={{ backgroundColor: "indigo" }}>
-            <Toolbar>
-              <Typography
-                className={this.classes.title}
-                variant="h6"
-                noWrap
-                style={{ fontSize: "24px", marginLeft: "300PX" }}
-              >
-                GoBike
-                <DirectionsBikeIcon className={this.classes.logo} />
-              </Typography>
-            </Toolbar>
-          </AppBar>
-        </div>
         <Container
           component="main"
           maxWidth="xs"

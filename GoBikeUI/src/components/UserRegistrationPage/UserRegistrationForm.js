@@ -255,33 +255,8 @@ class UserRegistrationForm extends React.Component {
 
     return (
       <div>
-        {/* <div style={{ backgroundColor: "black", textAlign: "center" }}>
-              <span>{this.websitename}</span>
-              <span>
-                <DirectionsBikeIcon className={classes.logo} />
-              </span>
-            </div>
-            <Typography component="h1" variant="h5" style={{ color: "indigo" }}>
-              Sign up
-            </Typography> */}
-
         <CssBaseline />
         {this.state.isRegistered === true ? this.myDialogue() : this.state.isRegistered === false ? alert("Username or email is already registered"):null}
-        <div className={this.classes.root}>
-          <AppBar position="static" style={{ backgroundColor: "indigo" }}>
-            <Toolbar>
-              <Typography
-                className={this.classes.title}
-                variant="h6"
-                noWrap
-                style={{ fontSize: "24px", marginLeft: "300PX" }}
-              >
-                GoBike
-                <DirectionsBikeIcon className={this.classes.logo} />
-              </Typography>
-            </Toolbar>
-          </AppBar>
-        </div>
 
         {/* <Grid item xs={false} sm={4} md={7} 
          style={{
@@ -486,7 +461,5 @@ class UserRegistrationForm extends React.Component {
     );
   }
 }
-
-// export default withStyles(styles, { withTheme: true })(UserRegistrationForm);
 
 export default withRouter(UserRegistrationForm);

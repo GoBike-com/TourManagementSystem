@@ -21,6 +21,7 @@
     "firebase": "^7.22.0",
     "gitstar-components": "^1.0.5",
     "google-map-react": "^1.1.5",
+    "google-maps-react": "2.0.6",
     "history": "4.9.0",
     "moment": "^2.24.0",
     "node-sass": "4.13.0",
@@ -33,6 +34,7 @@
     "react-bootstrap-typeahead": "5.1.2",
     "react-calendar": "^2.19.2",
     "react-chartkick": "^0.4.0",
+    "react-csv": "^2.0.3",
     "react-datetime": "2.16.3",
     "react-dom": "16.9.0",
     "react-facebook-login": "^4.1.1",
@@ -48,7 +50,6 @@
     "reactstrap": "8.4.1",
     "serve": "^11.2.0",
     "skeleton-css": "^2.0.4",
-    "google-maps-react": "2.0.6",
     "socket.io": "^2.3.0"
   },
   "scripts": {

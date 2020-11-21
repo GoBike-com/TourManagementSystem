@@ -1,16 +1,17 @@
 package com.iu.gobike.service;
 
-import com.iu.gobike.dto.SearchAirportResponse;
-import com.iu.gobike.dto.SearchFlightRequest;
-import com.iu.gobike.amadeus.dto.SearchFlightAmadeusResponse;
-import com.iu.gobike.dto.SearchFlightResponse;
+import com.iu.gobike.dto.AddTravelRequest;
+import com.iu.gobike.dto.BookRequest;
+
+import java.text.ParseException;
 
 /**
  * @author jbhushan
  */
 public interface TravelService {
 
-    SearchAirportResponse searchAirports(String keyword);
+    Boolean bookFlights(BookRequest request);
 
-    SearchFlightResponse searchFlights(SearchFlightRequest request);
+    void addFlight(AddTravelRequest request, String userName) throws ParseException;
+
 }
