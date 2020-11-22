@@ -22,7 +22,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
-
+import ItineraryPopup from "../Itinerary/ItineraryPopup";
 
 export default function ExploreComponent() {
     const [open, setOpen] = React.useState(false);
@@ -114,16 +114,6 @@ export default function ExploreComponent() {
     return (
         <div>
 
-            {/*Place Name*/}
-            <Typography className={classes.placeTitle} variant="h1" gutterBottom align="center">
-                {allDataLoaded ? placeData.name : ""}
-            </Typography>
-
-            {/*Short Place Description*/}
-            <Typography variant="body1" gutterBottom align={"center"}>
-                {allDataLoaded ? placeData.description : ""}
-            </Typography>
-
             <Autocomplete
                 clearOnBlur={false}
                 id="searchbar"
@@ -165,6 +155,21 @@ export default function ExploreComponent() {
                     />
                 )}
             />
+
+            {/*Place Name*/}
+            <Typography className={classes.placeTitle} variant="h1" gutterBottom align="center">
+                {allDataLoaded ? placeData.name : ""}
+            </Typography>
+
+            {/*Short Place Description*/}
+            <Typography variant="body1" gutterBottom align={"center"}>
+                {allDataLoaded ? placeData.description : ""}
+            </Typography>
+
+            <ItineraryPopup addToItinerary={(name) => {
+                alert(name);
+            }}/>
+
             <br/><br/><br/>
             <Divider variant="middle"/>
 
