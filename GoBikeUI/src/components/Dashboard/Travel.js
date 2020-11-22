@@ -58,6 +58,7 @@ class Travel extends React.Component {
     },
     root1: {
       minWidth: 100,
+      width: 300
     },
     title1: {
       fontSize: 14,
@@ -305,7 +306,7 @@ class Travel extends React.Component {
         return (
         <div>
           <Card
-            className={this.classes.root1}
+            ///className={this.classes.root1}
             raised="true"
             style={{ margin:"2%"}}
           >
@@ -366,6 +367,8 @@ class Travel extends React.Component {
                   <Alert severity="error">Please populate required fields for searching flights</Alert>
                 } 
               </div>
+            </Grid>
+            <Grid container justify="center">
               <Card
                 raised="true"
                 style={{ width: "75%"}}
@@ -384,7 +387,7 @@ class Travel extends React.Component {
                               {...params}
                               id="start"
                               margin="normal"
-                              label="Class"
+                              ///label="Class"
                               onChange={this.handleChange}
                               color="primary"
                               size="small"
@@ -434,7 +437,6 @@ class Travel extends React.Component {
                     <div style={{ display: "inline-block", padding: "4%" }}>
                       <Typography> Source </Typography>
                       <AsyncTypeahead
-                        // style={{margin:"4%" }}
                             id="source"
                             labelKey="name"
                             minLength={3}
@@ -449,7 +451,6 @@ class Travel extends React.Component {
                         <AsyncTypeahead
                           id="destination"
                           labelKey="name"
-                        //  style={{ padding: "2%", margin:"4%" }}
                           minLength={3}
                           onChange={(selected) => this.setState({arrivalcity : selected})}
                           onSearch={this.handleAirportSearch}
