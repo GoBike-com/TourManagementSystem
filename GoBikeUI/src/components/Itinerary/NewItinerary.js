@@ -146,6 +146,7 @@ class NewItinerary extends React.Component {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     name: itineraryName,
+                    //TODO: Will (me) make actual dates
                     startDate: "2020-12-21",
                     endDate: "2020-12-25"
                 }),
