@@ -33,8 +33,6 @@ export default function ItineraryPopup(props) {
         })
             .then((response) => response.json())
             .then((data) => {
-                setItineraries([]);
-
                 let itinerariesToAdd = [];
 
                 for (let i = 0; i < data.itineraryDetails.length; i++) {
@@ -44,15 +42,15 @@ export default function ItineraryPopup(props) {
                         name: itineraryData.itinerary.name,
                     };
 
-                    itinerariesToAdd.concat(itinerary);
+                    itinerariesToAdd = itinerariesToAdd.concat(itinerary);
                 }
-
                 setItineraries(itinerariesToAdd);
+
             })
             .catch((error) => {
                 console.log(error);
             });
-    }, [open]);
+    }, []);
 
     return (
         <div>
@@ -63,11 +61,7 @@ export default function ItineraryPopup(props) {
                 <DialogTitle id="simple-dialog-title">Itineraries</DialogTitle>
                 <List>
 
-                    {itineraries.map((itinerary) => (
-                        <ListItem button onClick={() => handleClose(itinerary.name)} key={itinerary.name}>
-                            <ListItemText primary={itinerary.name} />
-                        </ListItem>
-                    ))}
+                    {listItineraries()}
 
                     <ListItem autoFocus button onClick={() => handleClose('Cancel')}>
                         <ListItemText primary="Cancel" />
@@ -76,4 +70,13 @@ export default function ItineraryPopup(props) {
             </Dialog>
         </div>
     );
+
+    function listItineraries() {
+
+        return itineraries.map((itinerary) => (
+            <ListItem button onClick={() => handleClose(itinerary.name)} key={itinerary.name}>
+                <ListItemText primary={itinerary.name}/>
+            </ListItem>
+        ));
+    }
 }
