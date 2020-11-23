@@ -7,6 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import {config} from "../Constants";
 import fetch from "cross-fetch";
+import Grid from "@material-ui/core/Grid";
 
 export default function ItineraryPopup(props) {
     const [open, setOpen] = React.useState(false);
@@ -54,9 +55,11 @@ export default function ItineraryPopup(props) {
 
     return (
         <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Add to Itinerary
-            </Button>
+            <Grid item xs={12} style={{textAlign:'center'}}>
+                <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+                    Add to Itinerary
+                </Button>
+            </Grid>
             <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
                 <DialogTitle id="simple-dialog-title">Itineraries</DialogTitle>
                 <List>
