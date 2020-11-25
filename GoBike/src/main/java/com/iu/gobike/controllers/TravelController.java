@@ -56,7 +56,7 @@ public class TravelController {
     /**
      * This API is responsible for saving flight details to itinerary
      */
-    @PutMapping(path = "/flight/{username}", produces = "application/json")
+    @PostMapping(path = "/flight/{username}", produces = "application/json")
     public ResponseEntity<String> addFlight(@PathVariable("username") String userName, @RequestBody AddTravelRequest request) {
         ResponseEntity<String> responseEntity = null;
         try {

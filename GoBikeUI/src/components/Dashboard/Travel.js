@@ -11,6 +11,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { red } from '@material-ui/core/colors';
 import { config } from '../Constants'
 import image from "../../assets/img/travel.png";
+import ItineraryPopup from "../Itinerary/ItineraryPopup";
 
 class Travel extends React.Component {
   constructor(props) {
@@ -136,8 +137,8 @@ class Travel extends React.Component {
     this.setState({ countoftravellers: event.target.value });
   }
 
-  addToItinerary(flight){
-    var targetUrl = config.API_URL + "/itinerary/"+window.sessionStorage.getItem("username") + "/travel";
+  addToItinerary(flight, itineraryName){
+    var targetUrl = config.API_URL + "/travel/flight/"+window.sessionStorage.getItem("username");
     const requestOptions = {
       method: "POST",
       credentials: "include",
@@ -150,6 +151,7 @@ class Travel extends React.Component {
         nonStop: this.state.stop,
         adults: this.state.countoftravellers,
         travelClass: this.state.travellerclass,
+        itineraryName :itineraryName,
         flight: {
             price: flight.price,
             duration: flight.duration,
@@ -335,13 +337,11 @@ class Travel extends React.Component {
                 </CardContent>
               </div>
               <CardActions>
-                <Btn size="small" color="primary" onClick={e => 
-                 {
-                  e.preventDefault()
-                  this.addToItinerary(flight)
-                 }}>
-                  Add to itinerary
-                </Btn>
+                <ItineraryPopup addToItinerary={(name) => {
+                  //console.log(flight)
+                  this.addToItinerary(flight,name);
+                 // alert(name);
+                }}/>
               </CardActions> 
           </Card>
         </div>
