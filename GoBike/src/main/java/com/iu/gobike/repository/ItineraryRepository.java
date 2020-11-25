@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ItineraryRepository extends CrudRepository<Itinerary, Long> {
 
+    Itinerary findByName(String name);
+
 }

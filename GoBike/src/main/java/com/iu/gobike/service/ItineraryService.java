@@ -2,17 +2,18 @@ package com.iu.gobike.service;
 
 import com.iu.gobike.dto.*;
 import com.iu.gobike.model.Itinerary;
+import com.iu.gobike.model.Plan;
 import com.iu.gobike.model.UserItinerary;
 
+import javax.persistence.EntityExistsException;
 import java.text.ParseException;
-import java.util.List;
 
 /**
  * @author jbhushan
  */
 public interface ItineraryService {
 
-    UserItinerary create(CreateItineraryRequest request, String userName) throws ParseException;
+    UserItinerary create(CreateItineraryRequest request, String userName) throws ParseException, EntityExistsException;
 
     Itinerary addUser(AddUserToItineraryRequest request) throws ParseException;
 
@@ -21,4 +22,6 @@ public interface ItineraryService {
     ItineraryDetail getItinerary(String userName, String name);
 
     GetItineraryDetailsResponse getAllItineraries(String userName);
+
+    Plan savePlan(Plan request);
 }

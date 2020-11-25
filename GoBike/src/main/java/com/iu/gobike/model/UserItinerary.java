@@ -23,17 +23,17 @@ public class UserItinerary {
     private Long id;
 
     @JoinColumn(name = "USER")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @JoinColumn(name = "ITINERARY")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Itinerary itinerary;
 
-    @OneToMany(mappedBy = "userItinerary")
+    @OneToMany(mappedBy = "userItinerary", fetch = FetchType.LAZY)
     private List<Flight> flights;
 
-    @OneToMany(mappedBy = "userItinerary")
+    @OneToMany(mappedBy = "userItinerary", fetch = FetchType.LAZY)
     private List<Accommodation> accommodations;
 
     @Column(name="CREATED_DATE", updatable = false)
