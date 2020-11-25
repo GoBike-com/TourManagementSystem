@@ -6,6 +6,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -43,6 +45,9 @@ public class Flight {
     @Column(name = "AIRLINE")
     private String airline;
 
+    @Column(name = "TRAVEL_DATE")
+    private Date travelDate;
+
     @Column(name = "ARRIVAL_TERMINAL")
     private String arrivalTerminal;
 
@@ -55,11 +60,11 @@ public class Flight {
     @Column(name = "DEPT_CODE")
     private String deptIataCode;
 
-    @Column(name="DEPT_TIME", updatable = false)
-    private Instant deptTime;
+    @Column(name="DEPT_TIME")
+    private LocalTime deptTime;
 
     @Column(name="ARRIVAL_TIME")
-    private Instant arrivalTime;
+    private LocalTime arrivalTime;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
@@ -74,7 +79,7 @@ public class Flight {
     private String modifiedBy;
 
     @Column(name="BOOKED")
-    private Boolean booked;
+    private boolean booked;
 
     @PrePersist
     void onCreate() {
