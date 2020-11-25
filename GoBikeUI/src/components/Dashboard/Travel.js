@@ -171,6 +171,7 @@ class Travel extends React.Component {
       .then((response) => {
         // check for error response
         if (response.status == "200") {
+          alert("Travel is added to your itinerary "+itineraryName);
         }
 
         // this.setState({ totalReactPackages: data.total })
@@ -340,7 +341,6 @@ class Travel extends React.Component {
                 <ItineraryPopup addToItinerary={(name) => {
                   //console.log(flight)
                   this.addToItinerary(flight,name);
-                 // alert(name);
                 }}/>
               </CardActions> 
           </Card>

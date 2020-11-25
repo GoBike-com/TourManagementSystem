@@ -27,13 +27,13 @@ public class UserItinerary {
     private User user;
 
     @JoinColumn(name = "ITINERARY")
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Itinerary itinerary;
 
-    @OneToMany(mappedBy = "userItinerary", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userItinerary")
     private List<Flight> flights;
 
-    @OneToMany(mappedBy = "userItinerary", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userItinerary")
     private List<Accommodation> accommodations;
 
     @Column(name="CREATED_DATE", updatable = false)
