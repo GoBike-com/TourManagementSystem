@@ -7,12 +7,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import {DialogContent,Dialog,DialogTitle,DialogActions} from '@material-ui/core';
+import {DialogContent,Dialog,DialogTitle,DialogActions,TextField} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {config} from "../Constants";
 import fetch from "cross-fetch";
 import Divider from "@material-ui/core/Divider";
 import AccordionActions from "@material-ui/core/AccordionActions";
+import SaveIcon from '@material-ui/icons/Save';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 
@@ -23,7 +24,8 @@ class NewItinerary extends React.Component {
             itineraries: [],
             open:false,
             user:'',
-            itineraryName:''
+            itineraryName:'',
+            plan:''
         };
         this.addItinerary = this.addItinerary.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
@@ -190,6 +192,50 @@ class NewItinerary extends React.Component {
           },
     }));
 
+    savePlan = () => {
+        alert('Work in progress!')
+    }
+
+    commentComponent = () => {
+        return(
+            <div style={{ width:"100%"}}>
+                <TextField
+                    id="comment"
+                    label="Enter your plan"
+                    fullWidth
+                    multiline
+                    value={this.state.plan}
+                    InputLabelProps={{
+                    shrink: true,
+                    }}
+                    // onChange={this.handleDeptDate}
+                />
+                <div style={{ display: 'flex', width:"100%",paddingTop: "1%"}}>
+                    <TextField
+                        id="date"
+                        label="Day"
+                        type="date"
+                        color="primary"
+                        style={{ paddingRight: "4%"}}
+                        value={this.state.day}
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                        // onChange={this.handleDeptDate}
+                    /> 
+                    <Button size="small" 
+                         variant="outlined" color="primary"  startIcon={<SaveIcon />}
+                         onClick={e => 
+                            {
+                            e.preventDefault()
+                            this.savePlan()
+                            }}
+                    >Save</Button>
+                </div>  
+            </div>
+        )
+    }
+
     render() {
         const itineraries = this.state.itineraries;
         const classes = this.useStyles;
@@ -260,6 +306,11 @@ class NewItinerary extends React.Component {
                                     <Typography>
                                         <b>End Date: </b>{itinerary.endDate}
                                     </Typography>
+                                </AccordionDetails>
+                                <AccordionDetails>
+                                    {/* <Typography> */}
+                                       {this.commentComponent()}
+                                    {/* </Typography> */}
                                 </AccordionDetails>
                                 <Divider />
                                 <AccordionActions>
