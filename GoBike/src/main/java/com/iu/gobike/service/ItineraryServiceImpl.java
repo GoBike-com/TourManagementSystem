@@ -107,15 +107,10 @@ public class ItineraryServiceImpl implements ItineraryService {
     }
 
     @Override
-    public Plan savePlan(Plan plan) {
-//        if(plan.getId() != null){
-//
-//        } else {
-//
-//        }
-//        Itinerary itinerary = itineraryRepository.findByName(request.getItineraryName());
-//        Plan plan = Plan.builder().itinerary(itinerary).date(request.getDate()).description(request.getDescription())
-//                .createdBy(request.getLoggedInUser()).modifiedBy(request.getLoggedInUser()).build();
+    public Plan savePlan(AddPlanRequest request) throws ParseException {
+        Itinerary itinerary = itineraryRepository.findByName(request.getItineraryName());
+        Plan plan = Plan.builder().itinerary(itinerary).day(GoBikeUtil.convert(request.getDate())).description(request.getDescription())
+                .createdBy(request.getLoggedInUser()).modifiedBy(request.getLoggedInUser()).build();
         return planRepository.save(plan);
     }
 

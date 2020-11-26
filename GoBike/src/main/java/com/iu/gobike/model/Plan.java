@@ -1,5 +1,6 @@
 package com.iu.gobike.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,10 +25,11 @@ public class Plan {
 
     @JoinColumn(name = "itinerary")
     @ManyToOne
+    @JsonIgnore
     private Itinerary itinerary;
 
     @Column(name="DATE")
-    private Instant date;
+    private Instant day;
 
     @Column(name = "DESCRIPTION")
     private String description;

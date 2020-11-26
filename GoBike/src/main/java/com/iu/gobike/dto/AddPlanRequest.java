@@ -14,7 +14,7 @@ import java.time.Instant;
 @Builder
 public class AddPlanRequest {
 
-    private Instant date;
+    private String date;
     private String description;
     private String itineraryName;
     private String loggedInUser;
