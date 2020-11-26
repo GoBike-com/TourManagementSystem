@@ -427,7 +427,7 @@ class NewItinerary extends React.Component {
                                 <AccordionDetails>
                                  {this.state.showComment ?  this.commentComponent(itinerary.name) :
                                    <Button size="small" 
-                                        variant="contained" color="primary"  startIcon={<AddCommentIcon />}
+                                        variant="contained" color="primary" style={{ margin:"0.5%"}} startIcon={<AddCommentIcon />}
                                         onClick={e => 
                                             {
                                             e.preventDefault()
