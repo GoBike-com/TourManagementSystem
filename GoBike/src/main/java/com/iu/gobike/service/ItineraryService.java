@@ -22,6 +22,5 @@ public interface ItineraryService {
     ItineraryDetail getItinerary(String userName, String name);
 
     GetItineraryDetailsResponse getAllItineraries(String userName);
-
-    Plan savePlan(Plan request);
+    Plan savePlan(AddPlanRequest request) throws ParseException;
 }

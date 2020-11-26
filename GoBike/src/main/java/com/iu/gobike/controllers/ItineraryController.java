@@ -88,9 +88,14 @@ public class ItineraryController {
     /**
      * This API is responsible for creating new itinerary
      */
-    @PostMapping(path = "plan", produces = "application/json")
-    public ResponseEntity<Plan> addPlan(@RequestBody Plan plan) {
-        plan = itineraryService.savePlan(plan);
+    @PostMapping(path = "/plan", produces = "application/json")
+    public ResponseEntity<Plan> addPlan(@RequestBody AddPlanRequest addPlanRequest) {
+        Plan plan = null;
+        try {
+            plan = itineraryService.savePlan(addPlanRequest);
+        } catch (ParseException e) {
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
         return  ResponseEntity.ok(plan);
     }
 
