@@ -374,7 +374,7 @@ class Travel extends React.Component {
                 style={{ width: "75%"}}
               >
                 <div style={{ display: "flex"}}>
-                    <div style={{ paddingLeft: "4%",paddingTop: "4%",paddingRight: "4%" }}>
+                    <div style={{ paddingLeft: "4%",paddingTop: "5.5%",paddingRight: "4%" }}>
                       <Autocomplete
                           id="combo-box-demo4"
                           options={this.travellerclass}
