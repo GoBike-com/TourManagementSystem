@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -7,13 +8,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import {DialogContent,Dialog,DialogTitle,DialogActions,TextField} from '@material-ui/core';
+import {DialogContent,Dialog,DialogTitle,DialogActions,
+    TextField,Card,CardContent,CardHeader,CardActions,IconButton,Avatar } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {config} from "../Constants";
 import fetch from "cross-fetch";
 import Divider from "@material-ui/core/Divider";
 import AccordionActions from "@material-ui/core/AccordionActions";
 import SaveIcon from '@material-ui/icons/Save';
+import DeleteIcon from '@material-ui/icons/Delete';
+import {indigo } from '@material-ui/core/colors';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 
@@ -25,7 +29,7 @@ class NewItinerary extends React.Component {
             open:false,
             user:'',
             itineraryName:'',
-            plan:''
+            plan:""
         };
         this.addItinerary = this.addItinerary.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
@@ -71,6 +75,7 @@ class NewItinerary extends React.Component {
                         createdBy: itineraryData.itinerary.createdBy,
                         flights: itineraryData.flights,
                         accommodations: itineraryData.accommodations,
+                        plans:itineraryData.itinerary.plans,
                         place: ""
                     };
 
@@ -192,11 +197,38 @@ class NewItinerary extends React.Component {
           },
     }));
 
-    savePlan = () => {
-        alert('Work in progress!')
+    savePlan = (itineraryName) => {
+        var targetUrl = config.API_URL + "/itinerary/plan";
+        const requestOptions = {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              loggedInUser: window.sessionStorage.getItem("username"),
+              description: this.state.plan,
+              date: this.state.day,
+              itineraryName :itineraryName,
+            }),
+          };
+        fetch(targetUrl, requestOptions)
+        .then((response) => {
+            // check for error response
+            if (response.status == "200") {
+              alert("Plan is added to your itinerary "+itineraryName);
+            }
+          })
     }
 
-    commentComponent = () => {
+    handleDescription = (event) => {
+        this.setState({ plan: event.target.value });
+    }
+
+    handleDay = (event) => {
+        const day = moment(event.target.value).format("YYYY-MM-DD");
+        this.setState({ day: day });
+    }
+
+    commentComponent = (itinerary) => {
         return(
             <div style={{ width:"100%"}}>
                 <TextField
@@ -208,7 +240,7 @@ class NewItinerary extends React.Component {
                     InputLabelProps={{
                     shrink: true,
                     }}
-                    // onChange={this.handleDeptDate}
+                    onChange={this.handleDescription}
                 />
                 <div style={{ display: 'flex', width:"100%",paddingTop: "1%"}}>
                     <TextField
@@ -221,18 +253,52 @@ class NewItinerary extends React.Component {
                         InputLabelProps={{
                         shrink: true,
                         }}
-                        // onChange={this.handleDeptDate}
+                        onChange={this.handleDay}
                     /> 
                     <Button size="small" 
                          variant="outlined" color="primary"  startIcon={<SaveIcon />}
                          onClick={e => 
                             {
                             e.preventDefault()
-                            this.savePlan()
+                            this.savePlan(itinerary)
                             }}
                     >Save</Button>
                 </div>  
             </div>
+        )
+    }
+
+    onDelete = () => {
+        alert('Work in progress')
+    }
+
+    renderPlans = (plans) => {
+        return(
+            plans.map(plan => {
+                return(
+                    <Card style={{ margin:"0.5%"}}>
+                        <CardHeader 
+                           subheader = {moment(plan.day).format("YYYY-MM-DD")}
+                           subheaderTypographyProps={{variant:'h6' }}
+                           style={{ backgroundColor:indigo[700], textAlign:"center"}}
+                        /> 
+                        <CardContent style={{ width:"100%"}}>
+                            {plan.description}
+                        </CardContent>
+                        <CardActions>
+                        <IconButton component="span"  size="small"
+                         onClick={e => {
+                            e.preventDefault()
+                            this.onDelete()
+                         }}
+                        >
+                           {/* <DeleteIcon style={{ color: green[500] }}/>   */}
+                           <DeleteIcon color="primary" />  
+                        </IconButton>
+                        </CardActions>    
+                    </Card>
+                )
+            })
         )
     }
 
@@ -307,10 +373,13 @@ class NewItinerary extends React.Component {
                                         <b>End Date: </b>{itinerary.endDate}
                                     </Typography>
                                 </AccordionDetails>
+                                {itinerary.plans.length > 0 && 
                                 <AccordionDetails>
-                                    {/* <Typography> */}
-                                       {this.commentComponent()}
-                                    {/* </Typography> */}
+                                    {this.renderPlans(itinerary.plans)}
+                                </AccordionDetails>
+                                }
+                                <AccordionDetails>
+                                    {this.commentComponent(itinerary.name)}
                                 </AccordionDetails>
                                 <Divider />
                                 <AccordionActions>
@@ -333,7 +402,7 @@ class NewItinerary extends React.Component {
                         className={classes.modal}
                         >
                         <DialogTitle 
-                            style={{backgroundColor: '#0d47a1'}} id="simple-dialog-title">
+                            style={{backgroundColor: indigo[700]}} id="simple-dialog-title">
                                 Share with other traveler
                         </DialogTitle>
                         <DialogContent>
