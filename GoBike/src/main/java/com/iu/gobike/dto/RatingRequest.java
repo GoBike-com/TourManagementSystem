@@ -14,6 +14,6 @@ public class RatingRequest {
 
     private String userName;
     private String place;
-    private Integer rating;
+    private float rating;
 
 }

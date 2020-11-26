@@ -21,7 +21,7 @@ public class Rating {
     private Long id;
 
     @Column(name = "ratings")
-    private int ratings;
+    private float ratings;
 
     @JoinColumn(name = "place")
     @ManyToOne

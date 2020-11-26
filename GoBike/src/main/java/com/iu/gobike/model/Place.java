@@ -58,7 +58,10 @@ public class Place implements Serializable {
     private List<Hotel> hotel;
 
     @Column(name = "ratings")
-    private Integer ratings;
+    private float ratings;
+
+    @Column(name = "rating_count")
+    private int ratingsCount;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;

@@ -29,7 +29,10 @@ public class RatingServiceImpl implements RatingService{
     public Rating rate(RatingRequest request) {
         User user = userRepository.findByUserName(request.getUserName());
         Place place = placeRepository.findByName(request.getPlace());
-        Rating rating = Rating.builder().place(place).user(user)
+        float total = place.getRatings() * place.getRatingsCount();
+        place.setRatingsCount(place.getRatingsCount()+1);
+        place.setRatings((total+request.getRating())/place.getRatingsCount());
+        Rating rating = Rating.builder().place(place).user(user).ratings(request.getRating())
                 .createdBy(request.getUserName()).modifiedBy(request.getUserName()).build();
         rating = ratingRepository.save(rating);
         return rating;
