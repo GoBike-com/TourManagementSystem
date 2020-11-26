@@ -1,15 +1,15 @@
 import React from "react";
 import moment from "moment";
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import {Typography} from "@material-ui/core";
-import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import {DialogContent,Dialog,DialogTitle,DialogActions,
-    TextField,Card,CardContent,CardHeader,CardActions,IconButton,Box } from '@material-ui/core';
+    TextField,Card,CardContent,CardHeader,CardActions,
+    IconButton,Box,Button,Typography } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {config} from "../Constants";
 import fetch from "cross-fetch";
@@ -33,6 +33,7 @@ class NewItinerary extends React.Component {
             itineraryName:'',
             plan:"",
             showComment:false,
+            error:false
         };
         this.addItinerary = this.addItinerary.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
@@ -202,26 +203,36 @@ class NewItinerary extends React.Component {
     }));
 
     savePlan = (itineraryName) => {
-        var targetUrl = config.API_URL + "/itinerary/plan";
-        const requestOptions = {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              loggedInUser: window.sessionStorage.getItem("username"),
-              description: this.state.plan,
-              date: this.state.day,
-              itineraryName :itineraryName,
-            }),
-          };
-        fetch(targetUrl, requestOptions)
-        .then((response) => {
-            // check for error response
-            if (response.status == "200") {
-              alert("Plan is added to your itinerary "+itineraryName);
-              this.refresh()
-            }
-          })
+        if(this.state.plan ==='' || !this.state.day) {
+            this.setState({ 
+            error : true
+            })
+        } else {
+            this.setState({
+                error : false
+              })
+      
+            var targetUrl = config.API_URL + "/itinerary/plan";
+            const requestOptions = {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                loggedInUser: window.sessionStorage.getItem("username"),
+                description: this.state.plan,
+                date: this.state.day,
+                itineraryName :itineraryName,
+                }),
+            };
+            fetch(targetUrl, requestOptions)
+            .then((response) => {
+                // check for error response
+                if (response.status == "200") {
+                alert("Plan is added to your itinerary "+itineraryName);
+                this.refresh()
+                }
+            })
+        }
     }
 
     handleDescription = (event) => {
@@ -236,6 +247,9 @@ class NewItinerary extends React.Component {
     commentComponent = (itinerary) => {
         return(
             <Box style={{ width:"100%"}} borderColor="primary.main" border={1} m={1} borderRadius="borderRadius">
+                {this.state.error && 
+                  <Alert severity="error">Please enter details for adding Plan..</Alert>
+                } 
                 <div style={{ display: 'flex', padding:"1%"}}>
                     <TextField
                         id="date"
