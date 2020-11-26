@@ -9,7 +9,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import {DialogContent,Dialog,DialogTitle,DialogActions,
-    TextField,Card,CardContent,CardHeader,CardActions,IconButton,Avatar } from '@material-ui/core';
+    TextField,Card,CardContent,CardHeader,CardActions,IconButton,Box } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {config} from "../Constants";
 import fetch from "cross-fetch";
@@ -17,6 +17,8 @@ import Divider from "@material-ui/core/Divider";
 import AccordionActions from "@material-ui/core/AccordionActions";
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
+import AddCommentIcon from '@material-ui/icons/AddComment';
+import CancelIcon from '@material-ui/icons/Cancel';
 import {indigo } from '@material-ui/core/colors';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
@@ -29,12 +31,14 @@ class NewItinerary extends React.Component {
             open:false,
             user:'',
             itineraryName:'',
-            plan:""
+            plan:"",
+            showComment:false,
         };
         this.addItinerary = this.addItinerary.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleUserSearch = this.handleUserSearch.bind(this);
+        this.toggleShowComment = this.toggleShowComment.bind(this);
     }
 
     componentDidMount() {
@@ -215,6 +219,7 @@ class NewItinerary extends React.Component {
             // check for error response
             if (response.status == "200") {
               alert("Plan is added to your itinerary "+itineraryName);
+              this.refresh()
             }
           })
     }
@@ -230,46 +235,69 @@ class NewItinerary extends React.Component {
 
     commentComponent = (itinerary) => {
         return(
-            <div style={{ width:"100%"}}>
-                <TextField
-                    id="comment"
-                    label="Enter your plan"
-                    fullWidth
-                    multiline
-                    value={this.state.plan}
-                    InputLabelProps={{
-                    shrink: true,
-                    }}
-                    onChange={this.handleDescription}
-                />
-                <div style={{ display: 'flex', width:"100%",paddingTop: "1%"}}>
+            <Box style={{ width:"100%"}} borderColor="primary.main" border={1} m={1} borderRadius="borderRadius">
+                <div style={{ display: 'flex', padding:"1%"}}>
                     <TextField
                         id="date"
                         label="Day"
                         type="date"
                         color="primary"
-                        style={{ paddingRight: "4%"}}
                         value={this.state.day}
                         InputLabelProps={{
                         shrink: true,
                         }}
+                        style ={{paddingRight: "2%"}}
                         onChange={this.handleDay}
                     /> 
+                    <TextField
+                        id="comment"
+                        label="Enter your plan"
+                        fullWidth
+                        multiline
+                        value={this.state.plan}
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                        onChange={this.handleDescription}
+                    />
+                </div>
+                <div style={{ display: 'flex', width:"100%",padding: "1%"}}>
                     <Button size="small" 
-                         variant="outlined" color="primary"  startIcon={<SaveIcon />}
+                        color="primary"  startIcon={<SaveIcon />}
                          onClick={e => 
                             {
                             e.preventDefault()
                             this.savePlan(itinerary)
                             }}
                     >Save</Button>
+                    <Button size="small" color="primary"  startIcon={<CancelIcon />}
+                         onClick={e => 
+                            {
+                            e.preventDefault()
+                            this.toggleShowComment()
+                            }}
+                    >Cancel</Button>
                 </div>  
-            </div>
+            </Box >
         )
     }
 
-    onDelete = () => {
-        alert('Work in progress')
+    onDelete = (plan) => {
+        console.log(plan)
+        var targetUrl = config.API_URL + "/itinerary/plan/"+plan.id;
+        fetch(targetUrl,{
+            method: "DELETE",
+             credentials: "include",
+             headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+           })
+            .then((res) => {
+              alert('Plan is deleted')
+              this.refresh()
+            });
+    }
+
+    refresh = () =>{
+        window.location.reload(false);
     }
 
     renderPlans = (plans) => {
@@ -289,10 +317,9 @@ class NewItinerary extends React.Component {
                         <IconButton component="span"  size="small"
                          onClick={e => {
                             e.preventDefault()
-                            this.onDelete()
+                            this.onDelete(plan)
                          }}
                         >
-                           {/* <DeleteIcon style={{ color: green[500] }}/>   */}
                            <DeleteIcon color="primary" />  
                         </IconButton>
                         </CardActions>    
@@ -302,6 +329,11 @@ class NewItinerary extends React.Component {
         )
     }
 
+    toggleShowComment = () => {
+        this.setState({
+            showComment : !this.state.showComment
+        });
+    }
     render() {
         const itineraries = this.state.itineraries;
         const classes = this.useStyles;
@@ -379,8 +411,21 @@ class NewItinerary extends React.Component {
                                 </AccordionDetails>
                                 }
                                 <AccordionDetails>
-                                    {this.commentComponent(itinerary.name)}
+                                 {this.state.showComment ?  this.commentComponent(itinerary.name) :
+                                   <Button size="small" 
+                                        variant="contained" color="primary"  startIcon={<AddCommentIcon />}
+                                        onClick={e => 
+                                            {
+                                            e.preventDefault()
+                                            this.toggleShowComment()
+                                            }}
+                                    >Add Plan
+                                    </Button>
+                                }
                                 </AccordionDetails>
+                                {/* <AccordionDetails>
+                                    {this.commentComponent(itinerary.name)}
+                                </AccordionDetails> */}
                                 <Divider />
                                 <AccordionActions>
                                     <Button size="small" onClick={e => 

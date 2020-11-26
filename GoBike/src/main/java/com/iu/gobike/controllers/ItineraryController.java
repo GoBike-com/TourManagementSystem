@@ -99,6 +99,15 @@ public class ItineraryController {
         return  ResponseEntity.ok(plan);
     }
 
+    /**
+     * This API is responsible for creating new itinerary
+     */
+    @DeleteMapping(path = "/plan/{id}", produces = "application/json")
+    public ResponseEntity<Plan> deletePlan(@PathVariable("id") Long id) {
+        itineraryService.deletePlan(id);
+        return  ResponseEntity.ok().build();
+    }
+
     @GetMapping( produces = "application/json")
     public ResponseEntity<Iterable<UserItinerary>> getALl(){
         return ResponseEntity.ok(userItineraryRepository.findAll());
