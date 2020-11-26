@@ -114,6 +114,11 @@ public class ItineraryServiceImpl implements ItineraryService {
         return planRepository.save(plan);
     }
 
+    @Override
+    public void deletePlan(Long id) {
+        planRepository.deleteById(id);
+    }
+
     private GetItineraryDetailsResponse buildItineraryResponse(List<UserItinerary> userItineraries, String userName) {
         List<ItineraryDetail> details = new ArrayList<ItineraryDetail>();
         userItineraries.stream().map(userItinerary -> {
