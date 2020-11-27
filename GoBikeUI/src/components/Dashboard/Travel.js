@@ -137,8 +137,8 @@ class Travel extends React.Component {
     this.setState({ countoftravellers: event.target.value });
   }
 
-  addToItinerary(flight){
-    var targetUrl = config.API_URL + "/itinerary/"+window.localStorage.getItem("username") + "/travel";
+  addToItinerary(flight, itineraryName){
+    var targetUrl = config.API_URL + "/travel/flight/"+window.sessionStorage.getItem("username");
     const requestOptions = {
       method: "POST",
       credentials: "include",
