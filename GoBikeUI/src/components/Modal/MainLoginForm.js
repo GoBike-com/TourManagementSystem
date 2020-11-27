@@ -153,7 +153,7 @@ class MainLoginForm extends React.Component {
           if (data.ok === true) {
             this.setState({isRegistered : true})
             console.log("redirecting to home page.....");
-            window.sessionStorage.setItem("username",this.state.username)
+            window.localStorage.setItem("username",this.state.username)
             // window.sessionStorage.setItem("itineraries",null)
             this.props.history.push({pathname : '/traveller/success',state:{
               username:this.state.username

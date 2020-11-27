@@ -44,7 +44,7 @@ class EnterEmailForm extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    window.sessionStorage.setItem("isRequestComingFromForgotPassword", "True");
+    window.localStorage.setItem("isRequestComingFromForgotPassword", "True");
     var targetUrl = config.API_URL + "/user/otp/"+this.state.emailID;
 
     fetch(targetUrl, {

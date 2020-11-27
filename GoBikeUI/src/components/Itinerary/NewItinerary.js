@@ -1,26 +1,21 @@
 import React from "react";
-import moment from "moment";
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import {Typography} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import {DialogContent,Dialog,DialogTitle,DialogActions,
-    TextField,Card,CardContent,CardHeader,CardActions,
-    IconButton,Box,Button,Typography } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
+import {DialogContent,Dialog,DialogTitle,DialogActions} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {config} from "../Constants";
 import fetch from "cross-fetch";
 import Divider from "@material-ui/core/Divider";
 import AccordionActions from "@material-ui/core/AccordionActions";
-import SaveIcon from '@material-ui/icons/Save';
-import DeleteIcon from '@material-ui/icons/Delete';
-import AddCommentIcon from '@material-ui/icons/AddComment';
-import CancelIcon from '@material-ui/icons/Cancel';
-import {indigo } from '@material-ui/core/colors';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import ChatApp from '../Chat/ChatApp';
+import ChatIcon from '@material-ui/icons/Chat';
 
 
 class NewItinerary extends React.Component {
@@ -30,16 +25,12 @@ class NewItinerary extends React.Component {
             itineraries: [],
             open:false,
             user:'',
-            itineraryName:'',
-            plan:"",
-            showComment:false,
-            error:false
+            itineraryName:''
         };
         this.addItinerary = this.addItinerary.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleUserSearch = this.handleUserSearch.bind(this);
-        this.toggleShowComment = this.toggleShowComment.bind(this);
     }
 
     componentDidMount() {
@@ -80,7 +71,6 @@ class NewItinerary extends React.Component {
                         createdBy: itineraryData.itinerary.createdBy,
                         flights: itineraryData.flights,
                         accommodations: itineraryData.accommodations,
-                        plans:itineraryData.itinerary.plans,
                         place: ""
                     };
 
@@ -158,7 +148,6 @@ class NewItinerary extends React.Component {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     name: itineraryName,
-                    //TODO: Will (me) make actual dates
                     startDate: "2020-12-21",
                     endDate: "2020-12-25"
                 }),
@@ -168,8 +157,6 @@ class NewItinerary extends React.Component {
                 .then((response) => {
                     if (response.status == "200") {
                         this.getAllItineraries();
-                    } else if (response.status == "422"){
-                        alert('Ahh.. Please enter different itinerary name. This name has already been taken');
                     }
                 })
                 .catch((error) => {
@@ -202,152 +189,6 @@ class NewItinerary extends React.Component {
           },
     }));
 
-    savePlan = (itineraryName) => {
-        if(this.state.plan ==='' || !this.state.day) {
-            this.setState({ 
-            error : true
-            })
-        } else {
-            this.setState({
-                error : false
-              })
-      
-            var targetUrl = config.API_URL + "/itinerary/plan";
-            const requestOptions = {
-                method: "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                loggedInUser: window.sessionStorage.getItem("username"),
-                description: this.state.plan,
-                date: this.state.day,
-                itineraryName :itineraryName,
-                }),
-            };
-            fetch(targetUrl, requestOptions)
-            .then((response) => {
-                // check for error response
-                if (response.status == "200") {
-                alert("Plan is added to your itinerary "+itineraryName);
-                this.refresh()
-                }
-            })
-        }
-    }
-
-    handleDescription = (event) => {
-        this.setState({ plan: event.target.value });
-    }
-
-    handleDay = (event) => {
-        const day = moment(event.target.value).format("YYYY-MM-DD");
-        this.setState({ day: day });
-    }
-
-    commentComponent = (itinerary) => {
-        return(
-            <Box style={{ width:"100%"}} borderColor="primary.main" border={1} m={1} borderRadius="borderRadius">
-                {this.state.error && 
-                  <Alert severity="error">Please enter details for adding Plan..</Alert>
-                } 
-                <div style={{ display: 'flex', padding:"1%"}}>
-                    <TextField
-                        id="date"
-                        label="Day"
-                        type="date"
-                        color="primary"
-                        value={this.state.day}
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                        style ={{paddingRight: "2%"}}
-                        onChange={this.handleDay}
-                    /> 
-                    <TextField
-                        id="comment"
-                        label="Enter your plan"
-                        fullWidth
-                        multiline
-                        value={this.state.plan}
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                        onChange={this.handleDescription}
-                    />
-                </div>
-                <div style={{ display: 'flex', width:"100%",padding: "1%"}}>
-                    <Button size="small" 
-                        color="primary"  startIcon={<SaveIcon />}
-                         onClick={e => 
-                            {
-                            e.preventDefault()
-                            this.savePlan(itinerary)
-                            }}
-                    >Save</Button>
-                    <Button size="small" color="primary"  startIcon={<CancelIcon />}
-                         onClick={e => 
-                            {
-                            e.preventDefault()
-                            this.toggleShowComment()
-                            }}
-                    >Cancel</Button>
-                </div>  
-            </Box >
-        )
-    }
-
-    onDelete = (plan) => {
-        console.log(plan)
-        var targetUrl = config.API_URL + "/itinerary/plan/"+plan.id;
-        fetch(targetUrl,{
-            method: "DELETE",
-             credentials: "include",
-             headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-           })
-            .then((res) => {
-              alert('Plan is deleted')
-              this.refresh()
-            });
-    }
-
-    refresh = () =>{
-        window.location.reload(false);
-    }
-
-    renderPlans = (plans) => {
-        return(
-            plans.map(plan => {
-                return(
-                    <Card style={{ margin:"0.5%"}}>
-                        <CardHeader 
-                           subheader = {moment(plan.day).format("YYYY-MM-DD")}
-                           subheaderTypographyProps={{variant:'h6' }}
-                           style={{ backgroundColor:indigo[700], textAlign:"center"}}
-                        /> 
-                        <CardContent style={{ width:"100%"}}>
-                            {plan.description}
-                        </CardContent>
-                        <CardActions>
-                        <IconButton component="span"  size="small"
-                         onClick={e => {
-                            e.preventDefault()
-                            this.onDelete(plan)
-                         }}
-                        >
-                           <DeleteIcon color="primary" />  
-                        </IconButton>
-                        </CardActions>    
-                    </Card>
-                )
-            })
-        )
-    }
-
-    toggleShowComment = () => {
-        this.setState({
-            showComment : !this.state.showComment
-        });
-    }
     render() {
         const itineraries = this.state.itineraries;
         const classes = this.useStyles;
@@ -419,27 +260,6 @@ class NewItinerary extends React.Component {
                                         <b>End Date: </b>{itinerary.endDate}
                                     </Typography>
                                 </AccordionDetails>
-                                {itinerary.plans.length > 0 && 
-                                <AccordionDetails>
-                                    {this.renderPlans(itinerary.plans)}
-                                </AccordionDetails>
-                                }
-                                <AccordionDetails>
-                                 {this.state.showComment ?  this.commentComponent(itinerary.name) :
-                                   <Button size="small" 
-                                        variant="contained" color="primary" style={{ margin:"0.5%"}} startIcon={<AddCommentIcon />}
-                                        onClick={e => 
-                                            {
-                                            e.preventDefault()
-                                            this.toggleShowComment()
-                                            }}
-                                    >Add Plan
-                                    </Button>
-                                }
-                                </AccordionDetails>
-                                {/* <AccordionDetails>
-                                    {this.commentComponent(itinerary.name)}
-                                </AccordionDetails> */}
                                 <Divider />
                                 <AccordionActions>
                                     <Button size="small" onClick={e => 
@@ -461,7 +281,7 @@ class NewItinerary extends React.Component {
                         className={classes.modal}
                         >
                         <DialogTitle 
-                            style={{backgroundColor: indigo[700]}} id="simple-dialog-title">
+                            style={{backgroundColor: '#0d47a1'}} id="simple-dialog-title">
                                 Share with other traveler
                         </DialogTitle>
                         <DialogContent>
@@ -488,6 +308,23 @@ class NewItinerary extends React.Component {
                             </DialogActions>
                         </DialogContent>
                     </Dialog>
+                    {console.log("sharedwithuser " , this.state.sharedWithUser)}
+          {console.log("window.localStorage.getItem('shared') " , window.localStorage.getItem('shared'))}
+          {(this.state.sharedWithUser === true) || (window.localStorage.getItem('shared') === "true") ? (
+              <div> 
+                <Button
+              variant="contained"
+              color="primary"
+              startIcon={<ChatIcon />}
+              onClick={this.showChat}
+            >
+              Chat
+            </Button>
+           </div>)
+        
+           : null}
+           {console.log("this.state.displayChat " , this.state.displayChat)}
+           {this.state.displayChat === true ? (<ChatApp/>) : null}
                 </div>
             );
         }
@@ -495,4 +332,3 @@ class NewItinerary extends React.Component {
 }
 
 export default NewItinerary;
-

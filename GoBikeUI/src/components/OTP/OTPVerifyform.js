@@ -60,11 +60,11 @@ class OTPVerifyform extends React.Component {
         if (data.HAS_VALID_OTP === true) {
           this.state.isValidOTP = "True";
           console.log("h1" + this.state.isValidOTP);
-          console.log("h2" + window.sessionStorage.getItem("isRequestComingFromForgotPassword"))
-          if (this.state.isValidOTP == "True" && window.sessionStorage.getItem("isRequestComingFromForgotPassword") == "True") {
+          console.log("h2" + window.localStorage.getItem("isRequestComingFromForgotPassword"))
+          if (this.state.isValidOTP == "True" && window.localStorage.getItem("isRequestComingFromForgotPassword") == "True") {
             console.log("redirecting to password reset page.....");
-            console.log(window.sessionStorage.getItem("isRequestComingFromForgotPassword"))
-            window.sessionStorage.setItem("isRequestComingFromForgotPassword", "False");
+            console.log(window.localStorage.getItem("isRequestComingFromForgotPassword"))
+            window.localStorage.setItem("isRequestComingFromForgotPassword", "False");
             this.props.history.push("/traveller/resetpassword");
             // <Redirect to={'/traveller/success'} />
           }
