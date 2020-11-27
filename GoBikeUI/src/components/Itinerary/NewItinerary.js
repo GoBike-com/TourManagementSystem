@@ -14,6 +14,8 @@ import fetch from "cross-fetch";
 import Divider from "@material-ui/core/Divider";
 import AccordionActions from "@material-ui/core/AccordionActions";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import ChatApp from '../Chat/ChatApp';
+import ChatIcon from '@material-ui/icons/Chat';
 
 
 class NewItinerary extends React.Component {
