@@ -2,6 +2,7 @@ package com.iu.gobike.controllers;
 
 import com.iu.gobike.dto.*;
 import com.iu.gobike.model.Itinerary;
+import com.iu.gobike.model.Plan;
 import com.iu.gobike.model.UserItinerary;
 import com.iu.gobike.repository.UserItineraryRepository;
 import com.iu.gobike.service.ItineraryService;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityExistsException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -35,7 +37,9 @@ public class ItineraryController {
         UserItinerary userItinerary = null;
         try {
             userItinerary = itineraryService.create(createItineraryRequest,userName);
-        } catch (ParseException e) {
+        } catch(EntityExistsException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        } catch(ParseException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         return  ResponseEntity.ok(userItinerary);
@@ -79,6 +83,29 @@ public class ItineraryController {
     @GetMapping(path="/{username}/{name}", produces = "application/json")
     public ResponseEntity<ItineraryDetail> getItineraryDetails(@PathVariable("username") String userName, @PathVariable("name") String name){
             return ResponseEntity.ok(itineraryService.getItinerary(userName, name));
+    }
+
+    /**
+     * This API is responsible for creating new itinerary
+     */
+    @PostMapping(path = "/plan", produces = "application/json")
+    public ResponseEntity<Plan> addPlan(@RequestBody AddPlanRequest addPlanRequest) {
+        Plan plan = null;
+        try {
+            plan = itineraryService.savePlan(addPlanRequest);
+        } catch (ParseException e) {
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return  ResponseEntity.ok(plan);
+    }
+
+    /**
+     * This API is responsible for creating new itinerary
+     */
+    @DeleteMapping(path = "/plan/{id}", produces = "application/json")
+    public ResponseEntity<Plan> deletePlan(@PathVariable("id") Long id) {
+        itineraryService.deletePlan(id);
+        return  ResponseEntity.ok().build();
     }
 
     @GetMapping( produces = "application/json")

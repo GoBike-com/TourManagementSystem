@@ -6,8 +6,10 @@ import org.json.simple.parser.ParseException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +29,20 @@ public class GoBikeUtil {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date d = sdf.parse(date);
         return d.toInstant();
+    }
+
+    public static Date convertDate(String date) throws java.text.ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = sdf.parse(date);
+        return d;
+    }
+
+    public static LocalTime convertTime(String time) throws java.text.ParseException {
+        DateFormat displayFormat = new SimpleDateFormat("HH:mm");
+        DateFormat parseFormat = new SimpleDateFormat("hh:mm a");
+        Date date = parseFormat.parse(time);
+        System.out.println(parseFormat.format(date) + " = " + displayFormat.format(date));
+        return LocalTime.parse(displayFormat.format(date));
     }
 
     public static Map<String, String> getPostBodyInAMap(HttpServletRequest request) {

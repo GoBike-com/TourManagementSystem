@@ -1,40 +1,38 @@
 package com.iu.gobike.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.List;
 
 /**
- * @author jbhushan
+ * This model is responsible for storing day wise itinerary
  */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Builder
 @Entity
-@Table(name="USER_ITINERARY")
-public class UserItinerary {
+@Table
+public class Plan {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @JoinColumn(name = "USER")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
-
-    @JoinColumn(name = "ITINERARY")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "itinerary")
+    @ManyToOne
+    @JsonIgnore
     private Itinerary itinerary;
 
-    @OneToMany(mappedBy = "userItinerary")
-    private List<Flight> flights;
+    @Column(name="DATE")
+    private Instant day;
 
-    @OneToMany(mappedBy = "userItinerary")
-    private List<Accommodation> accommodations;
+    @Column(name = "DESCRIPTION")
+    private String description;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
