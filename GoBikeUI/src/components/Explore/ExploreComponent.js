@@ -167,6 +167,7 @@ export default function ExploreComponent() {
             </Typography>
 
             <ItineraryPopup addToItinerary={(name) => {
+                console.log(name)
                 alert(name);
             }}/>
 

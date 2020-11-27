@@ -119,7 +119,7 @@ class Itinerary extends React.Component {
   }
 
   header = 
-  window.sessionStorage.getItem("username");
+  window.localStorage.getItem("username");
 
   render() {
     return (

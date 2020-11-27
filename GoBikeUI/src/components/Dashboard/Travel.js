@@ -137,7 +137,7 @@ class Travel extends React.Component {
   }
 
   addToItinerary(flight){
-    var targetUrl = config.API_URL + "/itinerary/"+window.sessionStorage.getItem("username") + "/travel";
+    var targetUrl = config.API_URL + "/itinerary/"+window.localStorage.getItem("username") + "/travel";
     const requestOptions = {
       method: "POST",
       credentials: "include",
