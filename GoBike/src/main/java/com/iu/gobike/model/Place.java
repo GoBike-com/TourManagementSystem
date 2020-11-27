@@ -1,5 +1,6 @@
 package com.iu.gobike.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -74,6 +75,11 @@ public class Place implements Serializable {
 
     @Column(name="LONGITUDE")
     private Float longitude;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ITINERARY")
+    @JsonIgnore
+    private UserItinerary userItinerary;
 
     @PrePersist
     void onCreate() {

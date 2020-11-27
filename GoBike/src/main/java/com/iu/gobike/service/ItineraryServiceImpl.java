@@ -37,6 +37,9 @@ public class ItineraryServiceImpl implements ItineraryService {
     @Autowired
     private PlanRepository planRepository;
 
+    @Autowired
+    private PlaceRepository placeRepository;
+
     @Override
     public UserItinerary create(CreateItineraryRequest request, String userName) throws ParseException, EntityExistsException {
 
@@ -88,6 +91,15 @@ public class ItineraryServiceImpl implements ItineraryService {
         }
         userItineraryRepository.save(userItinerary);
         saveFlightDetails(request,userItinerary);
+    }
+
+    @Override
+    public void addPlace(String userName, AddPlaceRequest request) {
+        UserItinerary userItinerary = userItineraryRepository.findByUserUserNameAndItineraryName(userName, request.getItineraryName());
+        List<Place> places = userItinerary.getPlaces();
+        places.add(placeRepository.findByName(request.getPlaceName()));
+        userItinerary.setPlaces(places);
+        userItineraryRepository.save(userItinerary);
     }
 
     @Override

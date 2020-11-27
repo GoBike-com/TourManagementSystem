@@ -59,6 +59,7 @@ class NewItinerary extends React.Component {
         })
       };
 
+    //Gets all of the itineraries with their details
     getAllItineraries = () => {
         const targetGetUrl = config.API_URL + "/itinerary/" + window.sessionStorage.getItem("username");
         fetch(targetGetUrl, {
@@ -80,8 +81,8 @@ class NewItinerary extends React.Component {
                         createdBy: itineraryData.itinerary.createdBy,
                         flights: itineraryData.flights,
                         accommodations: itineraryData.accommodations,
-                        plans:itineraryData.itinerary.plans,
-                        place: ""
+                        plans: itineraryData.itinerary.plans,
+                        places: itineraryData.places
                     };
 
                     const groupMemberData = itineraryData.users;
@@ -401,12 +402,7 @@ class NewItinerary extends React.Component {
                                 <Divider />
                                 <AccordionDetails>
                                     <Typography>
-                                        This will include information about your itinerary, as well as a description if applicable.
-                                    </Typography>
-                                </AccordionDetails>
-                                <AccordionDetails>
-                                    <Typography>
-                                        <b>Created By: </b>{itinerary.createdBy}
+                                        Created by {itinerary.createdBy} at {itinerary.createdDate}.
                                     </Typography>
                                 </AccordionDetails>
                                 <AccordionDetails>
@@ -419,6 +415,8 @@ class NewItinerary extends React.Component {
                                         <b>End Date: </b>{itinerary.endDate}
                                     </Typography>
                                 </AccordionDetails>
+
+
                                 {itinerary.plans.length > 0 && 
                                 <AccordionDetails>
                                     {this.renderPlans(itinerary.plans)}

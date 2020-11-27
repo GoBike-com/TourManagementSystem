@@ -23,6 +23,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import ItineraryPopup from "../Itinerary/ItineraryPopup";
+import Rating from "@material-ui/lab/Rating";
 
 export default function ExploreComponent() {
     const [open, setOpen] = React.useState(false);
@@ -166,8 +167,32 @@ export default function ExploreComponent() {
                 {allDataLoaded ? placeData.description : ""}
             </Typography>
 
+            {/*Itinerary Popup*/}
             <ItineraryPopup addToItinerary={(name) => {
-                alert(name);
+                const targetUrl = config.API_URL + "/itinerary/"+window.sessionStorage.getItem("username") + "/place";
+                const requestOptions = {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        placeName: place,
+                        itineraryName: name
+                    }),
+                };
+
+                fetch(targetUrl, requestOptions)
+                    .then((response) => {
+                        // check for error response
+                        if (response.status == "200") {
+                            alert("Added!");
+                        }
+
+                        // this.setState({ totalReactPackages: data.total })
+                    })
+                    .catch((error) => {
+                        // this.setState({ errorMessage: error.toString() });
+                        console.error("There was an error!", error);
+                    });
             }}/>
 
             <br/><br/><br/>
@@ -224,6 +249,14 @@ export default function ExploreComponent() {
                     actionIcon={
                         <IconButton aria-label={`info about ${tile.name}`} className={classes.icon} href={tile.websiteURL} target="_blank">
                             <InfoIcon/>
+                            <Rating
+                                name="simple-controlled"
+                                value={2}
+                                onChange={(event, newValue) => {
+                                    // setValue(newValue);
+                                    //TODO: Call API
+                                }}
+                            />
                         </IconButton>
                     }
                 />
@@ -256,6 +289,14 @@ export default function ExploreComponent() {
                         <Button size="small" color="primary" href={tile.websiteURL} target="_blank">
                             Learn More
                         </Button>
+                        <Rating
+                            name="simple-controlled"
+                            value={2}
+                            onChange={(event, newValue) => {
+                                // setValue(newValue);
+                                //TODO: Call API
+                            }}
+                        />
                     </CardActions>
                 </Card>
             </Grid>
@@ -272,6 +313,13 @@ export default function ExploreComponent() {
                     actionIcon={
                         <IconButton aria-label={`info about ${tile.name}`} className={classes.icon} target="_blank" href={tile.websiteURL}>
                             <InfoIcon/>
+                            <Rating
+                                name="simple-controlled"
+                                value={2}
+                                onChange={(event, newValue) => {
+                                    //TODO: Call API
+                                }}
+                            />
                         </IconButton>
                     }
                 />
