@@ -402,12 +402,7 @@ class NewItinerary extends React.Component {
                                 <Divider />
                                 <AccordionDetails>
                                     <Typography>
-                                        This will include information about your itinerary, as well as a description if applicable.
-                                    </Typography>
-                                </AccordionDetails>
-                                <AccordionDetails>
-                                    <Typography>
-                                        <b>Created By: </b>{itinerary.createdBy}
+                                        Created by {itinerary.createdBy} at {itinerary.createdDate}.
                                     </Typography>
                                 </AccordionDetails>
                                 <AccordionDetails>
@@ -420,11 +415,8 @@ class NewItinerary extends React.Component {
                                         <b>End Date: </b>{itinerary.endDate}
                                     </Typography>
                                 </AccordionDetails>
-                                <AccordionDetails>
-                                    <Typography>
-                                        <b>Place length: </b>{itinerary.places}
-                                    </Typography>
-                                </AccordionDetails>
+
+
                                 {itinerary.plans.length > 0 && 
                                 <AccordionDetails>
                                     {this.renderPlans(itinerary.plans)}
