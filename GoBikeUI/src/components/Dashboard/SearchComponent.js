@@ -18,7 +18,7 @@ class SearchComponent extends React.Component {
    });
    }
 
-   header = window.localStorage.getItem("username");
+   header = window.sessionStorage.getItem("username");
 
     render() {
   return (

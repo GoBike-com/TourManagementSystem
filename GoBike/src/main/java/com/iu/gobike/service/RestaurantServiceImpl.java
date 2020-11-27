@@ -64,15 +64,21 @@ public class RestaurantServiceImpl implements RestaurantService {
              "&checkInDate=" + request.getCheckInDate() +  "&checkOutDate=" + request.getCheckOutDate() +
                 "&roomQuantity=" + request.getRoomqty()+"&adults="+request.getAdults()+"&ratings="+request.getRatings()
                 + "&boardType=" + request.getBoardType();
-
+//        String returnDate = request.getReturnDate();
+//        if(returnDate!=null){
+//            url = url+"&returnDate="+returnDate;
+//        }
         ResponseEntity<SearchHotelAmadeusResponse> r = amadeusRestTemplate.get(url, SearchHotelAmadeusResponse.class);
-        System.out.println(r.hasBody());
+//        System.out.println(r.getBody());
+        
+
+        
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String newstr = "";
         JSONObject json = null;
-        JSONParser parser = new JSONParser();
         try {
         	newstr = ow.writeValueAsString(r.getBody()); 
+        	JSONParser parser = new JSONParser();
             json = (JSONObject) parser.parse(newstr);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -81,6 +87,7 @@ public class RestaurantServiceImpl implements RestaurantService {
        
         
         JSONArray tot = (JSONArray) json.get("data");
+//        System.out.println(tot);
         List<HotelInfo> hf = new ArrayList<HotelInfo>();
         for (int i = 0 ; i < tot.size(); i++) {
         	HotelInfo hi = new HotelInfo();
@@ -94,9 +101,13 @@ public class RestaurantServiceImpl implements RestaurantService {
                 String checkindate = (String) obj1.get("checkInDate");
                 JSONObject amount = (JSONObject)obj1.get("price");
                 rates = (String)amount.get("total");
+                System.out.println(checkoutdate);
+                System.out.println(checkindate);
+
             
             JSONObject contact = (JSONObject)A.get("contact");
             String phoneNumber = (String) contact.get("phone");
+            System.out.println("phoneNumber " + phoneNumber);
             String chaincode = (String)A.get("chainCode");
             String hotelname = (String) A.get("name");
             JSONObject address = (JSONObject) A.get("address");
@@ -108,8 +119,12 @@ public class RestaurantServiceImpl implements RestaurantService {
             JSONArray lines = (JSONArray) address.get("lines");
             String street = (String)lines.get(0);
             String completeaddress = street + " " + cityName + " " + postalCode + " " + countryCode + " " + stateCode;
-//            System.out.println(completeaddress);
+            System.out.println(completeaddress);
             String rating = (String)A.get("rating");
+            System.out.println(hotelname);
+            System.out.println(cityName);
+            System.out.println(postalCode);
+            System.out.println(rating);
             hi.setName(hotelname);
             hi.setAddress(completeaddress);
             hi.setPostalCode(postalCode);
