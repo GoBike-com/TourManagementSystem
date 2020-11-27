@@ -80,8 +80,8 @@ class NewItinerary extends React.Component {
                         createdBy: itineraryData.itinerary.createdBy,
                         flights: itineraryData.flights,
                         accommodations: itineraryData.accommodations,
-                        plans:itineraryData.itinerary.plans,
-                        place: ""
+                        plans: itineraryData.itinerary.plans,
+                        places: itineraryData.places
                     };
 
                     const groupMemberData = itineraryData.users;

@@ -43,7 +43,7 @@ export default function ItineraryPopup(props) {
                         name: itineraryData.itinerary.name,
                     };
 
-                    itinerariesToAdd = itinerariesToAdd.concat(itinerary);
+                    itinerariesToAdd.push(itinerary);
                 }
                 setItineraries(itinerariesToAdd);
 

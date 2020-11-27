@@ -23,6 +23,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import ItineraryPopup from "../Itinerary/ItineraryPopup";
+import Rating from "@material-ui/lab/Rating";
 
 export default function ExploreComponent() {
     const [open, setOpen] = React.useState(false);
@@ -166,7 +167,9 @@ export default function ExploreComponent() {
                 {allDataLoaded ? placeData.description : ""}
             </Typography>
 
+            {/*Itinerary Popup*/}
             <ItineraryPopup addToItinerary={(name) => {
+                //TODO: Call itinerary place add
                 alert(name);
             }}/>
 
@@ -224,6 +227,14 @@ export default function ExploreComponent() {
                     actionIcon={
                         <IconButton aria-label={`info about ${tile.name}`} className={classes.icon} href={tile.websiteURL} target="_blank">
                             <InfoIcon/>
+                            <Rating
+                                name="simple-controlled"
+                                value={2}
+                                onChange={(event, newValue) => {
+                                    // setValue(newValue);
+                                    //TODO: Call API
+                                }}
+                            />
                         </IconButton>
                     }
                 />
@@ -256,6 +267,14 @@ export default function ExploreComponent() {
                         <Button size="small" color="primary" href={tile.websiteURL} target="_blank">
                             Learn More
                         </Button>
+                        <Rating
+                            name="simple-controlled"
+                            value={2}
+                            onChange={(event, newValue) => {
+                                // setValue(newValue);
+                                //TODO: Call API
+                            }}
+                        />
                     </CardActions>
                 </Card>
             </Grid>
@@ -272,6 +291,13 @@ export default function ExploreComponent() {
                     actionIcon={
                         <IconButton aria-label={`info about ${tile.name}`} className={classes.icon} target="_blank" href={tile.websiteURL}>
                             <InfoIcon/>
+                            <Rating
+                                name="simple-controlled"
+                                value={2}
+                                onChange={(event, newValue) => {
+                                    //TODO: Call API
+                                }}
+                            />
                         </IconButton>
                     }
                 />
