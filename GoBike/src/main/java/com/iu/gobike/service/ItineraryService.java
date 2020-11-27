@@ -19,7 +19,7 @@ public interface ItineraryService {
 
     void addTravel(AddTravelRequest request, String userName);
 
-    void addPlace(String userName, String placeName);
+    void addPlace(String userName, AddPlaceRequest request);
 
     ItineraryDetail getItinerary(String userName, String name);
 

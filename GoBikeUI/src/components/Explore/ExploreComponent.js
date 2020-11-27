@@ -169,8 +169,30 @@ export default function ExploreComponent() {
 
             {/*Itinerary Popup*/}
             <ItineraryPopup addToItinerary={(name) => {
-                //TODO: Call itinerary place add
-                alert(name);
+                const targetUrl = config.API_URL + "/itinerary/"+window.sessionStorage.getItem("username") + "/place";
+                const requestOptions = {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        placeName: place,
+                        itineraryName: name
+                    }),
+                };
+
+                fetch(targetUrl, requestOptions)
+                    .then((response) => {
+                        // check for error response
+                        if (response.status == "200") {
+                            alert("Added!");
+                        }
+
+                        // this.setState({ totalReactPackages: data.total })
+                    })
+                    .catch((error) => {
+                        // this.setState({ errorMessage: error.toString() });
+                        console.error("There was an error!", error);
+                    });
             }}/>
 
             <br/><br/><br/>

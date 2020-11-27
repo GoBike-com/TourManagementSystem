@@ -13,5 +13,6 @@ import lombok.*;
 public class AddPlaceRequest {
 
     private String placeName;
+    private String itineraryName;
 
 }

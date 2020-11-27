@@ -73,6 +73,11 @@ public class Place implements Serializable {
     @Column(name="LONGITUDE")
     private Float longitude;
 
+    @ManyToOne
+    @JoinColumn(name = "USER_ITINERARY")
+    @JsonIgnore
+    private UserItinerary userItinerary;
+
     @PrePersist
     void onCreate() {
         this.createdDate = this.lastModifiedDate = Instant.now();

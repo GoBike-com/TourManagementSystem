@@ -94,11 +94,10 @@ public class ItineraryServiceImpl implements ItineraryService {
     }
 
     @Override
-    public void addPlace(String userName, String placeName) {
-        User user = userRepository.findByUserName(userName);
-        UserItinerary userItinerary = userItineraryRepository.findByUserUserNameAndItineraryName(userName, placeName);
-        List<String> places = userItinerary.getPlaces();
-        places.add(placeName);
+    public void addPlace(String userName, AddPlaceRequest request) {
+        UserItinerary userItinerary = userItineraryRepository.findByUserUserNameAndItineraryName(userName, request.getItineraryName());
+        List<Place> places = userItinerary.getPlaces();
+        places.add(placeRepository.findByName(request.getPlaceName()));
         userItinerary.setPlaces(places);
         userItineraryRepository.save(userItinerary);
     }

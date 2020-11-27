@@ -59,6 +59,7 @@ class NewItinerary extends React.Component {
         })
       };
 
+    //Gets all of the itineraries with their details
     getAllItineraries = () => {
         const targetGetUrl = config.API_URL + "/itinerary/" + window.sessionStorage.getItem("username");
         fetch(targetGetUrl, {
@@ -417,6 +418,11 @@ class NewItinerary extends React.Component {
                                 <AccordionDetails>
                                     <Typography>
                                         <b>End Date: </b>{itinerary.endDate}
+                                    </Typography>
+                                </AccordionDetails>
+                                <AccordionDetails>
+                                    <Typography>
+                                        <b>Place length: </b>{itinerary.places}
                                     </Typography>
                                 </AccordionDetails>
                                 {itinerary.plans.length > 0 && 
