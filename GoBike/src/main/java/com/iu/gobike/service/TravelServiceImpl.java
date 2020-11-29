@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.time.Instant;
+import java.time.LocalTime;
 
 /**
  * @author jbhushan
@@ -40,20 +41,21 @@ public class TravelServiceImpl implements TravelService{
         UserItinerary userItinerary = userItineraryRepository.findByUserUserNameAndItineraryName(userName, request.getItineraryName());
         FlightInfo flightInfo = request.getFlight();
 
-        Instant deptTime = Instant.now();
+        LocalTime deptTime = LocalTime.now();
         if(flightInfo.getTakeOffTime() != null){
-            deptTime = GoBikeUtil.convert(flightInfo.getTakeOffTime());
+            deptTime = GoBikeUtil.convertTime(flightInfo.getTakeOffTime().intern());
         }
-        Instant arrivalTime = Instant.now();
+        LocalTime arrivalTime = LocalTime.now();
         if(flightInfo.getArrivalTime() != null){
-            arrivalTime = GoBikeUtil.convert(flightInfo.getArrivalTime());
+            arrivalTime = GoBikeUtil.convertTime(flightInfo.getArrivalTime().intern());
         }
 
         Flight flight = Flight.builder().airline(flightInfo.getAirline()).arrivalIataCode(flightInfo.getArrivalIataCode())
                 .arrivalTerminal(flightInfo.getArrivalTerminal()).deptIataCode(flightInfo.getDeptIataCode())
                 .deptTerminal(flightInfo.getDeptTerminal()).userItinerary(userItinerary).duration(flightInfo.getDuration())
                 .createdBy(userName).modifiedBy(userName).deptTime(deptTime).arrivalTime(arrivalTime)
-                .type(flightInfo.isReturnFlight()? FlightType.RETURN:FlightType.TRAVEL).build();
+                .type(flightInfo.isReturnFlight()? FlightType.RETURN:FlightType.TRAVEL).travelDate(GoBikeUtil.convertDate(request.getTravelDate()))
+                .price(flightInfo.getPrice()).travelClass(request.getTravelClass()).build();
 
         flightRepository.save(flight);
     }

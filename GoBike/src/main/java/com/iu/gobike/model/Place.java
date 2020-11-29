@@ -1,5 +1,6 @@
 package com.iu.gobike.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -58,7 +59,10 @@ public class Place implements Serializable {
     private List<Hotel> hotel;
 
     @Column(name = "ratings")
-    private Integer ratings;
+    private float ratings;
+
+    @Column(name = "rating_count")
+    private int ratingsCount;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
@@ -71,6 +75,11 @@ public class Place implements Serializable {
 
     @Column(name="LONGITUDE")
     private Float longitude;
+
+//    @ManyToOne
+//    @JoinColumn(name = "USER_ITINERARY")
+//    @JsonIgnore
+//    private UserItinerary userItinerary;
 
     @PrePersist
     void onCreate() {

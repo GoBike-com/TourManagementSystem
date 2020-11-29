@@ -4,37 +4,32 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.List;
 
-/**
- * @author jbhushan
- */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 @Builder
 @Entity
-@Table(name="USER_ITINERARY")
-public class UserItinerary {
+@Table
+public class Rating {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @JoinColumn(name = "USER")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "ratings")
+    private float ratings;
+
+    @JoinColumn(name = "place")
+    @ManyToOne
+    private Place place;
+
+    @JoinColumn(name = "user")
+    @ManyToOne
     private User user;
-
-    @JoinColumn(name = "ITINERARY")
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Itinerary itinerary;
-
-    @OneToMany(mappedBy = "userItinerary")
-    private List<Flight> flights;
-
-    @OneToMany(mappedBy = "userItinerary")
-    private List<Accommodation> accommodations;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
@@ -55,7 +50,7 @@ public class UserItinerary {
 
     @PreUpdate
     void onUpdate() {
-        this.lastModifiedDate = Instant.now();
+      this.lastModifiedDate = Instant.now();
     }
 
 }

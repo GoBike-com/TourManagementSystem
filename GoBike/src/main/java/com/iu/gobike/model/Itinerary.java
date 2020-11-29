@@ -23,7 +23,7 @@ public class Itinerary {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME",unique = true)
     private String name;
 
     @Column(name = "NUM_OF_DAYS")
@@ -50,8 +50,11 @@ public class Itinerary {
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
 
-//    @OneToMany(mappedBy = "itinerary", fetch = FetchType.LAZY)
-//    private List<UserItinerary> itineraries;
+    @OneToMany(mappedBy = "itinerary")
+    private List<Plan> plans;
+
+    @OneToMany(mappedBy = "itinerary")
+    private List<ItineraryPlace> places;
 
     @PrePersist
     void onCreate() {

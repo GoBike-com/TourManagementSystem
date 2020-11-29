@@ -2,18 +2,13 @@ package com.iu.gobike.service;
 
 import com.iu.gobike.dto.*;
 import com.iu.gobike.enums.FlightType;
-import com.iu.gobike.model.Flight;
-import com.iu.gobike.model.Itinerary;
-import com.iu.gobike.model.User;
-import com.iu.gobike.model.UserItinerary;
-import com.iu.gobike.repository.FlightRepository;
-import com.iu.gobike.repository.ItineraryRepository;
-import com.iu.gobike.repository.UserItineraryRepository;
-import com.iu.gobike.repository.UserRepository;
+import com.iu.gobike.model.*;
+import com.iu.gobike.repository.*;
 import com.iu.gobike.util.GoBikeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityExistsException;
 import java.text.ParseException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -37,25 +32,41 @@ public class ItineraryServiceImpl implements ItineraryService {
     private ItineraryRepository itineraryRepository;
 
     @Autowired
+    private ItineraryPlaceRepository itineraryPlaceRepository;
+
+    @Autowired
     private FlightRepository flightRepository;
 
+    @Autowired
+    private PlanRepository planRepository;
+
+    @Autowired
+    private PlaceRepository placeRepository;
+
     @Override
-    public UserItinerary create(CreateItineraryRequest request, String userName) throws ParseException {
-        User user = userRepository.findByUserName(userName);
-        Instant startDate = Instant.now();
-        Instant endDate = Instant.now();
-        if(request.getStartDate() !=null){
-            startDate = GoBikeUtil.convert(request.getStartDate());
+    public UserItinerary create(CreateItineraryRequest request, String userName) throws ParseException, EntityExistsException {
+
+        Itinerary itinerary = itineraryRepository.findByName(request.getName());
+
+        if(itinerary == null) {
+            User user = userRepository.findByUserName(userName);
+            Instant startDate = Instant.now();
+            Instant endDate = Instant.now();
+            if (request.getStartDate() != null) {
+                startDate = GoBikeUtil.convert(request.getStartDate());
+            }
+            if (request.getEndDate() != null) {
+                endDate = GoBikeUtil.convert(request.getEndDate());
+            }
+            itinerary = Itinerary.builder().name(request.getName())
+                    .startDate(startDate).endDate(endDate).createdBy(userName).modifiedBy(userName).build();
+            UserItinerary userItinerary = UserItinerary.builder().itinerary(itinerary).user(user)
+                    .createdBy(userName).modifiedBy(userName).build();
+            userItinerary = userItineraryRepository.save(userItinerary);
+            return userItinerary;
+        } else {
+            throw new EntityExistsException();
         }
-        if(request.getEndDate() !=null){
-            endDate = GoBikeUtil.convert(request.getEndDate());
-        }
-        Itinerary itinerary = Itinerary.builder().name(request.getName())
-                .startDate(startDate).endDate(endDate).createdBy(userName).modifiedBy(userName).build();
-        UserItinerary userItinerary = UserItinerary.builder().itinerary(itinerary).user(user)
-                .createdBy(userName).modifiedBy(userName).build();
-        userItinerary = userItineraryRepository.save(userItinerary);
-        return userItinerary;
     }
 
     @Override
@@ -86,6 +97,16 @@ public class ItineraryServiceImpl implements ItineraryService {
     }
 
     @Override
+    public void addPlace(String userName, AddPlaceRequest request) {
+        UserItinerary userItinerary = userItineraryRepository.findByUserUserNameAndItineraryName(userName, request.getItineraryName());
+        ArrayList<ItineraryPlace> itineraryPlaces = new ArrayList<ItineraryPlace>();
+        ItineraryPlace itineraryPlace = ItineraryPlace.builder().itinerary(userItinerary.getItinerary())
+                .place(placeRepository.findByName(request.getPlaceName())).build();
+        itineraryPlaces.add(itineraryPlace);
+        itineraryPlaceRepository.save(itineraryPlace);
+    }
+
+    @Override
     public ItineraryDetail getItinerary(String userName, String name) {
         UserItinerary userItinerary = userItineraryRepository.findByUserUserNameAndItineraryName(userName,name);
         Set<User> users =  userItineraryRepository.findByItineraryName(userItinerary.getItinerary().getName());
@@ -99,6 +120,19 @@ public class ItineraryServiceImpl implements ItineraryService {
         User user = userRepository.findByUserName(userName);
         List<UserItinerary> u = userItineraryRepository.findByUserId(user.getId());
        return  buildItineraryResponse(u,userName);
+    }
+
+    @Override
+    public Plan savePlan(AddPlanRequest request) throws ParseException {
+        Itinerary itinerary = itineraryRepository.findByName(request.getItineraryName());
+        Plan plan = Plan.builder().itinerary(itinerary).day(GoBikeUtil.convert(request.getDate())).description(request.getDescription())
+                .createdBy(request.getLoggedInUser()).modifiedBy(request.getLoggedInUser()).build();
+        return planRepository.save(plan);
+    }
+
+    @Override
+    public void deletePlan(Long id) {
+        planRepository.deleteById(id);
     }
 
     private GetItineraryDetailsResponse buildItineraryResponse(List<UserItinerary> userItineraries, String userName) {
