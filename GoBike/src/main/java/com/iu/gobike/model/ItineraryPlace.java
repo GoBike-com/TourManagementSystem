@@ -1,40 +1,40 @@
 package com.iu.gobike.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.iu.gobike.enums.FlightType;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.List;
+import java.time.LocalTime;
+import java.util.Date;
 
-/**
- * @author jbhushan
- */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 @Builder
 @Entity
-@Table(name="USER_ITINERARY")
-public class UserItinerary {
+@Table(name="ITINERARY_PLACE")
+public class ItineraryPlace {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @JoinColumn(name = "USER")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
-
+    @ManyToOne
     @JoinColumn(name = "ITINERARY")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Itinerary itinerary;
 
-    @OneToMany(mappedBy = "userItinerary")
-    private List<Flight> flights;
+    @JoinColumn(name="PLACE")
+    @ManyToOne
+    private Place place;
 
-    @OneToMany(mappedBy = "userItinerary")
-    private List<Accommodation> accommodations;
+    @Column(name="VISIT_ORDER")
+    private int order;
 
     @Column(name="CREATED_DATE", updatable = false)
     private Instant createdDate;
@@ -55,7 +55,7 @@ public class UserItinerary {
 
     @PreUpdate
     void onUpdate() {
-        this.lastModifiedDate = Instant.now();
+         this.lastModifiedDate = Instant.now();
     }
 
 }

@@ -1,27 +1,16 @@
 import fetch from 'cross-fetch';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { config } from '../Constants';
 import {makeStyles} from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import LocalActivityIcon from '@material-ui/icons/LocalActivity';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import HotelIcon from '@material-ui/icons/Hotel';
-import GridListTileBar from "@material-ui/core/GridListTileBar";
-import IconButton from "@material-ui/core/IconButton";
+import {Button, GridListTileBar, Link, Grid, Card, CardActionArea, CardMedia, CardContent,
+     CardActions, Divider, Typography, CircularProgress,TextField, IconButton} from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
-import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Button from "@material-ui/core/Button";
 import ItineraryPopup from "../Itinerary/ItineraryPopup";
 import Rating from "@material-ui/lab/Rating";
 
@@ -33,6 +22,7 @@ export default function ExploreComponent() {
     const [place, setPlace] = React.useState("Chicago");
     const [placeData, setPlaceData] = React.useState([]);
     const [allDataLoaded, setAllDataLoaded] = React.useState(false);
+    const [rating, setValue] = React.useState();
 
     //Styles
     let useStyles = makeStyles((theme) => ({
@@ -104,7 +94,9 @@ export default function ExploreComponent() {
         })
             .then((response) => response.json())
             .then((data) => {
+                console.log(data);
                 setPlaceData(data);
+                console.log(placeData);
                 setAllDataLoaded(true);
             })
             .catch((error) => {
@@ -194,6 +186,58 @@ export default function ExploreComponent() {
                         console.error("There was an error!", error);
                     });
             }}/>
+            <div>
+                <Typography variant="body1">
+                    <div  style = {{display:'flex'}} >
+                        <Rating
+                            name="read-only"
+                            value={placeData.ratings+''}
+                            style = {{paddingRight :"1%"}}
+                            readOnly
+                            precision={0.5}
+                        />
+                        <Link
+                            component="button"
+                            variant="body2"
+                            onClick={() => {
+                                console.info("I'm a button.");
+                            }}
+                        >
+                        {placeData.ratingsCount} users ratings
+                        </Link>    
+                    </div>
+                    <div style = {{display:'end'}} >
+                        Provide your ratings <Rating
+                        name="simple-controlled"
+                        value={rating}
+                        onChange={(event, newValue) => {
+                           setValue(newValue);
+                            // this.setState({
+                            //     rating : newValue
+                            // })
+                            var targetUrl = config.API_URL + "/place/"+placeData.name+"/rate";
+                            const requestOptions = {
+                                method: "POST",
+                                credentials: "include",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                  userName: window.sessionStorage.getItem("username"),
+                                  place: placeData.name,
+                                  rating: newValue,      
+                                }),
+                              };
+                            fetch(targetUrl, requestOptions)
+                             .then(res => res.json())
+                              .then((res) => {
+                                console.log(res)
+                                window.location.reload(false);
+                                // setIsLoading(false);
+                              });
+                        }}
+                    />
+                </div>
+                </Typography>
+            </div>
 
             <br/><br/><br/>
             <Divider variant="middle"/>

@@ -32,6 +32,9 @@ public class ItineraryServiceImpl implements ItineraryService {
     private ItineraryRepository itineraryRepository;
 
     @Autowired
+    private ItineraryPlaceRepository itineraryPlaceRepository;
+
+    @Autowired
     private FlightRepository flightRepository;
 
     @Autowired
@@ -96,10 +99,11 @@ public class ItineraryServiceImpl implements ItineraryService {
     @Override
     public void addPlace(String userName, AddPlaceRequest request) {
         UserItinerary userItinerary = userItineraryRepository.findByUserUserNameAndItineraryName(userName, request.getItineraryName());
-        List<Place> places = userItinerary.getPlaces();
-        places.add(placeRepository.findByName(request.getPlaceName()));
-        userItinerary.setPlaces(places);
-        userItineraryRepository.save(userItinerary);
+        ArrayList<ItineraryPlace> itineraryPlaces = new ArrayList<ItineraryPlace>();
+        ItineraryPlace itineraryPlace = ItineraryPlace.builder().itinerary(userItinerary.getItinerary())
+                .place(placeRepository.findByName(request.getPlaceName())).build();
+        itineraryPlaces.add(itineraryPlace);
+        itineraryPlaceRepository.save(itineraryPlace);
     }
 
     @Override
