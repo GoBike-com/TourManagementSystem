@@ -53,6 +53,9 @@ public class Itinerary {
     @OneToMany(mappedBy = "itinerary")
     private List<Plan> plans;
 
+    @OneToMany(mappedBy = "itinerary")
+    private List<ItineraryPlace> places;
+
     @PrePersist
     void onCreate() {
         this.createdDate = this.lastModifiedDate = Instant.now();

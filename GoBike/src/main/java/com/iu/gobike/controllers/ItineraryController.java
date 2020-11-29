@@ -71,7 +71,7 @@ public class ItineraryController {
     /**
      * This API is responsible for saving selected place names to itinerary.
      */
-    @PostMapping(path = "/{username}/place}", produces = "application/json")
+    @PostMapping(path = "/{username}/place", produces = "application/json")
     public ResponseEntity<String> addPlace(@PathVariable("username") String userName, @RequestBody AddPlaceRequest request) {
         itineraryService.addPlace(userName,request);
         return  ResponseEntity.ok("SAVED");
