@@ -16,7 +16,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(path = "/place")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*", allowCredentials = "true")
 public class PlaceController {
 
     @Autowired
