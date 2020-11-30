@@ -6,9 +6,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import {DialogContent,Dialog,DialogTitle,DialogActions,
-    TextField,Card,CardContent,CardHeader,CardActions,
-    IconButton,Box,Button,Typography } from '@material-ui/core';
+import {
+    DialogContent, Dialog, DialogTitle, DialogActions,
+    TextField, Card, CardContent, CardHeader, CardActions,
+    IconButton, Box, Button, Typography, CardActionArea, CardMedia
+} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {config} from "../Constants";
@@ -21,6 +23,7 @@ import AddCommentIcon from '@material-ui/icons/AddComment';
 import CancelIcon from '@material-ui/icons/Cancel';
 import {indigo } from '@material-ui/core/colors';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import Rating from "@material-ui/lab/Rating";
 
 
 class NewItinerary extends React.Component {
@@ -418,26 +421,12 @@ class NewItinerary extends React.Component {
                                         <b>End Date: </b>{itinerary.endDate}
                                     </Typography>
                                 </AccordionDetails>
-                                
-                                {/*
-                                name: itineraryData.itinerary.name,
-                                startDate: itineraryData.itinerary.startDate,
-                                endDate: itineraryData.itinerary.endDate,
-                                createdDate: itineraryData.itinerary.createdDate,
-                                createdBy: itineraryData.itinerary.createdBy,
-                                flights: itineraryData.flights,
-                                accommodations: itineraryData.accommodations,
-                                plans: itineraryData.itinerary.plans,
-                                places: itineraryData.itinerary.places,
-                                users: itineraryData.users*/
-                                }
                                 {/*Users*/}
                                 <AccordionDetails>
                                     <Typography>
                                         <b>Group Members: </b>{itinerary.users}
                                     </Typography>
                                 </AccordionDetails>
-
 
                                 {itinerary.plans.length > 0 && 
                                 <AccordionDetails>
@@ -460,6 +449,75 @@ class NewItinerary extends React.Component {
                                 {/* <AccordionDetails>
                                     {this.commentComponent(itinerary.name)}
                                 </AccordionDetails> */}
+                                <Divider />
+
+                                {/*Places*/}
+                                {/*
+                                *name: itineraryData.itinerary.name,
+                                *startDate: itineraryData.itinerary.startDate,
+                                *endDate: itineraryData.itinerary.endDate,
+                                *createdDate: itineraryData.itinerary.createdDate,
+                                *createdBy: itineraryData.itinerary.createdBy,
+                                flights: itineraryData.flights,
+                                accommodations: itineraryData.accommodations,
+                                *plans: itineraryData.itinerary.plans,
+                                places: itineraryData.itinerary.places,
+                                *users: itineraryData.users*/
+                                }
+                                {itinerary.places.length == 0 ?
+                                    <AccordionDetails>
+                                        <Button size="small" variant="contained" color="primary" style={{ margin:"0.5%"}} href="/search">Add Place</Button>
+                                    </AccordionDetails>
+                                    :
+                                    <div>
+                                        <AccordionDetails>
+                                            <Typography variant="h4">Places on Trip</Typography>
+                                        </AccordionDetails>
+                                        {itinerary.places.map((places) => (
+                                            <div>
+                                                <AccordionDetails>
+                                                    <Typography variant="h5">{places.place.name}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography>{places.place.description}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography variant="h6">Restaurants</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Grid container spacing={1}>
+                                                        {places.place.restaurant.map((tile) => (
+                                                            <Grid item md={3}>
+                                                                <Card className={classes.root}>
+                                                                    <CardActionArea href={tile.websiteURL} target="_blank">
+                                                                        <CardMedia
+                                                                            component="img"
+                                                                            className={classes.media}
+                                                                            height="140"
+                                                                            image={tile.imageURL}
+                                                                            title={tile.name}
+                                                                        />
+                                                                        <CardContent>
+                                                                            <Typography gutterBottom variant="h5" component="h2">
+                                                                                {tile.name}
+                                                                            </Typography>
+                                                                        </CardContent>
+                                                                    </CardActionArea>
+                                                                    <CardActions>
+                                                                        <Button size="small" color="primary" href={tile.websiteURL} target="_blank">
+                                                                            Learn More
+                                                                        </Button>
+                                                                    </CardActions>
+                                                                </Card>
+                                                            </Grid>
+                                                        ))}
+                                                    </Grid>
+                                                </AccordionDetails>
+                                            </div>
+                                            ))}
+                                    </div>
+                                }
+
                                 <Divider />
                                 <AccordionActions>
                                     <Button size="small" onClick={e => 
