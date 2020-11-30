@@ -6,9 +6,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import {DialogContent,Dialog,DialogTitle,DialogActions,
-    TextField,Card,CardContent,CardHeader,CardActions,
-    IconButton,Box,Button,Typography } from '@material-ui/core';
+import {
+    DialogContent, Dialog, DialogTitle, DialogActions,
+    TextField, Card, CardContent, CardHeader, CardActions,
+    IconButton, Box, Button, Typography, CardActionArea, CardMedia
+} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {config} from "../Constants";
@@ -21,6 +23,8 @@ import AddCommentIcon from '@material-ui/icons/AddComment';
 import CancelIcon from '@material-ui/icons/Cancel';
 import {indigo } from '@material-ui/core/colors';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import Rating from "@material-ui/lab/Rating";
+import DisplayMapClass from "../Dashboard/Map";
 
 
 class NewItinerary extends React.Component {
@@ -33,7 +37,8 @@ class NewItinerary extends React.Component {
             itineraryName:'',
             plan:"",
             showComment:false,
-            error:false
+            error:false,
+            showmap: false
         };
         this.addItinerary = this.addItinerary.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
@@ -59,6 +64,13 @@ class NewItinerary extends React.Component {
         })
       };
 
+    displayMap = (event) => {
+        event.preventDefault();
+        this.setState({
+            showmap: !this.state.showmap
+        });
+    }
+
     //Gets all of the itineraries with their details
     getAllItineraries = () => {
         const targetGetUrl = config.API_URL + "/itinerary/" + window.sessionStorage.getItem("username");
@@ -82,12 +94,15 @@ class NewItinerary extends React.Component {
                         flights: itineraryData.flights,
                         accommodations: itineraryData.accommodations,
                         plans: itineraryData.itinerary.plans,
-                        places: itineraryData.places
+                        places: itineraryData.itinerary.places
                     };
 
-                    const groupMemberData = itineraryData.users;
-                   // itinerary.groupMembers = groupMemberData.firstName + " " + groupMemberData.lastName;
-                  // itinerary.groupMembers = groupMemberData
+                    let users = itineraryData.users[0].firstName + " " + itineraryData.users[0].lastName;
+                    for(let j = 1; j < itineraryData.users.length; j += 1) {
+                        users += ", " + itineraryData.users[j].firstName + " " + itineraryData.users[j].lastName;
+                    }
+                    itinerary.users = users;
+
                     this.setState({
                         itineraries: this.state.itineraries.concat(itinerary)
                     });
@@ -249,7 +264,7 @@ class NewItinerary extends React.Component {
         return(
             <Box style={{ width:"100%"}} borderColor="primary.main" border={1} m={1} borderRadius="borderRadius">
                 {this.state.error && 
-                  <Alert severity="error">Please enter details for adding Plan..</Alert>
+                  <Alert severity="error">Please enter details for adding Plan.</Alert>
                 } 
                 <div style={{ display: 'flex', padding:"1%"}}>
                     <TextField
@@ -415,7 +430,12 @@ class NewItinerary extends React.Component {
                                         <b>End Date: </b>{itinerary.endDate}
                                     </Typography>
                                 </AccordionDetails>
-
+                                {/*Users*/}
+                                <AccordionDetails>
+                                    <Typography>
+                                        <b>Group Members: </b>{itinerary.users}
+                                    </Typography>
+                                </AccordionDetails>
 
                                 {itinerary.plans.length > 0 && 
                                 <AccordionDetails>
@@ -439,12 +459,169 @@ class NewItinerary extends React.Component {
                                     {this.commentComponent(itinerary.name)}
                                 </AccordionDetails> */}
                                 <Divider />
+
+                                {/*Places*/}
+                                {itinerary.places.length == 0 ?
+                                    <AccordionDetails>
+                                        <Button size="small" variant="contained" color="primary" style={{ margin:"0.5%"}} href="/search">Add Place</Button>
+                                    </AccordionDetails>
+                                    :
+                                    <div>
+                                        <AccordionDetails>
+                                            <Typography variant="h4">Places on Trip</Typography>
+                                        </AccordionDetails>
+                                        {itinerary.places.map((places) => (
+                                            <div>
+                                                <AccordionDetails>
+                                                    <Typography variant="h5">{places.place.name}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography>{places.place.description}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography variant="h6">Restaurants</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Grid container spacing={1}>
+                                                        {places.place.restaurant.map((tile) => (
+                                                            <Grid item md={3}>
+                                                                <Card className={classes.root}>
+                                                                    <CardActionArea href={tile.websiteURL} target="_blank">
+                                                                        <CardMedia
+                                                                            component="img"
+                                                                            className={classes.media}
+                                                                            height="140"
+                                                                            image={tile.imageURL}
+                                                                            title={tile.name}
+                                                                        />
+                                                                        <CardContent>
+                                                                            <Typography gutterBottom variant="h5" component="h2">
+                                                                                {tile.name}
+                                                                            </Typography>
+                                                                        </CardContent>
+                                                                    </CardActionArea>
+                                                                    <CardActions>
+                                                                        <Button size="small" color="primary" href={tile.websiteURL} target="_blank">
+                                                                            Learn More
+                                                                        </Button>
+                                                                    </CardActions>
+                                                                </Card>
+                                                            </Grid>
+                                                        ))}
+                                                    </Grid>
+                                                </AccordionDetails>
+                                            </div>
+                                            ))}
+                                    </div>
+                                }
+
+                                {/*Flights*/}
+                                <Divider />
+
+                                {itinerary.flights.length == 0 ?
+                                    <AccordionDetails>
+                                        <Button size="small" variant="contained" color="primary" style={{ margin:"0.5%"}} href="/travel">Add Flight</Button>
+                                    </AccordionDetails>
+                                    :
+                                    <div>
+                                        <AccordionDetails>
+                                            <Typography variant="h4">Flights Added</Typography>
+                                        </AccordionDetails>
+                                        {itinerary.flights.map((flight) => (
+                                            <div>
+                                                <AccordionDetails>
+                                                    <Typography variant="h5">{flight.airline}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Departs</b> from {flight.deptIataCode}, terminal {flight.deptTerminal}, at {flight.deptTime} and <b>arrives</b> at {flight.arrivalIataCode} at {flight.arrivalTime}.</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Date: </b>{flight.travelDate}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Class: </b>{flight.travelClass}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Price: </b>${flight.price}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Duration: </b>{flight.duration}</Typography>
+                                                </AccordionDetails>
+                                            </div>
+                                        ))}
+                                    </div>
+                                }
+
+
+                                {/*
+                                *name: itineraryData.itinerary.name,
+                                *startDate: itineraryData.itinerary.startDate,
+                                *endDate: itineraryData.itinerary.endDate,
+                                *createdDate: itineraryData.itinerary.createdDate,
+                                *createdBy: itineraryData.itinerary.createdBy,
+                                *flights: itineraryData.flights,
+                                accommodations: itineraryData.accommodations,
+                                *plans: itineraryData.itinerary.plans,
+                                *places: itineraryData.itinerary.places,
+                                *users: itineraryData.users*/
+                                }
+
+                                {/*Accommodations*/}
+                                <Divider />
+
+                                {itinerary.accommodations.length == 0 ?
+                                    <AccordionDetails>
+                                        <Button size="small" variant="contained" color="primary" style={{ margin:"0.5%"}} href="/accomodation">Add Accommodation</Button>
+                                    </AccordionDetails>
+                                    :
+                                    <div>
+                                        <AccordionDetails>
+                                            <Typography variant="h4">Accommodations</Typography>
+                                        </AccordionDetails>
+                                        {itinerary.accommodations.map((accommodation) => (
+                                            <div>
+                                                <AccordionDetails>
+                                                    <Typography variant="h5">{accommodation.name}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Address: </b>{accommodation.address}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Zip Code: </b>{accommodation.postalCode}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Rating: </b>${accommodation.rating}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Chain: </b>{accommodation.chaincode}</Typography>
+                                                </AccordionDetails>
+                                            </div>
+                                        ))}
+                                    </div>
+                                }
+
+                                {/*Map*/}
+                                <Divider />
+                                {this.state.showmap === true ? <DisplayMapClass /> : null}
+
+
+                                {/*Actions*/}
+                                <Divider />
                                 <AccordionActions>
                                     <Button size="small" onClick={e => 
                                             {
                                             e.preventDefault()
                                             this.handleOpen(itinerary.name)
-                                            }}>Share</Button>
+                                            }}>Share
+                                    </Button>
+                                    <Button size="small" onClick={e =>
+                                    {
+                                        e.preventDefault()
+                                        alert("Itinerary has been booked.")
+                                    }}>
+                                        Book
+                                    </Button>
+                                    <Button size="small" onClick={this.displayMap}>{this.state.showmap ? "Hide Map" : "Show Map"}</Button>
                                     <Button size="small" color="primary">
                                         Edit
                                     </Button>
