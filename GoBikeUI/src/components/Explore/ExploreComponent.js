@@ -9,7 +9,8 @@ import LocalActivityIcon from '@material-ui/icons/LocalActivity';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import HotelIcon from '@material-ui/icons/Hotel';
 import {Button, GridListTileBar, Link, Grid, Card, CardActionArea, CardMedia, CardContent,
-     CardActions, Divider, Typography, CircularProgress,TextField, IconButton} from "@material-ui/core";
+     CardActions, Divider, Typography, CircularProgress,TextField, IconButton,Dialog,
+     DialogTitle,DialogActions,DialogContent} from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
 import ItineraryPopup from "../Itinerary/ItineraryPopup";
 import Rating from "@material-ui/lab/Rating";
@@ -23,6 +24,7 @@ export default function ExploreComponent() {
     const [placeData, setPlaceData] = React.useState([]);
     const [allDataLoaded, setAllDataLoaded] = React.useState(false);
     const [rating, setValue] = React.useState();
+    const [reviewOpen, setReviewOpen] = React.useState(false);
 
     //Styles
     let useStyles = makeStyles((theme) => ({
@@ -199,43 +201,14 @@ export default function ExploreComponent() {
                         <Link
                             component="button"
                             variant="body2"
-                            onClick={() => {
-                                console.info("I'm a button.");
+                            onClick={(e) => {
+                                e.preventDefault()
+                                setReviewOpen(true)
                             }}
                         >
                         {placeData.ratingsCount} users ratings
                         </Link>    
                     </div>
-                    <div style = {{display:'end'}} >
-                        Provide your ratings <Rating
-                        name="simple-controlled"
-                        value={rating}
-                        onChange={(event, newValue) => {
-                           setValue(newValue);
-                            // this.setState({
-                            //     rating : newValue
-                            // })
-                            var targetUrl = config.API_URL + "/place/"+placeData.name+"/rate";
-                            const requestOptions = {
-                                method: "POST",
-                                credentials: "include",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                  userName: window.sessionStorage.getItem("username"),
-                                  place: placeData.name,
-                                  rating: newValue,      
-                                }),
-                              };
-                            fetch(targetUrl, requestOptions)
-                             .then(res => res.json())
-                              .then((res) => {
-                                console.log(res)
-                                window.location.reload(false);
-                                // setIsLoading(false);
-                              });
-                        }}
-                    />
-                </div>
                 </Typography>
             </div>
 
@@ -280,6 +253,51 @@ export default function ExploreComponent() {
                     {allDataLoaded ? hotelData() : ""}
                 </GridList>
             </div>
+            <Dialog
+                open={reviewOpen}
+                onClose={() => {
+                    setReviewOpen(false);
+                }}
+                className={classes.modal}
+                >
+                <DialogTitle 
+                    // style={{backgroundColor: indigo[700]}} id="simple-dialog-title"
+                    >
+                        All Ratings
+                </DialogTitle>
+                <DialogContent>
+                    <Typography>{allDataLoaded? displayAllRatings(placeData.ratingList): ""}</Typography>
+                    <Divider />
+                    <Typography variant="h6">
+                        Provide your ratings:
+                        <Rating
+                            name="simple-controlled"
+                            value={rating}
+                            onChange={(event, newValue) => {
+                                setValue(newValue);
+                                var targetUrl = config.API_URL + "/place/"+placeData.name+"/rate";
+                                const requestOptions = {
+                                    method: "POST",
+                                    credentials: "include",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        userName: window.sessionStorage.getItem("username"),
+                                        place: placeData.name,
+                                        rating: newValue,      
+                                    }),
+                                    };
+                                fetch(targetUrl, requestOptions)
+                                    .then(res => res.json())
+                                    .then((res) => {
+                                    console.log(res)
+                                    window.location.reload(false);
+                                    // setIsLoading(false);
+                                    });
+                                }}
+                        />
+                    </Typography>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 
@@ -305,6 +323,28 @@ export default function ExploreComponent() {
                     }
                 />
             </GridListTile>
+        ))
+    }
+
+    function displayAllRatings(ratings){
+        return ratings.map(rating =>(
+            <div>
+                <Typography variant="p"> 
+                   <i> {rating.user.userName}</i>
+                </Typography>
+                <Typography style = {{display: 'flex'}}>
+                    <Rating
+                        name="read-only"
+                        value={rating.ratings+''}
+                        style = {{paddingRight :"1%"}}
+                        readOnly
+                        precision={0.5}
+                        size="small"
+                    />
+                    <label style = {{paddingLeft: '1%'}}>{rating.ratings}</label>
+                </Typography>
+                <Divider/>
+            </div>
         ))
     }
 
