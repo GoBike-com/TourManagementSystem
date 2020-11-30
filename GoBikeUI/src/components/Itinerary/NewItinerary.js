@@ -452,18 +452,6 @@ class NewItinerary extends React.Component {
                                 <Divider />
 
                                 {/*Places*/}
-                                {/*
-                                *name: itineraryData.itinerary.name,
-                                *startDate: itineraryData.itinerary.startDate,
-                                *endDate: itineraryData.itinerary.endDate,
-                                *createdDate: itineraryData.itinerary.createdDate,
-                                *createdBy: itineraryData.itinerary.createdBy,
-                                flights: itineraryData.flights,
-                                accommodations: itineraryData.accommodations,
-                                *plans: itineraryData.itinerary.plans,
-                                places: itineraryData.itinerary.places,
-                                *users: itineraryData.users*/
-                                }
                                 {itinerary.places.length == 0 ?
                                     <AccordionDetails>
                                         <Button size="small" variant="contained" color="primary" style={{ margin:"0.5%"}} href="/search">Add Place</Button>
@@ -518,6 +506,57 @@ class NewItinerary extends React.Component {
                                     </div>
                                 }
 
+                                {/*
+                                *name: itineraryData.itinerary.name,
+                                *startDate: itineraryData.itinerary.startDate,
+                                *endDate: itineraryData.itinerary.endDate,
+                                *createdDate: itineraryData.itinerary.createdDate,
+                                *createdBy: itineraryData.itinerary.createdBy,
+                                flights: itineraryData.flights,
+                                accommodations: itineraryData.accommodations,
+                                *plans: itineraryData.itinerary.plans,
+                                *places: itineraryData.itinerary.places,
+                                *users: itineraryData.users*/
+                                }
+                                {/*Flights*/}
+                                <Divider />
+
+                                {itinerary.flights.length == 0 ?
+                                    <AccordionDetails>
+                                        <Button size="small" variant="contained" color="primary" style={{ margin:"0.5%"}} href="/travel">Add Flight</Button>
+                                    </AccordionDetails>
+                                    :
+                                    <div>
+                                        <AccordionDetails>
+                                            <Typography variant="h4">Flights Added</Typography>
+                                        </AccordionDetails>
+                                        {itinerary.flights.map((flight) => (
+                                            <div>
+                                                <AccordionDetails>
+                                                    <Typography variant="h5">{flight.airline}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Departs</b> from {flight.deptIataCode}, terminal {flight.deptTerminal}, at {flight.deptTime} and <b>arrives</b> at {flight.arrivalIataCode} at {flight.arrivalTime}.</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Date: </b>{flight.travelDate}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Class: </b>{flight.travelClass}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Price: </b>${flight.price}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Duration: </b>{flight.duration}</Typography>
+                                                </AccordionDetails>
+                                            </div>
+                                        ))}
+                                    </div>
+                                }
+
+
+                                {/*Actions*/}
                                 <Divider />
                                 <AccordionActions>
                                     <Button size="small" onClick={e => 
