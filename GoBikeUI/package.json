@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@date-io/date-fns": "^1.3.13",
+    "@date-io/moment": "^1.3.13",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
@@ -17,13 +18,14 @@
     "cors": "^2.8.5",
     "date-fns": "^2.16.1",
     "dotenv": "^6.2.0",
+    "draft-js": "0.11.7",
     "express": "^4.16.4",
     "firebase": "^7.22.0",
     "gitstar-components": "^1.0.5",
     "google-map-react": "^1.1.5",
     "google-maps-react": "2.0.6",
     "history": "4.9.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.1",
     "node-sass": "4.13.0",
     "nouislider": "14.0.2",
     "prop-types": "15.7.2",
@@ -50,8 +52,7 @@
     "reactstrap": "8.4.1",
     "serve": "^11.2.0",
     "skeleton-css": "^2.0.4",
-    "socket.io": "^2.3.0",
-    "draft-js": "0.11.7"
+    "socket.io": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

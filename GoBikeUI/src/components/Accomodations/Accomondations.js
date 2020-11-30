@@ -2,14 +2,16 @@ import React from "react";
 import "date-fns";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import DateFnsUtils from "@date-io/date-fns";
+// import DateFnsUtils from "@date-io/date-fns";
+import MomentUtils from '@date-io/moment';
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import image from "../../assets/img/image17.jpg";
-import image1 from "../../assets/img/image18.jpg";
+import image1 from "../../assets/img/bg3.jpg";
+
 
 import { config } from "../Constants";
 import moment from "moment";
@@ -26,6 +28,15 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
+import LinearProgress from '@material-ui/core/LinearProgress';
+import ItineraryPopup from '../Itinerary/ItineraryPopup';
+import Dialog from "@material-ui/core/Dialog";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import MuiDialogActions from "@material-ui/core/DialogActions";
+import DialogActions from '@material-ui/core/DialogActions';
+
+
 
 class Accomondations extends React.Component {
   constructor(props) {
@@ -42,6 +53,10 @@ class Accomondations extends React.Component {
       open: "",
       Errorvalidation: "false",
       noResponse:"false",
+      city:"",
+      registered:"",
+      dateError:"false",
+      iatacodee:"",
     };
     this.handleDateChange1 = this.handleDateChange1.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
@@ -54,6 +69,8 @@ class Accomondations extends React.Component {
     this.renderHotels = this.renderHotels.bind(this);
     this.validations = this.validations.bind(this);
     this.errorComponent = this.errorComponent.bind(this);
+    this.addToItinerary = this.addToItinerary.bind(this);
+    this.manageClose = this.manageClose.bind(this);
   }
 
   noOfRooms = ["1", "2", "3"];
@@ -66,6 +83,7 @@ class Accomondations extends React.Component {
   //   ("FB", "FB"),
   //   ("AI", "AI"),
   // ];
+
 
   handleAirportSearch = (query) => {
     //setIsLoading(true);
@@ -87,7 +105,8 @@ class Accomondations extends React.Component {
           iataCode: i.iataCode,
 
         }));
-
+        this.setState({iatacodee:options.iataCode})
+        this.setState({city: options.name})
         this.setState({ options: options });
       });
   };
@@ -127,31 +146,44 @@ class Accomondations extends React.Component {
 
   handleHotelSearch = (event) => {
     event.preventDefault();
+    console.log("helllo" )
     this.setState({ Errorvalidation: "false" });
     this.setState({ hotels: "" });
     this.state.loading = "false";
     this.state.noResponse = "false";
-    console.log(this.state.Errorvalidation)
     // this.state.searchResult = true;
+    console.log("iatacode" + this.state.iatacodee)
+    console.log("destination " + this.state.iatacodee);
+    console.log("arrival date " + this.state.selectedDate);
+    console.log("departure date " + this.state.depatureDate);
+    console.log("no of rooms " + this.state.roomqty);
+    console.log("no of travellers " + this.state.adults);
+    console.log("ratings " + this.state.ratings);
+    console.log("boardtype " + this.state.boardType);
+    // console.log("itacodeeeeeeeeee" ,typeof this.state.destination[0].iataCode)
 
-    // console.log("destination " + this.state.destination[0].iataCode);
-    // console.log("arrival date " + this.state.selectedDate);
-    // console.log("departure date " + this.state.depatureDate);
-    // console.log("no of rooms " + this.state.roomqty);
-    // console.log("no of travellers " + this.state.adults);
-    // console.log("ratings " + this.state.ratings);
-    // console.log("boardtype " + this.state.boardType);
+    // if(this.state.destination[0].iataCode === null){
+    //   return this.setState({ dateError: "true" });
+    // }
+    // else{
+    //   return console.log("not finally")
+    // }
     if (
-      this.state.destination === undefined ||
+      this.state.iatacodee === "" || 
+      this.state.destination === "" ||
+      this.state.destination[0].iataCode == undefined || 
       this.state.selectedDate === undefined ||
       this.state.depatureDate === undefined ||
-      this.state.roomqty === undefined ||
-      this.state.adults === undefined ||
-      this.state.ratings === undefined ||
-      this.state.boardType === undefined
+      this.state.roomqty === "" ||
+      this.state.adults === "" ||
+      this.state.ratings === "" ||
+      this.state.boardType === ""
     ) {
       console.log("hello");
       return this.setState({ Errorvalidation: "true" });
+    }
+    if(moment(this.state.selectedDate) < moment(this.state.depatureDate)){
+      return this.setState({ dateError: "true" });
     }
 
     // if(this.state.destination !== null && this.state.destination[0].iataCode === undefined){
@@ -166,7 +198,7 @@ class Accomondations extends React.Component {
     // console.log("boardtype " + this.state.boardType);
 
     this.setState({ loading: "true" });
-
+    // console.log("itacodeee", this.state.iatacodee);
     var targetUrl = config.API_URL + "/restaurant/city/hotels";
     const requestOptions = {
       method: "POST",
@@ -212,6 +244,101 @@ class Accomondations extends React.Component {
     this.setState({ open: true });
   };
 
+  manageClose = () => {
+    this.setState({registered : "false"})
+  }
+
+  myDialogue = () => {
+    return (
+      // alert("hello")
+      <Dialog aria-labelledby="customized-dialog-title" open="true" onClose={this.manageClose}>
+        <MuiDialogTitle id="customized-dialog-title">
+          Welcome GoBikers..!!
+        </MuiDialogTitle>
+        <MuiDialogContent dividers>
+          <Typography gutterBottom>
+            Hotel booking has confirmed and added to your itinerary.
+          </Typography>
+        </MuiDialogContent>
+        {/* <DialogActions>
+          <Button onClick={manageClose} color="primary">
+            Close
+          </Button>
+        </DialogActions> */}
+      </Dialog>
+    );
+  };
+
+
+  addToItinerary = (name, hotel) => {
+    console.log("helere")
+    console.log(name)
+    console.log("itineray name " , name)
+    
+    console.log("      checkInDate:", this.state.depatureDate)
+    console.log("      checkOutDate: ", this.state.selectedDate)
+    console.log("city:", this.state.city)
+	  console.log("      adults: ",this.state.adults)
+    console.log("      travelClass:", this.state.travelClass)
+    console.log("      amount:", hotel.amount)
+    console.log("rating" , this.state.ratings)
+    console.log("name", hotel.name)
+    console.log("address:", hotel.address)
+    console.log("         phonenumber:", hotel.phonenumber)
+    console.log("          postalCode:", hotel.postalCode)
+    console.log("          chaincode:", hotel.chaincode)
+          // hotel: {
+          //     amount: hotel.amount,
+          //     rating: this.state.ratings,
+          //     name: hotel.name,
+          //     address: hotel.address,
+          //     phonenumber: hotel.phonenumber,
+          //     postalCode: hotel.postalCode,
+          //     chaincode: hotel.chaincode
+          // }
+  
+      var targetUrl = config.API_URL + "/accommodation/"+window.localStorage.getItem("username");
+      const ph = hotel.phonenumber.replace(/\s+/g, '');
+      console.log(this.state.city);
+      console.log(ph);
+
+      const requestOptions = {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          itineraryName: name,
+          checkInDate: this.state.selectedDate,
+          checkOutDate: this.state.arrivalDate,
+         	city: this.state.city,
+	        adults: this.state.adults,
+          hotel: {
+              amount: hotel.amount,
+              rating: this.state.ratings,
+              name: hotel.name,
+              address: hotel.address,
+              phonenumber: ph,
+              postalCode: hotel.postalCode,
+              chaincode: hotel.chaincode
+          }
+        }),
+      };
+
+      fetch(targetUrl, requestOptions)
+        .then((response) => {
+          // check for error response
+          if (response.status == "200") {
+            console.log("successfull")
+            this.setState({"registered":true})
+          }
+
+          // this.setState({ totalReactPackages: data.total })
+        })
+        .catch((error) => {
+          // this.setState({ errorMessage: error.toString() });
+          console.error("There was an error!", error);
+        });
+    };
 
   renderHotels = (hotels) => {
     return hotels.map((hotel) => {
@@ -219,26 +346,28 @@ class Accomondations extends React.Component {
         <Card
           raised="true"
           style={{
-            marginLeft: "10%",
-            height: "400px",
+            // marginLeft: "10%",
+            // height: "400px",
             margin: "2%",
+            width:"70%"
           }}
         >
           <div
             style={{
               backgroundColor: "darkgreen",
               color: "white",
-              border: "none",
+              // border: "none",
+              // marginLeft: "4%",
             }}
           >
             <Typography
               style={{
                 fontFamily:
                   "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif",
-                marginLeft: "3%",
                 fontSize: "24px",
                 fontWeight: "16px",
                 fontStretch: "expanded",
+                marginLeft:"4%"
               }}
               paragraph
             >
@@ -248,7 +377,7 @@ class Accomondations extends React.Component {
           <div
             style={{
               display: "flex",
-              backgroundColor: "floralwhite",
+              // backgroundColor: "floralwhite",
             }}
           >
             <CardContent>
@@ -256,7 +385,6 @@ class Accomondations extends React.Component {
                 style={{
                   fontFamily:
                     "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif",
-                  marginLeft: "3%",
                 }}
                 paragraph
               >
@@ -266,7 +394,6 @@ class Accomondations extends React.Component {
                 style={{
                   fontFamily:
                     "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif",
-                  marginLeft: "3%",
                 }}
                 paragraph
               >
@@ -276,7 +403,6 @@ class Accomondations extends React.Component {
                 style={{
                   fontFamily:
                     "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif",
-                  marginLeft: "3%",
                 }}
                 paragraph
               >
@@ -286,7 +412,6 @@ class Accomondations extends React.Component {
                 style={{
                   fontFamily:
                     "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif",
-                  marginLeft: "3%",
                 }}
                 paragraph
               >
@@ -296,30 +421,26 @@ class Accomondations extends React.Component {
                 style={{
                   fontFamily:
                     "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif",
-                  marginLeft: "3%",
                 }}
                 paragraph
               >
                 Chain code : {hotel.chaincode}
               </Typography>
-              <CardActions>
-                <Button
-                  size="small"
-                  color="primary"
-                  style={{ backgroundColor: "black", color: "white" }}
-                >
-                  Add to itinerary
-                </Button>
-              </CardActions>
-            </CardContent>
-            <CardContent style={{ display: "flex", width: "30%" }}>
-              <div>
+              {/* <CardContent>
+              <div style={{}}>
                 <img
-                  style={{ height: "40%", marginLeft: "30%" }}
+                  // style={{ height: "40%", marginLeft: "30%" }}
                   src={image}
                 ></img>
               </div>
+            </CardContent> */}
+              <CardActions>
+              <ItineraryPopup addToItinerary={(name) => {
+                 this.addToItinerary(name,hotel);
+            }}/>
+              </CardActions>
             </CardContent>
+            
             {/* <CardContent>
              
             </CardContent> */}
@@ -332,11 +453,11 @@ class Accomondations extends React.Component {
 
   variants = () => {
     return (
-      <div style={{ padding: "10%" }}>
-        <Skeleton variant="text" animation="pulse" />
-        <Skeleton variant="circle" width={210} height={60} animation="pulse" />
-        <Skeleton variant="rect" width={210} height={118} animation="pulse" />
-      </div>
+      <Card raised="true">
+      <h1>Searching....</h1>
+      <LinearProgress />
+      <LinearProgress color="secondary" />
+      </Card>
     );
   };
 
@@ -346,44 +467,37 @@ class Accomondations extends React.Component {
         style={{
           backgroundColor: "#d40035",
           color: "white",
-          textAlign: "left",
-          marginLeft: "14%",
-          maxWidth:"80%",
-          marginBottom:"2%",
-          padding:"2%",
+          // margin: "auto",
+          // marginLeft: "14%",
+          // width:"40%",
+          // marginBottom:"1%",
+          // padding:"1%",
           borderRadius:"8%"
 
         }}
       >
-        <Typography
+        {/* <Typography
           style={{
             fontSize: "18px",
             fontWeight: "10px",
           }}
-        >
+        > */}
           To continue please correct the following details,
           {props}
-        </Typography>
+        {/* </Typography> */}
       </div>
     );
   };
 
   errorComponent = (props) => {
-    console.log("helllllllllllo")
+   
     this.state.loading = "false";
-    // this.setState({loading: "false"})
+ 
     return (
-      <div
+      <Card raised="true"
         style={{
-          // backgroundColor: "#d40035",
-          // color: "white",
-          textAlign: "center",
-          // marginLeft: "14%",
-          width:"100%",
-          marginBottom:"2%",
-          padding:"2%",
-          // borderRadius:"8%",
-          // backgroundImage: image1
+          margin:"auto",
+          flex:"left"
         }}
       >
         <Typography
@@ -392,43 +506,43 @@ class Accomondations extends React.Component {
             fontWeight: "10px",
             alignContent:"center",
             color:"indigo",
-            marginLeft:"25%"
+            padding:"10%"
+            // marginLeft:"25%"
           }}
         >
           The hotels for the dates are unavailable. please try to select different dates or amenties
         </Typography>
-        <div>
+        {/* <div>
                 <img
                   style={{ height: "40%", marginLeft: "30%" }}
                   src={image1}
                 ></img>
-              </div>
+              </div> */}
         
-      </div>
+      </Card>
     );
   };
 
   render() {
     return (
       <Grid>
-         <Grid item xs={12}>
+         {/* <Grid item xs={12}>
+         {this.validations("all fields are mandatory")}
             {this.state.Errorvalidation === "true" ? this.validations("all fields are mandatory") : null}
             {this.state.invalidIataCode === "true" ? this.validations("Destination value is incorrect") : null}
-          </Grid>
+          </Grid> */}
         <Grid
-          container
-          // spacing={2}
+          container 
+
+          // // spacing={2}
           style={{
-            backgroundColor: "lightgray",
-            maxWidth: "150%",
-            marginLeft: "10%",
-            marginBottom: "14%",
-            // alignItems: "center",
-            display: "flex",
-            // marginLeft:"50px"
+            backgroundImage: "url(" + image1 + ")",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          minHeight: "100vh",
           }}
         >
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <div
               style={{
                 backgroundColor: "royalblue",
@@ -448,13 +562,24 @@ class Accomondations extends React.Component {
               </Typography>
               <div></div>
             </div>
-          </Grid>
+          </Grid> */}
+
+
+          
          
-          <div style={{ width: "100%", display: "flex", margin: "2%" }}>
-            <Grid item xs={12} sm={3}>
+           <Card raised="true" style={{display:"flex", width:"20%", height:"10%", margin:"4%"}}>
+            
+          <div style={{margin:"auto"}} >
+          <div> 
+          {this.state.dateError === "true" ? this.validations("departure date is later than arrival date") : null}
+          {this.state.Errorvalidation === "true" ? this.validations("all fields are mandatory") : null}
+            {this.state.invalidIataCode === "true" ? this.validations("Destination value is incorrect") : null}</div>
+            {/* <Grid item xs={12} sm={12}> */}
               <div
-                style={{ display: "inline" }}
-                // style={{ padding: "2%" }}
+
+              // style={{alignItems:"center", margin:"2%", }}
+                // style={{ display: "inline" }}
+                style={{ padding: "5%" }}
               >
                 <Typography
                   style={{
@@ -465,7 +590,6 @@ class Accomondations extends React.Component {
                   Destination
                 </Typography>
                 <AsyncTypeahead
-                  style={{ padding: "2%", marginRight: "4%" }}
                   id="source"
                   labelKey="name"
                   minLength={3}
@@ -477,14 +601,14 @@ class Accomondations extends React.Component {
                   placeholder="Find..."
                 />
               </div>
-            </Grid>
+            {/* </Grid> */}
 
-            <Grid item xs={12} sm={3}>
+            {/* <Grid item xs={12} sm={12}> */}
               <div
-                style={{ display: "inline" }}
-                style={{ width: "90%", marginLeft: "10%", paddingTop: "4%" }}
+                style={{ padding: "5%" }}
+                // style={{ width: "90%", marginLeft: "10%", paddingTop: "4%" }}
               >
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <MuiPickersUtilsProvider utils={MomentUtils}>
                   <KeyboardDatePicker
                     style={{
                       fontFamily:
@@ -492,7 +616,7 @@ class Accomondations extends React.Component {
                     }}
                     disableToolbar
                     variant="inline"
-                    format="yyyy-MM-dd"
+                    format="yyyy-MM-DD"
                     size="small"
                     id="date-picker-inline"
                     label="Departure date"
@@ -501,13 +625,12 @@ class Accomondations extends React.Component {
                   />
                 </MuiPickersUtilsProvider>
               </div>
-            </Grid>
-            <Grid item xs={12} sm={3}>
+            {/* </Grid> */}
+            {/* <Grid item xs={12} sm={12}> */}
               <div
-                style={{ display: "inline" }}
-                style={{ width: "90%", marginLeft: "8%", paddingTop: "4%" }}
+               style={{ padding: "5%" }}
               >
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <MuiPickersUtilsProvider utils={MomentUtils}>
                   <KeyboardDatePicker
                     style={{
                       fontFamily:
@@ -515,7 +638,7 @@ class Accomondations extends React.Component {
                     }}
                     disableToolbar
                     variant="inline"
-                    format="yyyy-MM-dd"
+                    format="yyyy-MM-DD"
                     size="small"
                     id="date-picker-inline"
                     label="Arival date"
@@ -524,11 +647,11 @@ class Accomondations extends React.Component {
                   />
                 </MuiPickersUtilsProvider>
               </div>
-            </Grid>
-            <Grid item xs={12} sm={3}>
+            {/* </Grid> */}
+            {/* <Grid item xs={12} sm={12}> */}
               <div
-                style={{ display: "inline" }}
-                style={{ width: "90%" }}
+                // style={{ display: "inline" }}
+               style={{ padding: "5%" }}
               >
                 <Autocomplete
                   options={this.noOfRooms}
@@ -551,11 +674,10 @@ class Accomondations extends React.Component {
                   )}
                 />
               </div>
-            </Grid>
-            <Grid item xs={12} sm={3}>
+            {/* </Grid> */}
+            {/* <Grid item xs={12} sm={12}> */}
               <div
-                style={{ display: "inline" }}
-                style={{ width: "90%" }}
+                style={{ padding: "6%" }}
               >
                 <Autocomplete
                   id="combo-box-demo4"
@@ -581,43 +703,15 @@ class Accomondations extends React.Component {
                   )}
                 />
               </div>
-            </Grid>
-            <Grid item xs={12} sm={3}>
+            {/* </Grid> */}
+            {/* <Grid item xs={12} sm={12}> */}
+              
+            {/* </Grid> */}
+            {/* <Grid item xs={12} sm={12}> */}
               <div
-                style={{ display: "inline" }}
-                style={{ width: "90%"}}
+                style={{ padding: "6%" }}
               >
-                <Autocomplete
-                  required
-                  options={this.rating}
-                  autoSelect
-                  value={this.state.ratings}
-                  onChange={this.handleRatings}
-                  renderInput={(params) => (
-                    <TextField
-                      style={{
-                        fontFamily:
-                          "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;",
-                        color: "indigo",
-                      }}
-                      {...params}
-                      id="start"
-                      label="Ratings"
-                      // value={value}
-                      onChange={this.handleRatings}
-                      variant="outlined"
-                      color="primary"
-                    />
-                  )}
-                />
-              </div>
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <div
-                style={{ display: "inline" }}
-                style={{ maxWidth: "90%" }}
-              >
-                <FormControl variant="outlined" style={{ width: "90%" }}>
+                <FormControl variant="outlined" style={{ width: "83%" }}>
                   <InputLabel htmlFor="outlined-age-native-simple">
                     Amenties
                   </InputLabel>
@@ -644,29 +738,67 @@ class Accomondations extends React.Component {
                   </Select>
                 </FormControl>
               </div>
-            </Grid>
 
-            <Grid item xs={12} sm={3}>
+              <div
+                style={{ padding: "6%" }}
+              >
+                <Autocomplete
+                  required
+                  options={this.rating}
+                  autoSelect
+                  value={this.state.ratings}
+                  onChange={this.handleRatings}
+                  renderInput={(params) => (
+                    <TextField
+                      style={{
+                        fontFamily:
+                          "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;",
+                        color: "indigo",
+                      }}
+                      {...params}
+                      id="start"
+                      label="Ratings"
+                      // value={value}
+                      onChange={this.handleRatings}
+                      variant="outlined"
+                      color="primary"
+                    />
+                  )}
+                />
+              </div>
+            {/* </Grid> */}
+<div
+                style={{ padding: "5%" }}
+              >
+            {/* <Grid item xs={12} sm={12}> */}
               <Button
                 color="primary"
                 variant="contained"
-                style={{ width: "90%", marginLeft: "2%", padding: "9%" }}
+                // style={{ padding: "5%" }}
                 onClick={this.handleHotelSearch}
               >
                 Search
               </Button>
-            </Grid>
+              </div>
+            {/* </Grid> */}
+         
           </div>
-        </Grid>
+          </Card>
+        {/* </Grid>
+        <Grid> */}
+          <div style={{margin:"auto", width:"40%", height:"20%"}}>
+    
 
-        <Grid>
-          <div style={{ width: "80%", height: "80%", marginLeft: "15%" }}>
+       
             {console.log(this.state.noResponse)}
             {console.log(this.state.loading)}
+            {/* {this.variants()} */}
             {this.state.loading === "false" ? null : this.variants()}
-
+            {/* {this.errorComponent("hello")} */}
             {this.state.noResponse === "true" ? this.errorComponent("hello") : null};
             {this.state.hotels && this.renderHotels(this.state.hotels)}
+            {this.state.registered === true ? this.myDialogue() : null}
+
             
           </div>
         </Grid>
