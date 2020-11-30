@@ -214,6 +214,7 @@ export default function ExploreComponent() {
                         <Rating
                             name="simple-controlled"
                             value={rating}
+                            precision={0.5}
                             onChange={(event, newValue) => {
                                 console.log(event)
                                 console.log(newValue)
