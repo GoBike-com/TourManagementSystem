@@ -23,7 +23,7 @@ export default function ExploreComponent() {
     const [place, setPlace] = React.useState("Chicago");
     const [placeData, setPlaceData] = React.useState([]);
     const [allDataLoaded, setAllDataLoaded] = React.useState(false);
-    const [rating, setValue] = React.useState();
+    const [rating, setValue] = React.useState(0);
     const [reviewOpen, setReviewOpen] = React.useState(false);
 
     //Styles
@@ -108,7 +108,6 @@ export default function ExploreComponent() {
 
     return (
         <div>
-
             <Autocomplete
                 clearOnBlur={false}
                 id="searchbar"
@@ -210,6 +209,36 @@ export default function ExploreComponent() {
                         </Link>    
                     </div>
                 </Typography>
+                <Typography>
+                        Provide your ratings:
+                        <Rating
+                            name="simple-controlled"
+                            value={rating}
+                            onChange={(event, newValue) => {
+                                console.log(event)
+                                console.log(newValue)
+                                setValue(newValue);
+                                var targetUrl = config.API_URL + "/place/"+placeData.name+"/rate";
+                                const requestOptions = {
+                                    method: "POST",
+                                    credentials: "include",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        userName: window.sessionStorage.getItem("username"),
+                                        place: placeData.name,
+                                        rating: newValue,      
+                                    }),
+                                    };
+                                fetch(targetUrl, requestOptions)
+                                    .then(res => res.json())
+                                    .then((res) => {
+                                    console.log(res)
+                                    window.location.reload(false);
+                                    // setIsLoading(false);
+                                    });
+                                }}
+                        />
+                </Typography>
             </div>
 
             <br/><br/><br/>
@@ -260,42 +289,11 @@ export default function ExploreComponent() {
                 }}
                 className={classes.modal}
                 >
-                <DialogTitle 
-                    // style={{backgroundColor: indigo[700]}} id="simple-dialog-title"
-                    >
-                        All Ratings
+                <DialogTitle>
+                        All Ratings <i>({placeData.ratings}/5)</i>
                 </DialogTitle>
                 <DialogContent>
                     <Typography>{allDataLoaded? displayAllRatings(placeData.ratingList): ""}</Typography>
-                    <Divider />
-                    <Typography variant="h6">
-                        Provide your ratings:
-                        <Rating
-                            name="simple-controlled"
-                            value={rating}
-                            onChange={(event, newValue) => {
-                                setValue(newValue);
-                                var targetUrl = config.API_URL + "/place/"+placeData.name+"/rate";
-                                const requestOptions = {
-                                    method: "POST",
-                                    credentials: "include",
-                                    headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({
-                                        userName: window.sessionStorage.getItem("username"),
-                                        place: placeData.name,
-                                        rating: newValue,      
-                                    }),
-                                    };
-                                fetch(targetUrl, requestOptions)
-                                    .then(res => res.json())
-                                    .then((res) => {
-                                    console.log(res)
-                                    window.location.reload(false);
-                                    // setIsLoading(false);
-                                    });
-                                }}
-                        />
-                    </Typography>
                 </DialogContent>
             </Dialog>
         </div>
@@ -329,7 +327,7 @@ export default function ExploreComponent() {
     function displayAllRatings(ratings){
         return ratings.map(rating =>(
             <div>
-                <Typography variant="p"> 
+                <Typography> 
                    <i> {rating.user.userName}</i>
                 </Typography>
                 <Typography style = {{display: 'flex'}}>
