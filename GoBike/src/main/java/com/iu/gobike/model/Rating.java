@@ -1,9 +1,11 @@
 package com.iu.gobike.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,6 +27,7 @@ public class Rating {
 
     @JoinColumn(name = "place")
     @ManyToOne
+    @JsonIgnore
     private Place place;
 
     @JoinColumn(name = "user")

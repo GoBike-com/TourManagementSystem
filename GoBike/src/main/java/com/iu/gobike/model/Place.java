@@ -76,6 +76,9 @@ public class Place implements Serializable {
     @Column(name="LONGITUDE")
     private Float longitude;
 
+    @OneToMany(mappedBy = "place")
+    private List<Rating> ratingList;
+
 //    @ManyToOne
 //    @JoinColumn(name = "USER_ITINERARY")
 //    @JsonIgnore
