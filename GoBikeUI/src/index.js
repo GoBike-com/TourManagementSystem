@@ -17,7 +17,6 @@ import Itinerary from './components/Dashboard/Itinerary';
 import NewItinerary from './components/Itinerary/NewItinerary';
 import Travel from './components/Dashboard/Travel';
 import Review from './components/Dashboard/Review';
-import Chat from './components/Dashboard/Chat';
 import GobikeMap from './components/Itinerary/GobikeMap';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -47,7 +46,6 @@ ReactDOM.render(
               <Route path="/newitinerary" exact component={NewItinerary} />
               <Route path="/travel" exact component={Travel} />
               <Route path="/review" exact component={Review} />
-              <Route path="/chat" exact component={Chat} />
               <Route path="/map" exact component={GobikeMap} />
             </Switch>
         <Footer/>

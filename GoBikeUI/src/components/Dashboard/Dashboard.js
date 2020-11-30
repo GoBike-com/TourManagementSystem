@@ -10,6 +10,12 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
+    {console.log("window.sessionStorage.getItem('firstLoad')", window.sessionStorage.getItem('firstLoad'))}
+    if( !window.sessionStorage.getItem('firstLoad'))
+    {
+      window.sessionStorage.setItem('firstLoad', true);
+      window.location.reload();
+    }  
     const { history } = this.props;
      window.addEventListener("popstate", () => {
      history.go(1);
