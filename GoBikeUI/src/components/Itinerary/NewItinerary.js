@@ -24,6 +24,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import {indigo } from '@material-ui/core/colors';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import Rating from "@material-ui/lab/Rating";
+import DisplayMapClass from "../Dashboard/Map";
 
 
 class NewItinerary extends React.Component {
@@ -36,7 +37,8 @@ class NewItinerary extends React.Component {
             itineraryName:'',
             plan:"",
             showComment:false,
-            error:false
+            error:false,
+            showmap: false
         };
         this.addItinerary = this.addItinerary.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
@@ -61,6 +63,13 @@ class NewItinerary extends React.Component {
             open:false
         })
       };
+
+    displayMap = (event) => {
+        event.preventDefault();
+        this.setState({
+            showmap: !this.state.showmap
+        });
+    }
 
     //Gets all of the itineraries with their details
     getAllItineraries = () => {
@@ -591,6 +600,10 @@ class NewItinerary extends React.Component {
                                     </div>
                                 }
 
+                                {/*Map*/}
+                                <Divider />
+                                {this.state.showmap === true ? <DisplayMapClass /> : null}
+
 
                                 {/*Actions*/}
                                 <Divider />
@@ -599,7 +612,16 @@ class NewItinerary extends React.Component {
                                             {
                                             e.preventDefault()
                                             this.handleOpen(itinerary.name)
-                                            }}>Share</Button>
+                                            }}>Share
+                                    </Button>
+                                    <Button size="small" onClick={e =>
+                                    {
+                                        e.preventDefault()
+                                        alert("Itinerary has been booked.")
+                                    }}>
+                                        Book
+                                    </Button>
+                                    <Button size="small" onClick={this.displayMap}>{this.state.showmap ? "Hide Map" : "Show Map"}</Button>
                                     <Button size="small" color="primary">
                                         Edit
                                     </Button>
