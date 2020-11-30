@@ -82,12 +82,15 @@ class NewItinerary extends React.Component {
                         flights: itineraryData.flights,
                         accommodations: itineraryData.accommodations,
                         plans: itineraryData.itinerary.plans,
-                        places: itineraryData.places
+                        places: itineraryData.itinerary.places
                     };
 
-                    const groupMemberData = itineraryData.users;
-                   // itinerary.groupMembers = groupMemberData.firstName + " " + groupMemberData.lastName;
-                  // itinerary.groupMembers = groupMemberData
+                    let users = itineraryData.users[0].firstName + " " + itineraryData.users[0].lastName;
+                    for(let j = 1; j < itineraryData.users.length; j += 1) {
+                        users += ", " + itineraryData.users[j].firstName + " " + itineraryData.users[j].lastName;
+                    }
+                    itinerary.users = users;
+
                     this.setState({
                         itineraries: this.state.itineraries.concat(itinerary)
                     });
@@ -249,7 +252,7 @@ class NewItinerary extends React.Component {
         return(
             <Box style={{ width:"100%"}} borderColor="primary.main" border={1} m={1} borderRadius="borderRadius">
                 {this.state.error && 
-                  <Alert severity="error">Please enter details for adding Plan..</Alert>
+                  <Alert severity="error">Please enter details for adding Plan.</Alert>
                 } 
                 <div style={{ display: 'flex', padding:"1%"}}>
                     <TextField
@@ -413,6 +416,25 @@ class NewItinerary extends React.Component {
                                 <AccordionDetails>
                                     <Typography>
                                         <b>End Date: </b>{itinerary.endDate}
+                                    </Typography>
+                                </AccordionDetails>
+                                
+                                {/*
+                                name: itineraryData.itinerary.name,
+                                startDate: itineraryData.itinerary.startDate,
+                                endDate: itineraryData.itinerary.endDate,
+                                createdDate: itineraryData.itinerary.createdDate,
+                                createdBy: itineraryData.itinerary.createdBy,
+                                flights: itineraryData.flights,
+                                accommodations: itineraryData.accommodations,
+                                plans: itineraryData.itinerary.plans,
+                                places: itineraryData.itinerary.places,
+                                users: itineraryData.users*/
+                                }
+                                {/*Users*/}
+                                <AccordionDetails>
+                                    <Typography>
+                                        <b>Group Members: </b>{itinerary.users}
                                     </Typography>
                                 </AccordionDetails>
 
