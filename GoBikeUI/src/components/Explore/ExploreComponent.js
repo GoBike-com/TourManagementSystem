@@ -290,7 +290,7 @@ export default function ExploreComponent() {
                 className={classes.modal}
                 >
                 <DialogTitle>
-                        All Ratings <i>({placeData.ratings}/5)</i>
+                        All Ratings <i>({parseFloat(placeData.ratings).toFixed(2)}/5)</i>
                 </DialogTitle>
                 <DialogContent>
                     <Typography>{allDataLoaded? displayAllRatings(placeData.ratingList): ""}</Typography>
