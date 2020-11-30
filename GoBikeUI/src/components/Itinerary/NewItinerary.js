@@ -506,18 +506,6 @@ class NewItinerary extends React.Component {
                                     </div>
                                 }
 
-                                {/*
-                                *name: itineraryData.itinerary.name,
-                                *startDate: itineraryData.itinerary.startDate,
-                                *endDate: itineraryData.itinerary.endDate,
-                                *createdDate: itineraryData.itinerary.createdDate,
-                                *createdBy: itineraryData.itinerary.createdBy,
-                                flights: itineraryData.flights,
-                                accommodations: itineraryData.accommodations,
-                                *plans: itineraryData.itinerary.plans,
-                                *places: itineraryData.itinerary.places,
-                                *users: itineraryData.users*/
-                                }
                                 {/*Flights*/}
                                 <Divider />
 
@@ -549,6 +537,54 @@ class NewItinerary extends React.Component {
                                                 </AccordionDetails>
                                                 <AccordionDetails>
                                                     <Typography><b>Duration: </b>{flight.duration}</Typography>
+                                                </AccordionDetails>
+                                            </div>
+                                        ))}
+                                    </div>
+                                }
+
+
+                                {/*
+                                *name: itineraryData.itinerary.name,
+                                *startDate: itineraryData.itinerary.startDate,
+                                *endDate: itineraryData.itinerary.endDate,
+                                *createdDate: itineraryData.itinerary.createdDate,
+                                *createdBy: itineraryData.itinerary.createdBy,
+                                *flights: itineraryData.flights,
+                                accommodations: itineraryData.accommodations,
+                                *plans: itineraryData.itinerary.plans,
+                                *places: itineraryData.itinerary.places,
+                                *users: itineraryData.users*/
+                                }
+
+                                {/*Accommodations*/}
+                                <Divider />
+
+                                {itinerary.accommodations.length == 0 ?
+                                    <AccordionDetails>
+                                        <Button size="small" variant="contained" color="primary" style={{ margin:"0.5%"}} href="/accomodation">Add Accommodation</Button>
+                                    </AccordionDetails>
+                                    :
+                                    <div>
+                                        <AccordionDetails>
+                                            <Typography variant="h4">Accommodations</Typography>
+                                        </AccordionDetails>
+                                        {itinerary.accommodations.map((accommodation) => (
+                                            <div>
+                                                <AccordionDetails>
+                                                    <Typography variant="h5">{accommodation.name}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Address: </b>{accommodation.address}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Zip Code: </b>{accommodation.postalCode}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Rating: </b>${accommodation.rating}</Typography>
+                                                </AccordionDetails>
+                                                <AccordionDetails>
+                                                    <Typography><b>Chain: </b>{accommodation.chaincode}</Typography>
                                                 </AccordionDetails>
                                             </div>
                                         ))}
