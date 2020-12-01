@@ -297,7 +297,7 @@ class Accomondations extends React.Component {
           //     chaincode: hotel.chaincode
           // }
   
-      var targetUrl = config.API_URL + "/accommodation/"+window.localStorage.getItem("username");
+      var targetUrl = config.API_URL + "/accommodation/"+window.sessionStorage.getItem("username");
       const ph = hotel.phonenumber.replace(/\s+/g, '');
       console.log(this.state.city);
       console.log(ph);
