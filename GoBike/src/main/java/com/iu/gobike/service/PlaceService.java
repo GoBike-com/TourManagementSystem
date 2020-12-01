@@ -16,4 +16,6 @@ public interface PlaceService {
     Place save(Place place);
 
     List<Place> findAll();
+
+    List<Place> topPlaces();
 }

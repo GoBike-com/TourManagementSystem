@@ -48,4 +48,9 @@ public class PlaceServiceImpl implements PlaceService{
         return p != null ? StreamSupport.stream(p.spliterator(), false)
                 .collect(Collectors.toList()) : Collections.emptyList();
     }
+
+    @Override
+    public List<Place> topPlaces() {
+        return placeRepository.findTop3ByOrderByRatingsDesc();
+    }
 }

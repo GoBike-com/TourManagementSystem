@@ -17,4 +17,6 @@ public interface PlaceRepository extends CrudRepository<Place, Long> {
     List<String> findAllName(String searchStr);
 
     Place findByName(String name);
+
+    List<Place> findTop3ByOrderByRatingsDesc();
 }
