@@ -6,6 +6,7 @@ import com.iu.gobike.model.Plan;
 import com.iu.gobike.model.UserItinerary;
 import com.iu.gobike.repository.UserItineraryRepository;
 import com.iu.gobike.service.ItineraryService;
+import com.iu.gobike.service.UserItineraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,9 @@ public class ItineraryController {
 
     @Autowired
     private ItineraryService itineraryService;
+
+    @Autowired
+    private UserItineraryService userItineraryService;
 
     @Autowired
     private UserItineraryRepository userItineraryRepository;
@@ -120,5 +124,10 @@ public class ItineraryController {
     @GetMapping( produces = "application/json")
     public ResponseEntity<Iterable<UserItinerary>> getALl(){
         return ResponseEntity.ok(userItineraryRepository.findAll());
+    }
+
+    @PutMapping(path = "/{itineraryname}/book/{username}",  produces = "application/json")
+    public ResponseEntity<Boolean> book(@PathVariable("username") String userName, @PathVariable("itineraryname") String itineraryName){
+        return ResponseEntity.ok(userItineraryService.book(userName, itineraryName));
     }
 }

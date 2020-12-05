@@ -69,7 +69,7 @@ public class Accommodation {
     @Column(name = "ADDRESS")
     private String address;
 
-    @Column(name = "booked")
+    @Column(name = "booked",columnDefinition="tinyint(1) default 0")
     private boolean booked;
 
     @Column(name="CREATED_DATE", updatable = false)
