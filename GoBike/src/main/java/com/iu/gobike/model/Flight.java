@@ -78,7 +78,7 @@ public class Flight {
     @Column(name="MODIFIED_BY")
     private String modifiedBy;
 
-    @Column(name="BOOKED")
+    @Column(name="BOOKED", columnDefinition="tinyint(1) default 0")
     private boolean booked;
 
     @PrePersist

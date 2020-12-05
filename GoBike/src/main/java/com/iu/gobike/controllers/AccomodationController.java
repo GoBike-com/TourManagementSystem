@@ -45,4 +45,14 @@ public class AccomodationController {
         return responseEntity;
     }
 
+    /**
+     * This API is responsible for deleting flight from itinerary
+     */
+    @DeleteMapping(path = "/{id}", produces = "application/json")
+    public ResponseEntity<Boolean> removeAccommodation(@PathVariable("id") Long id) {
+        ResponseEntity<String> responseEntity = null;
+        accomodationService.deletedAccommodation(id);
+        return ResponseEntity.ok(true);
+    }
+
 }
