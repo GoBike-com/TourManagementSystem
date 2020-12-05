@@ -21,6 +21,9 @@ import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import { config } from '../Constants';
+import Card from "@material-ui/core/Card";
+
+
 class UserRegistrationForm extends React.Component {
   constructor(props) {
     super(props);
@@ -271,18 +274,21 @@ class UserRegistrationForm extends React.Component {
         <Grid
           container
           direction="column"
-          spacing="2px"
+          // spacing="2px"
           style={{
+            // alignItems: "center",
+              // textAlign: "center",
             backgroundImage: "url(" + img + ")",
             backgroundPosition: "center",
             backgroundSize: "cover",
+            minHeight: "100vh",
             // width:"1200px",
             // marginLeft:"150px",
-            backgroundColor: "blue",
-            padding: "60px",
+            // backgroundColor: "blue",
+            // padding: "60px",
           }}
         >
-          <Avatar
+          {/* <Avatar
             className={this.classes.avatar}
             style={{
               alignItems: "center",
@@ -294,14 +300,17 @@ class UserRegistrationForm extends React.Component {
             <AccountBoxIcon
               style={{ alignItems: "center", textAlign: "center" }}
             />
-          </Avatar>
+          </Avatar> */}
           <Typography
             component="h1"
-            variant="h5"
+            // variant="h5"
             style={{
               alignItems: "center",
               textAlign: "center",
-              marginTop: "10px",
+              fontSize:"48px",
+              fontWeight:"20px",
+              fontStretch:"expanded"
+              // margin: "auto",
             }}
           >
             Register with GoBike

@@ -6,7 +6,7 @@ import classNames from "classnames";
 import Recommendations from "../Recommendations/Recommendations.js";
 import img13 from "../../assets/img/image13.jpg";
 import img14 from "../../assets/img/image14.jpg";
-import image from "../../assets/img/bikess.jpg";
+import image from "../../assets/img/bikingImage.jpg";
 
 const LandingPage = (props) => {
   const useStyles = makeStyles({
@@ -65,7 +65,7 @@ const LandingPage = (props) => {
                   backgroundImage: "url(" + image + ")",
                   backgroundPosition: "center",
                   backgroundSize: "cover",
-                  height:"75vh",
+                  minHeight:"100vh",
                   width:"100%",
                   backgroundRepeat: "no-repeat",
                 }}
