@@ -8,21 +8,20 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/core/Input";
 import Paper from "@material-ui/core/Paper";
 import Avatar from "@material-ui/core/Avatar";
-import Box from "@material-ui/core/Box";
-
+import Chip from "@material-ui/core/Chip";
 import PubNubReact from "pubnub-react";
 import CardHeader from "assets/components/Card/CardHeader";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import FaceIcon from '@material-ui/icons/Face';
+
 
 const now = new Date().getTime();
 
 let username = window.sessionStorage.getItem("username");
-if(username == null){
+if (username == null) {
   username = "GoBikers";
 }
 
@@ -60,7 +59,6 @@ class Message extends Component {
 }
 
 class ChatApp extends Component {
-  
   constructor(props) {
     super(props);
     this.pubnub = new PubNubReact({
@@ -75,8 +73,6 @@ class ChatApp extends Component {
     };
     this.pubnub.init(this);
   }
-
- 
 
   sendChat = () => {
     if (this.state.chatInput) {
@@ -151,10 +147,10 @@ class ChatApp extends Component {
         }}
       >
         <CardHeader
-          style={{ backgroundColor: "purple", flex: "left", marginTop:"2%" }}
+          style={{ backgroundColor: "purple", flex: "left", marginTop: "2%" }}
         >
           <Avatar style={{ backgroundColor: "violet", marginTop: "5%" }}>
-          {console.log(username)}
+            {console.log(username)}
             {username.substring(0, 1).toUpperCase()}
           </Avatar>
           <Typography
@@ -168,18 +164,53 @@ class ChatApp extends Component {
         </CardHeader>
         <CardContent>
           <div className={classes.root}>
-            <Paper style={{ height: "70vh", overflow: "auto", backgroundColor:"#DDA0DD"}}>
-              <List component="nav">
-                <ListItem>
-                  <Typography component="div" style={{color:"white", fontSize:"20px"}}>
-                    {this.state.messages}</Typography>
-                </ListItem>
-              </List>
+            <Paper
+              style={{
+                height: "70vh",
+                overflow: "auto",
+                backgroundColor: "#DDA0DD",
+              }}
+            >
+              {/* <Typography
+                    component="div"
+                    style={{
+                      color: "black",
+                      fontSize: "20px",
+                      borderRadius: "5px",
+                      display: "inline-block",
+                      backgroundColor: "white",
+                      marginBottom: "5%",
+                    }}
+                  >
+                    {this.state.messages}
+                  </Typography> */}
+              {this.state.messages.map((p) => {
+                return (
+                
+                  <List component="nav">
+                    <ListItem>
+                     
+                      <Chip
+                        avatar={<Avatar style={{backgroundColor:"white"}}> {<FaceIcon />}</Avatar>}
+                        label={p}
+                        clickable
+                        style={{backgroundColor:"indigo",color:"white"}}
+                      />
+                    </ListItem>
+                  </List>
+                );
+              })}
             </Paper>
           </div>
         </CardContent>
         <CardActions>
-          <Input style={{backgroundColor:"white", width:"60vh",height:"10vh", borderRadius:"8px"}}
+          <Input
+            style={{
+              backgroundColor: "white",
+              width: "60vh",
+              height: "10vh",
+              borderRadius: "8px",
+            }}
             placeholder=" Enter a message"
             value={this.state.chatInput}
             className={classes.input}

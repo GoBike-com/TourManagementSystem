@@ -11,7 +11,9 @@ import Grid from "@material-ui/core/Grid";
 // import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 // import { makeStyles } from "@material-ui/core/styles";
+import GoogleLogin from 'react-google-login';
 import image from "../../assets/img/Image3.jpg";
+import image1 from "../../assets/img/googlelogo.jpg";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import { withStyles } from "@material-ui/core/styles";
 import GitHubIcon from "@material-ui/icons/GitHub";
@@ -94,6 +96,7 @@ class MainLoginForm extends React.Component {
       this
     );
     this.responseFacebook = this.responseFacebook.bind(this);
+    this.loginGitHub = this.loginGitHub.bind(this);
   }
 
   handleUsernameChange = (event) => {
@@ -126,6 +129,9 @@ class MainLoginForm extends React.Component {
     );
   };
 
+  loginGitHub = (res) => {
+    console.log(res);
+  }
 
   login = () => {
     console.log("login");
@@ -165,6 +171,18 @@ class MainLoginForm extends React.Component {
         }
   });
 }}
+
+  responseGoogle = (response) => {
+    console.log(response.profileObj.givenName);
+    this.setState({isRegistered : true})
+            console.log("redirecting to home page.....");
+            window.sessionStorage.setItem("username",response.profileObj.givenName)
+            // window.sessionStorage.setItem("itineraries",null)
+            this.props.history.push({pathname : '/traveller/success',state:{
+              username:response.profileObj.givenName
+            }});
+          }
+
 
   responseFacebook = (response) => {
     this.setState({ username: response.email });
@@ -224,6 +242,8 @@ class MainLoginForm extends React.Component {
 
   render() {
     const { classes, history } = this.props;
+    const inStyle = { backgroundColor:"#3f51b5", color:"white",borderRadius:"6px",marginTop:"6px",width:"100%",fontSize:"14px",height:"25%"
+  ,fontFamily:"Roboto, Helvetica, Arial, sans-serif"}
     return (
       <div>
         <Grid container component="main" className={classes.root}>
@@ -311,12 +331,21 @@ class MainLoginForm extends React.Component {
                 </Grid>
                 <Grid container>
                   <Grid item xs={12} xm={8}>
+                      <GoogleLogin style={{backgroundColor:"lightblue"}}
+                      clientId="1033980153229-mr9b8ff7on1u0k38t3on5n0a2qjk4upj.apps.googleusercontent.com"
+                      buttonText="Login with Google"
+                      onSuccess={this.responseGoogle}
+                      onFailure={this.responseGoogle}
+                      render={renderProps => (
+                        <button onClick={renderProps.onClick} disabled={renderProps.disabled} style={inStyle}>LOGIN WITH GOOGLE</button>
+                      )}
+                      cookiePolicy={'single_host_origin'}/>
                       <Button
                           fullWidth
                           variant="contained"
                           color="primary"
                           className={classes.submit}
-                          onClick={this.login}
+                          onClick={this.loginGitHub}
                           href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`}
                       >
                         Login with GitHub

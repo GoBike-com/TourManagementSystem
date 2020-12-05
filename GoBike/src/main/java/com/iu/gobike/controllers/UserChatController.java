@@ -59,11 +59,18 @@ public class UserChatController {
 
     @GetMapping(path="/{username}", produces = "application/json")
     public ResponseEntity<Boolean> getChatEnableDetails(@PathVariable("username") String username){
-        User user = userRepository.findByUserName(username);
-        SharedChatUser u = userChatService.getChatStatus(user.getId());
-        if( u == null) {
-        	return ResponseEntity.ok(false);
-        }
-        return ResponseEntity.ok(u.getChatenable());
+        ResponseEntity<String> responseEntity= null;
+        try{
+            User user = userRepository.findByUserName(username);
+            SharedChatUser u = userChatService.getChatStatus(user.getId());
+            if( u == null) {
+                return ResponseEntity.ok(false);
+            }
+            return ResponseEntity.ok(u.getChatenable());
+    }
+    catch(Exception e){
+        System.out.println("no chat details available");
+    }
+       return null;
  }
 }
