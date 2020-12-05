@@ -67,4 +67,14 @@ public class TravelController {
         }
         return responseEntity;
     }
+
+    /**
+     * This API is responsible for deleting flight from itinerary
+     */
+    @DeleteMapping(path = "/flight/{id}", produces = "application/json")
+    public ResponseEntity<Boolean> removeFlight(@PathVariable("id") Long id) {
+        ResponseEntity<String> responseEntity = null;
+        travelService.deleteFlight(id);
+        return ResponseEntity.ok(true);
+    }
 }

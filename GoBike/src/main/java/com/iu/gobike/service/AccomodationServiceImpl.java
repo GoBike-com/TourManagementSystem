@@ -48,4 +48,9 @@ public class AccomodationServiceImpl implements AccomodationService{
         //userItinerary.setAccommodations(List.of(accommodation));
         // userItineraryRepository.save(userItinerary);
     }
+
+    @Override
+    public void deletedAccommodation(Long id) {
+        accommodationRepository.deleteById(id);
+    }
 }
