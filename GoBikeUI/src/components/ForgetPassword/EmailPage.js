@@ -1,6 +1,9 @@
 import React from "react";
 
 import EnterEmailForm from "./EnterEmailForm";
+import img from '../../assets/img/image21.jpg';
+import CssBaseline from "@material-ui/core/CssBaseline";
+
 
 // const useLoginStyles = makeStyles(loginStyles);
 
@@ -12,7 +15,19 @@ export default function EmailPage(props) {
     // const loginClasses = useLoginStyles();
     const { ...rest } = props;
     return (
-        <div>
+
+        <div style={
+            {
+                backgroundImage: "url(" + img + ")",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+            minHeight: "100vh",
+            }
+        }>
+
+           <CssBaseline />
+           
+
             <EnterEmailForm/>
             {/* <Header
                 absolute

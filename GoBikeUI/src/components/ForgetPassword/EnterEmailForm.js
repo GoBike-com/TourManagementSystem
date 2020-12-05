@@ -126,35 +126,23 @@ class EnterEmailForm extends React.Component {
     // }
     return (
       <div>
-        <Container
-          component="main"
-          maxWidth="xs"
-          style={{ alignItems: "center", marginTop: "150px" }}
-        >
-          <CssBaseline />
+              <CssBaseline />
 
-          <div className={this.classes.paper} style={{ marginTop: "100px" }}>
-            <Avatar
-              className={this.classes.avatar}
-              style={{
-                alignItems: "center",
-                textAlign: "center",
-                marginLeft: "180px",
-                backgroundColor: "indigo",
-              }}
-            >
-              <LockOutlinedIcon
-                style={{ alignItems: "center", textAlign: "center" }}
-              />
-            </Avatar>
-            ,
+        <Container 
+        
+        >
+          {/* <CssBaseline /> */}
+
+          <div >
+            
             <Typography
               component="h1"
               variant="h5"
               style={{
                 alignItems: "center",
                 textAlign: "center",
-                marginTop: "10px",
+                fontSize:"48px",
+                color:"royalblue"
               }}
             >
               Forget Password

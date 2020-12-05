@@ -138,7 +138,7 @@ class ChatApp extends Component {
         style={{
           maxWidth: "40%",
           margin: "2%",
-          backgroundColor: "#318CE7",
+          backgroundColor: "royalblue",
           backgroundImage: "url(" + image + ")",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
@@ -149,7 +149,7 @@ class ChatApp extends Component {
         <CardHeader
           style={{ backgroundColor: "purple", flex: "left", marginTop: "2%" }}
         >
-          <Avatar style={{ backgroundColor: "violet", marginTop: "5%" }}>
+          <Avatar style={{ backgroundColor: "royalblue", marginTop: "5%" }}>
             {console.log(username)}
             {username.substring(0, 1).toUpperCase()}
           </Avatar>
@@ -168,7 +168,7 @@ class ChatApp extends Component {
               style={{
                 height: "70vh",
                 overflow: "auto",
-                backgroundColor: "#DDA0DD",
+                backgroundColor: "LightSkyBlue",
               }}
             >
               {/* <Typography
@@ -184,7 +184,10 @@ class ChatApp extends Component {
                   >
                     {this.state.messages}
                   </Typography> */}
-              {this.state.messages.map((p) => {
+
+                  {console.log("otheruser is",window.sessionStorage.getItem("otheruser") )}
+                  {console.log("username is ", window.sessionStorage.getItem("username"))}
+              {window.sessionStorage.getItem("otheruser") !== null ? this.state.messages.map((p) => {
                 return (
                 
                   <List component="nav">
@@ -199,7 +202,24 @@ class ChatApp extends Component {
                     </ListItem>
                   </List>
                 );
-              })}
+              }): 
+              this.state.messages.map((p) => {
+                return (
+                
+                  <List component="nav">
+                    <ListItem>
+                     
+                      <Chip
+                        avatar={<Avatar style={{backgroundColor:"white"}}> {<FaceIcon />}</Avatar>}
+                        label={p}
+                        clickable
+                        style={{backgroundColor:"darkgreen",color:"white"}}
+                      />
+                    </ListItem>
+                  </List>
+                );
+              })
+              }
             </Paper>
           </div>
         </CardContent>
