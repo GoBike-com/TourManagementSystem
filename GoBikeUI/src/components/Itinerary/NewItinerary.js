@@ -259,7 +259,7 @@ class NewItinerary extends React.Component {
             this.getAllItineraries();
           } else if (response.status == "422") {
             alert(
-              "Ahh.. Please enter different itinerary name. This name has already been taken"
+              "Please enter different itinerary name. This name has already been taken."
             );
           }
         })

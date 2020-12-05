@@ -20,6 +20,7 @@ export default function ExploreComponent() {
     const [options, setOptions] = React.useState([]);
     const loading = open && options.length === 0;
     const [searchText, setSearchText] = React.useState("");
+    const [topPlaces, setTopPlaces] = React.useState([]);
     const [place, setPlace] = React.useState("Chicago");
     const [placeData, setPlaceData] = React.useState([]);
     const [allDataLoaded, setAllDataLoaded] = React.useState(false);
@@ -106,6 +107,34 @@ export default function ExploreComponent() {
             });
     }, [place]);
 
+    React.useEffect(() => {
+        const targetUrl = config.API_URL + "/place/top";
+        fetch(targetUrl, {
+            method:'get',
+            headers: {Accept: 'application/json'},
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setTopPlaces([]);
+                let allTopPlaces = [];
+
+                for (let i = 0; i < data.length; i += 1) {
+                    const placeDetails = data[i];
+                    const topPlace = {
+                        name: placeDetails.name,
+                        state: placeDetails.state,
+                        imageURL: placeDetails.activity[0].imageURL
+                    };
+                    allTopPlaces.push(topPlace);
+                }
+                setTopPlaces(allTopPlaces);
+            })
+            .catch((error) => {
+                console.log(error);
+                setOptions([]);
+            })
+    }, []);
+
     return (
         <div>
             <Autocomplete
@@ -149,6 +178,44 @@ export default function ExploreComponent() {
                     />
                 )}
             />
+
+            {/*Recommendations*/}
+            <Typography className={classes.placeTitle} variant="h1" gutterBottom align="center">
+                Top User Recommendations
+            </Typography>
+
+            <div>
+                <Grid container spacing={5}>
+                    {topPlaces.length == 0 ? "asdasdasdasd"
+                        :
+                        topPlaces.map((place) => (
+                                <Grid item md={4}>
+                                    <Card className={classes.root}>
+                                        <CardActionArea onClick={() => {
+                                            setPlace(place.name)
+                                        }} target="_blank">
+                                            <CardMedia
+                                                component="img"
+                                                className={classes.media}
+                                                height="140"
+                                                image={place.imageURL}
+                                                title={place.name}
+                                            />
+                                            <CardContent>
+                                                <Typography gutterBottom variant="h5" component="h2">
+                                                    {place.name}
+                                                </Typography>
+                                                <Typography variant="body2" color="textSecondary" component="p">
+                                                    {place.state}
+                                                </Typography>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Card>
+                                </Grid>
+                        ))
+                    }
+                </Grid>
+            </div>
 
             {/*Place Name*/}
             <Typography className={classes.placeTitle} variant="h1" gutterBottom align="center">
