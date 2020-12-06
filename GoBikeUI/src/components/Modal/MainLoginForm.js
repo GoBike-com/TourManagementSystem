@@ -399,7 +399,7 @@ class MainLoginForm extends React.Component {
                   <Grid item xs={12} xm={8}>
                     <GoogleLogin
                       style={{ backgroundColor: "lightblue" }}
-                      clientId="1033980153229-mr9b8ff7on1u0k38t3on5n0a2qjk4upj.apps.googleusercontent.com"
+                      clientId="196277232928-il71ltk47010ncabd64ofsan1p2abqt3.apps.googleusercontent.com"
                       buttonText="Login with Google"
                       onSuccess={this.responseGoogle}
                       onFailure={this.responseGoogle}
