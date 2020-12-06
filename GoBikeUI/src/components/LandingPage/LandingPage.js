@@ -40,6 +40,7 @@ const LandingPage = (props) => {
     Recommendations: {
       height: 200,
       backgroundImage: "url(../../assets/img/image13.jpg)",
+      minHeight:"220vh"
     },
     left: {
       float: "left",
@@ -52,9 +53,10 @@ const LandingPage = (props) => {
   const classes = useStyles();
   return (
     <div>
-      <div className={classes.mainContainer}>
-        <CssBaseline />
+      <CssBaseline />
 
+      <div className={classes.mainContainer}>
+        
         <Grid container direction="row" className={classes.mainbody}>
           <Grid item direction="row" xs={12} sm={2}></Grid>
           <Grid item direction="row" xs={12} sm={12}>

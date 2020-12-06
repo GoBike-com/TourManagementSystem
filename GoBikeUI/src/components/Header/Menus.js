@@ -89,12 +89,12 @@ export default function Menus() {
                     </ListItemIcon>
                     <ListItemText primary="Accommodation" />
                 </MenuItem>
-                <MenuItem onClick={(event) => handleSelectedMenu(event,'review')}>
+                {/* <MenuItem onClick={(event) => handleSelectedMenu(event,'review')}>
                     <ListItemIcon>
                         <RateReviewIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText primary="Review and Feedback" />
-                </MenuItem>
+                </MenuItem> */}
             </StyledMenu>
         </div>
     );

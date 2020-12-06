@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
+import image1 from "../../assets/img/image46.jpg";
 import {
   DialogContent,
   Dialog,
@@ -620,7 +621,12 @@ class NewItinerary extends React.Component {
       );
     } else {
       return (
-        <div>
+        <div style={{
+          backgroundImage: "url(" + image1 + ")",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          minHeight: "100vh",
+        }}>
           <Typography variant="h1" align="center">
             Itineraries
           </Typography>

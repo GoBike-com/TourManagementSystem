@@ -78,7 +78,7 @@ const Recommendations = (props) => {
                     color="textSecondary"
                     component="p"
                   >
-                    Chicago, on Lake Michigan in Illinois, is among the largest cities in the U.S. Famed for its bold architecture, it has a skyline punctuated by skyscrapers such as the iconic John Hancock Center, 1,451-ft. Willis Tower (formerly the Sears Tower) and the neo-Gothic Tribune Tower. The city is also renowned for its museums, including the Art Institute of Chicago with its noted Impressionist and Post-Impressionist works.
+                    Chicago, on Lake Michigan in Illinois, is among the largest cities in the U.S. Famed for its bold architecture, it has a skyline punctuated by skyscrapers such as the iconic John Hancock Center, 1,451-ft. Willis Tower (formerly the Sears Tower) and the neo-Gothic Tribune Tower. The city is also renowned for its museums, including the Art Institute of Chicago.
                   </Typography>
                 </CardContent>
               </CardActionArea>
@@ -112,7 +112,7 @@ const Recommendations = (props) => {
                     color="textSecondary"
                     component="p"
                   >
-                    San Francisco, officially the City and County of San Francisco, is the cultural, commercial, and financial center of Northern California. San Francisco is the 16th most populous city in the United States, and the fourth most populous in California, with 881,549 residents as of 2019.
+                    San Francisco, officially the City and County of San Francisco, is the cultural, commercial, and financial center of Northern California. San Francisco is the 16th most populous city in the United States, and the fourth most populous in California, with 881,549 residents as of 2019. The history of the city of San Francisco, California, and its development as a center of maritime trade.
                   </Typography>
                 </CardContent>
               </CardActionArea>
