@@ -61,7 +61,7 @@ public class Accommodation {
     private Integer numOfPerson;
 
     @Column(name = "CONTACT")
-    private Long contact;
+    private String contact;
 
     @Column(name = "FAX")
     private Long fax;

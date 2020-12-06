@@ -439,7 +439,7 @@ class Travel extends React.Component {
                       <AsyncTypeahead
                             id="source"
                             labelKey="name"
-                            minLength={3}
+                            minLength={5}
                             onChange={(selected) => this.setState({departurecity : selected})}
                             onSearch={this.handleAirportSearch}
                             options={this.state.options}
@@ -451,7 +451,7 @@ class Travel extends React.Component {
                         <AsyncTypeahead
                           id="destination"
                           labelKey="name"
-                          minLength={3}
+                          minLength={5}
                           onChange={(selected) => this.setState({arrivalcity : selected})}
                           onSearch={this.handleAirportSearch}
                           options={this.state.options}

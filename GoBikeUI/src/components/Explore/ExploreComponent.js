@@ -10,7 +10,7 @@ import RestaurantIcon from '@material-ui/icons/Restaurant';
 import HotelIcon from '@material-ui/icons/Hotel';
 import {Button, GridListTileBar, Link, Grid, Card, CardActionArea, CardMedia, CardContent,
      CardActions, Divider, Typography, CircularProgress,TextField, IconButton,Dialog,
-     DialogTitle,DialogActions,DialogContent} from "@material-ui/core";
+     DialogTitle,Box,DialogContent} from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
 import ItineraryPopup from "../Itinerary/ItineraryPopup";
 import Rating from "@material-ui/lab/Rating";
@@ -276,15 +276,14 @@ export default function ExploreComponent() {
                         </Link>    
                     </div>
                 </Typography>
-                <Typography>
-                        Provide your ratings:
+               { window.sessionStorage.getItem("username") && <Typography>
+                    <div  style = {{display:'flex'}} >
                         <Rating
                             name="simple-controlled"
+                            style = {{paddingRight :"1%"}}
                             value={rating}
                             precision={0.5}
                             onChange={(event, newValue) => {
-                                console.log(event)
-                                console.log(newValue)
                                 setValue(newValue);
                                 var targetUrl = config.API_URL + "/place/"+placeData.name+"/rate";
                                 const requestOptions = {
@@ -306,7 +305,9 @@ export default function ExploreComponent() {
                                     });
                                 }}
                         />
-                </Typography>
+                        <label style = {{fontSize:'13px'}}>Rate this place</label>
+                    </div>
+                </Typography>}
             </div>
 
             <br/><br/><br/>
