@@ -59,7 +59,8 @@ class NewItinerary extends React.Component {
       startDate: moment().format("YYYY-MM-DD"),
       endDate: moment().format("YYYY-MM-DD"),
       addItineraryOpen: false,
-      addItineraryName: ""
+      addItineraryName: "",
+      chatusers: [],
     };
     this.addItinerary = this.addItinerary.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -68,6 +69,7 @@ class NewItinerary extends React.Component {
     this.handleAddItineraryClose = this.handleAddItineraryClose.bind(this);
     this.handleUserSearch = this.handleUserSearch.bind(this);
     this.toggleShowComment = this.toggleShowComment.bind(this);
+    this.handleChat = this.handleChat.bind(this);
   }
 
   componentDidMount() {
@@ -90,6 +92,13 @@ class NewItinerary extends React.Component {
   handleAddItineraryOpen = () => {
     this.setState({
       addItineraryOpen: true
+    });
+  };
+
+  handleChat = (event) =>{
+    event.preventDefault();
+    this.setState({
+      displayChat: !this.state.displayChat,
     });
   };
 
@@ -216,7 +225,8 @@ class NewItinerary extends React.Component {
           }
           //DEEPIKA HERE
           itinerary.usernames = usernames;
-
+          this.setState({chatusers: itinerary.usernames});
+          this.shareChat(itinerary.usernames);
           this.setState({
             itineraries: this.state.itineraries.concat(itinerary),
           });
@@ -227,22 +237,26 @@ class NewItinerary extends React.Component {
       });
   };
 
-  shareChat = () => {
+  shareChat = (usernames) => {
     this.setState({sharedWithUser: true})
-    const url = config.API_URL + "/userchat/" + this.state.user[0] + "/true";
-    const requestOptions = {
-      method: "POST",
-      credentials: "include",
-    };
-    fetch(url, requestOptions).then((response) => {
-      if (response.status == "200") {
-        console.log("success");
-      }
-    });
+    for(let i = 0 ; i < usernames.length; i++){
+      console.log(usernames[i].userName)
+      const url = config.API_URL + "/userchat/" + usernames[i] + "/true";
+      const requestOptions = {
+        method: "POST",
+        credentials: "include",
+      };
+      fetch(url, requestOptions).then((response) => {
+        if (response.status == "200") {
+          console.log("success");
+        }
+      });
+    }
+    
   };
 
   share = () => {
-    this.shareChat();
+    this.shareChat(this.state.user[0].userName);
     console.log(this.state.user);
     var targetUrl = config.API_URL + "/itinerary/adduser";
     const requestOptions = {
@@ -641,6 +655,7 @@ class NewItinerary extends React.Component {
                 <AccordionDetails>
                   <Typography>
                     <b>Group Members: </b>
+                    {console.log("itinerary.users", itinerary.users)}
                     {itinerary.users}
                   </Typography>
                 </AccordionDetails>
@@ -882,6 +897,7 @@ class NewItinerary extends React.Component {
                 {/*Map*/}
                 <Divider />
                 {this.state.showmap === true ? <DisplayMapClass /> : null}
+                {this.state.displayChat === true ? <ChatApp chats={ itinerary.users} topic={itinerary.name}/> : null}
 
                 {/*Actions*/}
                 <Divider />
@@ -906,6 +922,9 @@ class NewItinerary extends React.Component {
                   </Button>
                   <Button size="small" onClick={this.displayMap}>
                     {this.state.showmap ? "Hide Map" : "Show Map"}
+                  </Button>
+                  <Button size="small" onClick={this.displayChat}>
+                    {this.state.displayChat ? "Hide Chat" : "Show Chat"}
                   </Button>
                   <Button size="small" color="primary">
                     Edit
@@ -952,7 +971,7 @@ class NewItinerary extends React.Component {
               </DialogActions>
             </DialogContent>
           </Dialog>
-          {console.log("sharedwithuser ", this.state.sharedWithUser)}
+          {/* {console.log("sharedwithuser ", this.state.sharedWithUser)}
           {console.log(
             "window.sessionStorage.getItem('shared') ",
             window.localStorage.getItem("shared")
@@ -971,7 +990,7 @@ class NewItinerary extends React.Component {
             </div>
           ) : null}
           {console.log("this.state.displayChat ", this.state.displayChat)}
-          {this.state.displayChat === true ? <ChatApp /> : null}
+          {this.state.displayChat === true ? <ChatApp /> : null} */}
 
           {/*Add Itinerary Popup*/}
           <Dialog open={this.state.addItineraryOpen} onClose={() => this.handleAddItineraryClose(false)} aria-labelledby="form-dialog-title">

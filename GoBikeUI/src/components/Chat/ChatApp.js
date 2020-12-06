@@ -15,8 +15,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
 import PubNubReact from "pubnub-react";
 import CardHeader from "assets/components/Card/CardHeader";
-import FaceIcon from '@material-ui/icons/Face';
-
+import FaceIcon from "@material-ui/icons/Face";
 
 const now = new Date().getTime();
 
@@ -72,6 +71,7 @@ class ChatApp extends Component {
       chatInput: "",
     };
     this.pubnub.init(this);
+    this.displayUsers = this.displayUsers.bind(this);
   }
 
   sendChat = () => {
@@ -131,47 +131,133 @@ class ChatApp extends Component {
     });
   }
 
-  render() {
-    const { classes } = this.props;
-    return (
-      <Card
-        style={{
-          maxWidth: "40%",
-          margin: "2%",
-          backgroundColor: "royalblue",
-          backgroundImage: "url(" + image + ")",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          minHeight: "100vh",
-          width: "60vh",
-        }}
-      >
-        <CardHeader
-          style={{ backgroundColor: "purple", flex: "left", marginTop: "2%" }}
-        >
+  displayUsers = (users) => {
+    {
+      console.log(users.length);
+    }
+    users.map((disuser) => {
+      {
+        console.log(disuser);
+      }
+      return (
+        <div>
           <Avatar style={{ backgroundColor: "royalblue", marginTop: "5%" }}>
-            {console.log(username)}
-            {username.substring(0, 1).toUpperCase()}
+            {disuser.substring(0, 1).toUpperCase()}
           </Avatar>
           <Typography
             gutterBottom
             variant="headline"
             component="h1"
-            style={{ color: "white" }}
+            style={{ color: "white", fontSize: "48px" }}
           >
-            GoBiker {username}
+            Let's plan our trip : {disuser}
           </Typography>
-        </CardHeader>
-        <CardContent>
-          <div className={classes.root}>
-            <Paper
-              style={{
-                height: "70vh",
-                overflow: "auto",
-                backgroundColor: "LightSkyBlue",
-              }}
+        </div>
+      );
+    });
+    // return(
+    //   for (let i = 0; i < users.length; i++){
+
+    //     <div>
+    //       <Avatar style={{ backgroundColor: "royalblue", marginTop: "5%" }}>{users[i].substring(0, 1).toUpperCase()}</Avatar>
+    //       <Typography
+    //         gutterBottom
+    //         variant="headline"
+    //         component="h1"
+    //         style={{ color: "white", fontSize:"48px" }}
+    //       >
+    //         Let's plan our trip :   {users[i]}
+    //       </Typography>
+
+    //     </div>
+    //   // );
+    // }
+    // )
+  };
+
+  render() {
+    const { classes } = this.props;
+    const liveusers = this.props.chats;
+    return (
+      <Card
+        style={{
+          maxWidth: "50%",
+          margin: "2%",
+          backgroundColor: "royalblue",
+          backgroundImage: "url(" + image + ")",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          minHeight: "70vh",
+          // width: "100vh",
+        }}
+      >
+        {/* <div style={{float:"left", boxSizing: "border-box",
+  "width": "50%",
+  "padding": "10px"}}> */}
+        {/* <div style={{float:"left", boxSizing: "border-box",
+  "width": "20%",
+  "padding": "10px"}}>
+        <CardHeader
+          style={{ backgroundColor: "purple", flex: "left", marginTop: "8%", minHeight: "100vh" }}
+        >
+          {liveusers.length}
+          {/* {liveusers.map(p => {
+            return(
+              <div>
+              {p}
+            </div>
+            )
+           
+          })} */}
+        {/* {this.displayUsers(liveusers)} */}
+        {/* {liveusers.map(u => {
+            return(<h1>
+              hello
+            </h1>)
+          })} */}
+        {/* {/* {this.props.chats.map( liveusers => {
+            return(
+              <Avatar style={{ backgroundColor: "royalblue", marginTop: "5%" }}> */}
+        {/* {console.log(liveusers)}
+             {liveusers.substring(0, 1).toUpperCase()}
+           </Avatar>
+            )
+             
+          })} */}
+
+        {/* </CardHeader> */}
+        {/* </div> */}
+        <div
+          style={{
+            boxSizing: "border-box",
+            width: "80%",
+            padding: "10px",
+            margin: "auto",
+          }}
+        >
+          <CardHeader
+            style={{ backgroundColor: "purple", flex: "left", marginTop: "2%" }}
+          >
+            <Typography
+              gutterBottom
+              variant="headline"
+              component="h1"
+              style={{ color: "white", fontSize: "48px" }}
             >
-              {/* <Typography
+              Let's plan our trip : {this.props.topic}
+            </Typography>
+          </CardHeader>
+
+          <CardContent>
+            <div className={classes.root}>
+              <Paper
+                style={{
+                  height: "75vh",
+                  overflow: "auto",
+                  backgroundColor: "LightSkyBlue",
+                }}
+              >
+                {/* <Typography
                     component="div"
                     style={{
                       color: "black",
@@ -185,62 +271,77 @@ class ChatApp extends Component {
                     {this.state.messages}
                   </Typography> */}
 
-                  {console.log("otheruser is",window.sessionStorage.getItem("otheruser") )}
-                  {console.log("username is ", window.sessionStorage.getItem("username"))}
-              {window.sessionStorage.getItem("otheruser") !== null ? this.state.messages.map((p) => {
-                return (
-                
-                  <List component="nav">
-                    <ListItem>
-                     
-                      <Chip
-                        avatar={<Avatar style={{backgroundColor:"white"}}> {<FaceIcon />}</Avatar>}
-                        label={p}
-                        clickable
-                        style={{backgroundColor:"indigo",color:"white"}}
-                      />
-                    </ListItem>
-                  </List>
-                );
-              }): 
-              this.state.messages.map((p) => {
-                return (
-                
-                  <List component="nav">
-                    <ListItem>
-                     
-                      <Chip
-                        avatar={<Avatar style={{backgroundColor:"white"}}> {<FaceIcon />}</Avatar>}
-                        label={p}
-                        clickable
-                        style={{backgroundColor:"darkgreen",color:"white"}}
-                      />
-                    </ListItem>
-                  </List>
-                );
-              })
-              }
-            </Paper>
-          </div>
-        </CardContent>
-        <CardActions>
-          <Input
-            style={{
-              backgroundColor: "white",
-              width: "60vh",
-              height: "10vh",
-              borderRadius: "8px",
-            }}
-            placeholder=" Enter a message"
-            value={this.state.chatInput}
-            className={classes.input}
-            onKeyDown={this.handleKeyPress}
-            onChange={this.setChatInput}
-            inputProps={{
-              "aria-label": "Description",
-            }}
-          />
-        </CardActions>
+                {/* {console.log("otheruser is",window.sessionStorage.getItem("otheruser") )}
+                  {console.log("username is ", window.sessionStorage.getItem("username"))} */}
+                {window.sessionStorage.getItem("otheruser") !== null
+                  ? this.state.messages.map((p) => {
+                      return (
+                        <List component="nav">
+                          <ListItem>
+                            <Chip
+                              avatar={
+                                <Avatar style={{ backgroundColor: "white" }}>
+                                  {" "}
+                                  {<FaceIcon />}
+                                </Avatar>
+                              }
+                              label={p}
+                              clickable
+                              style={{
+                                backgroundColor: "indigo",
+                                color: "white",
+                              }}
+                            />
+                          </ListItem>
+                        </List>
+                      );
+                    })
+                  : this.state.messages.map((p) => {
+                      return (
+                        <List component="nav">
+                          <ListItem>
+                            <Chip
+                              avatar={
+                                <Avatar style={{ backgroundColor: "white" }}>
+                                  {" "}
+                                  {<FaceIcon />}
+                                </Avatar>
+                              }
+                              label={p}
+                              clickable
+                              style={{
+                                backgroundColor: "darkgreen",
+                                color: "white",
+                              }}
+                            />
+                          </ListItem>
+                        </List>
+                      );
+                    })}
+              </Paper>
+            </div>
+          </CardContent>
+          <CardActions>
+            <Input
+              style={{
+                backgroundColor: "white",
+                width: "100%",
+                padding: "5px",
+                height: "13vh",
+                borderRadius: "8px",
+              }}
+              placeholder=" Enter a message"
+              value={this.state.chatInput}
+              className={classes.input}
+              onKeyDown={this.handleKeyPress}
+              onChange={this.setChatInput}
+              inputProps={{
+                "aria-label": "Description",
+              }}
+            />
+          </CardActions>
+        </div>
+        {/* </div> */}
       </Card>
     );
   }
