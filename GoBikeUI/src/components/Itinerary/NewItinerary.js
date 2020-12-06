@@ -210,6 +210,13 @@ class NewItinerary extends React.Component {
           }
           itinerary.users = users;
 
+          let usernames = [];
+          for (let j = 0; j < itineraryData.users.length; j += 1) {
+            usersnames.push(itineraryData.users[j].userName);
+          }
+          //DEEPIKA HERE
+          itinerary.usernames = usernames;
+
           this.setState({
             itineraries: this.state.itineraries.concat(itinerary),
           });
@@ -497,6 +504,84 @@ class NewItinerary extends React.Component {
             </Button>
           </Grid>
           <br />
+          {/*Add Itinerary Popup*/}
+          <Dialog open={this.state.addItineraryOpen} onClose={() => this.handleAddItineraryClose(false)} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Add Itinerary</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                To add an itinerary, please enter the name of the itinerary and the start/end dates below.
+              </DialogContentText>
+              <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Itinerary Name"
+                  type="text"
+                  fullWidth
+                  required={true}
+                  onChange={(event) => {
+                    this.setState({
+                      addItineraryName: event.target.value
+                    })
+                  }}
+              />
+              <MuiPickersUtilsProvider utils={MomentUtils}>
+                <KeyboardDatePicker
+                    style={{
+                      fontFamily:
+                          "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;",
+                    }}
+                    disableToolbar
+                    variant="inline"
+                    format="yyyy-MM-DD"
+                    size="small"
+                    id="date-picker-inline"
+                    label="Start Date"
+                    value={this.state.startDate}
+                    onChange={(date) => {
+                      this.setState({startDate: date});
+                      if(date >= this.state.endDate) {
+                        this.setState({
+                          endDate: date
+                        });
+                      }
+                    }}
+                />
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                  <KeyboardDatePicker
+                      style={{
+                        fontFamily:
+                            "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;",
+                      }}
+                      disableToolbar
+                      variant="inline"
+                      format="yyyy-MM-DD"
+                      size="small"
+                      id="date-picker-inline"
+                      label="End Date"
+                      value={this.state.endDate}
+                      onChange={(date) => {
+                        this.setState({endDate: date});
+                        if(date <= this.state.startDate) {
+                          this.setState({
+                            startDate: date
+                          });
+                        }
+                      }}
+
+                  />
+                </MuiPickersUtilsProvider>
+              </MuiPickersUtilsProvider>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => this.handleAddItineraryClose(false)} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={() => this.handleAddItineraryClose(true, this.state.addItineraryName, this.state.startDate, this.state.endDate)} color="primary">
+                Add
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       );
     } else {
