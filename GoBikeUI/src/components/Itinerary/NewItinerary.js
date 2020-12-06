@@ -212,7 +212,7 @@ class NewItinerary extends React.Component {
 
           let usernames = [];
           for (let j = 0; j < itineraryData.users.length; j += 1) {
-            usersnames.push(itineraryData.users[j].userName);
+            usernames.push(itineraryData.users[j].userName);
           }
           //DEEPIKA HERE
           itinerary.usernames = usernames;
