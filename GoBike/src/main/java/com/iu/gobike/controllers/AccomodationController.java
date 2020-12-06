@@ -15,7 +15,7 @@ import java.text.ParseException;
  */
 @RestController
 @RequestMapping(path = "/accommodation")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*", allowCredentials = "true")
 public class AccomodationController {
 
     @Autowired

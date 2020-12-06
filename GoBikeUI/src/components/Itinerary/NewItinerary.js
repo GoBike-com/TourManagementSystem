@@ -374,6 +374,7 @@ class NewItinerary extends React.Component {
   };
 
   commentComponent = (itinerary) => {
+    console.log(itinerary)
     return (
       <Box
         style={{ width: "100%" }}
@@ -392,8 +393,12 @@ class NewItinerary extends React.Component {
             type="date"
             color="primary"
             value={this.state.day}
-            InputLabelProps={{
-              shrink: true,
+            // InputLabelProps={{
+            //   shrink: true,
+            // }}
+            inputProps={{
+              min: moment(itinerary.startDate).format("YYYY-MM-DD"),
+              max: moment(itinerary.endDate).format("YYYY-MM-DD")
             }}
             style={{ paddingRight: "2%" }}
             onChange={this.handleDay}
@@ -417,7 +422,7 @@ class NewItinerary extends React.Component {
             startIcon={<SaveIcon />}
             onClick={(e) => {
               e.preventDefault();
-              this.savePlan(itinerary);
+              this.savePlan(itinerary.name);
             }}
           >
             Save
@@ -667,7 +672,7 @@ class NewItinerary extends React.Component {
                 )}
                 <AccordionDetails>
                   {this.state.showComment ? (
-                    this.commentComponent(itinerary.name)
+                    this.commentComponent(itinerary)
                   ) : (
                     <Button
                       size="small"
