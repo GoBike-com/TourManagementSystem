@@ -93,8 +93,8 @@ class NewItinerary extends React.Component {
     });
   };
 
-  handleAddItineraryClose = (name, startDate, endDate) => {
-    if (name && startDate && endDate) {
+  handleAddItineraryClose = (save, name, startDate, endDate) => {
+    if (save && name && startDate && endDate) {
       const targetCreateUrl =
           config.API_URL +
           "/itinerary/" +
@@ -117,7 +117,7 @@ class NewItinerary extends React.Component {
               this.setState({
                 addItineraryOpen: false
               });
-
+              alert("\"" + name + "\"" + " was added.");
             } else if (response.status == "422") {
               alert(
                   "Please enter different itinerary name. This name has already been taken."
@@ -125,12 +125,14 @@ class NewItinerary extends React.Component {
             }
           })
           .catch((error) => {
-            alert(error);
             console.error("There was an error!", error);
           });
-
-    } else if (startDate && endDate) {
-      alert("Please enter an itinerary name.");
+    } else if(save && !name) {
+      alert("Please enter an itinerary name.")
+    } else {
+      this.setState({
+        addItineraryOpen: false
+      });
     }
   };
 
@@ -208,6 +210,13 @@ class NewItinerary extends React.Component {
           }
           itinerary.users = users;
 
+          let usernames = [];
+          for (let j = 0; j < itineraryData.users.length; j += 1) {
+            usersnames.push(itineraryData.users[j].userName);
+          }
+          //DEEPIKA HERE
+          itinerary.usernames = usernames;
+
           this.setState({
             itineraries: this.state.itineraries.concat(itinerary),
           });
@@ -215,7 +224,6 @@ class NewItinerary extends React.Component {
       })
       .catch((error) => {
         console.log(error);
-        alert(error);
       });
   };
 
@@ -260,7 +268,6 @@ class NewItinerary extends React.Component {
         window.sessionStorage.setItem("shared", true);
       })
       .catch((error) => {
-        alert(error);
         console.error("There was an error!", error);
       });
   };
@@ -497,6 +504,84 @@ class NewItinerary extends React.Component {
             </Button>
           </Grid>
           <br />
+          {/*Add Itinerary Popup*/}
+          <Dialog open={this.state.addItineraryOpen} onClose={() => this.handleAddItineraryClose(false)} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Add Itinerary</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                To add an itinerary, please enter the name of the itinerary and the start/end dates below.
+              </DialogContentText>
+              <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Itinerary Name"
+                  type="text"
+                  fullWidth
+                  required={true}
+                  onChange={(event) => {
+                    this.setState({
+                      addItineraryName: event.target.value
+                    })
+                  }}
+              />
+              <MuiPickersUtilsProvider utils={MomentUtils}>
+                <KeyboardDatePicker
+                    style={{
+                      fontFamily:
+                          "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;",
+                    }}
+                    disableToolbar
+                    variant="inline"
+                    format="yyyy-MM-DD"
+                    size="small"
+                    id="date-picker-inline"
+                    label="Start Date"
+                    value={this.state.startDate}
+                    onChange={(date) => {
+                      this.setState({startDate: date});
+                      if(date >= this.state.endDate) {
+                        this.setState({
+                          endDate: date
+                        });
+                      }
+                    }}
+                />
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                  <KeyboardDatePicker
+                      style={{
+                        fontFamily:
+                            "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;",
+                      }}
+                      disableToolbar
+                      variant="inline"
+                      format="yyyy-MM-DD"
+                      size="small"
+                      id="date-picker-inline"
+                      label="End Date"
+                      value={this.state.endDate}
+                      onChange={(date) => {
+                        this.setState({endDate: date});
+                        if(date <= this.state.startDate) {
+                          this.setState({
+                            startDate: date
+                          });
+                        }
+                      }}
+
+                  />
+                </MuiPickersUtilsProvider>
+              </MuiPickersUtilsProvider>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => this.handleAddItineraryClose(false)} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={() => this.handleAddItineraryClose(true, this.state.addItineraryName, this.state.startDate, this.state.endDate)} color="primary">
+                Add
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       );
     } else {
@@ -889,7 +974,7 @@ class NewItinerary extends React.Component {
           {this.state.displayChat === true ? <ChatApp /> : null}
 
           {/*Add Itinerary Popup*/}
-          <Dialog open={this.state.addItineraryOpen} onClose={() => this.handleAddItineraryClose()} aria-labelledby="form-dialog-title">
+          <Dialog open={this.state.addItineraryOpen} onClose={() => this.handleAddItineraryClose(false)} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Add Itinerary</DialogTitle>
             <DialogContent>
               <DialogContentText>
@@ -924,6 +1009,11 @@ class NewItinerary extends React.Component {
                     value={this.state.startDate}
                     onChange={(date) => {
                       this.setState({startDate: date});
+                      if(date >= this.state.endDate) {
+                        this.setState({
+                          endDate: date
+                        });
+                      }
                     }}
                 />
                 <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -938,19 +1028,25 @@ class NewItinerary extends React.Component {
                       size="small"
                       id="date-picker-inline"
                       label="End Date"
-                      value={this.state.startDate}
+                      value={this.state.endDate}
                       onChange={(date) => {
                         this.setState({endDate: date});
+                        if(date <= this.state.startDate) {
+                          this.setState({
+                            startDate: date
+                          });
+                        }
                       }}
+
                   />
                 </MuiPickersUtilsProvider>
               </MuiPickersUtilsProvider>
             </DialogContent>
             <DialogActions>
-              <Button onClick={() => this.handleAddItineraryClose()} color="primary">
+              <Button onClick={() => this.handleAddItineraryClose(false)} color="primary">
                 Cancel
               </Button>
-              <Button onClick={() => this.handleAddItineraryClose(this.state.addItineraryName, this.state.startDate, this.state.endDate)} color="primary">
+              <Button onClick={() => this.handleAddItineraryClose(true, this.state.addItineraryName, this.state.startDate, this.state.endDate)} color="primary">
                 Add
               </Button>
             </DialogActions>
