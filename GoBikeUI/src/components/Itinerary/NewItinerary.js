@@ -125,7 +125,6 @@ class NewItinerary extends React.Component {
             }
           })
           .catch((error) => {
-            alert(error);
             console.error("There was an error!", error);
           });
 
@@ -215,7 +214,6 @@ class NewItinerary extends React.Component {
       })
       .catch((error) => {
         console.log(error);
-        alert(error);
       });
   };
 
@@ -260,7 +258,6 @@ class NewItinerary extends React.Component {
         window.sessionStorage.setItem("shared", true);
       })
       .catch((error) => {
-        alert(error);
         console.error("There was an error!", error);
       });
   };
