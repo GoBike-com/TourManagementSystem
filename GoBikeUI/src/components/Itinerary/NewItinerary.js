@@ -519,7 +519,12 @@ class NewItinerary extends React.Component {
 
     if (itineraries.length === 0) {
       return (
-        <div>
+        <div style={{
+          backgroundImage: "url(" + image1 + ")",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          minHeight: "100vh",
+        }}>
           <Typography variant="h1" align="center">
             Itineraries
           </Typography>
