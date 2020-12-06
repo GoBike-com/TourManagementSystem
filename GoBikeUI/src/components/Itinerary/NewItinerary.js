@@ -35,10 +35,12 @@ import AddCommentIcon from "@material-ui/icons/AddComment";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { indigo } from "@material-ui/core/colors";
 import "react-bootstrap-typeahead/css/Typeahead.css";
-import Rating from "@material-ui/lab/Rating";
 import DisplayMapClass from "../Dashboard/Map";
 import ChatApp from "../Chat/ChatApp";
 import ChatIcon from "@material-ui/icons/Chat";
+import MomentUtils from "@date-io/moment";
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
+import DialogContentText from "@material-ui/core/DialogContentText";
 
 class NewItinerary extends React.Component {
   constructor(props) {
@@ -54,10 +56,16 @@ class NewItinerary extends React.Component {
       showmap: false,
       sharedWithUser: false,
       displayChat: false,
+      startDate: moment().format("YYYY-MM-DD"),
+      endDate: moment().format("YYYY-MM-DD"),
+      addItineraryOpen: false,
+      addItineraryName: ""
     };
     this.addItinerary = this.addItinerary.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleAddItineraryOpen = this.handleAddItineraryOpen.bind(this);
+    this.handleAddItineraryClose = this.handleAddItineraryClose.bind(this);
     this.handleUserSearch = this.handleUserSearch.bind(this);
     this.toggleShowComment = this.toggleShowComment.bind(this);
   }
@@ -77,6 +85,53 @@ class NewItinerary extends React.Component {
     this.setState({
       open: false,
     });
+  };
+
+  handleAddItineraryOpen = () => {
+    this.setState({
+      addItineraryOpen: true
+    });
+  };
+
+  handleAddItineraryClose = (name, startDate, endDate) => {
+    if (name && startDate && endDate) {
+      const targetCreateUrl =
+          config.API_URL +
+          "/itinerary/" +
+          window.sessionStorage.getItem("username");
+      const requestOptions = {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name,
+          startDate: moment(startDate).format("YYYY-MM-DD"),
+          endDate: moment(endDate).format("YYYY-MM-DD")
+        }),
+      };
+
+      fetch(targetCreateUrl, requestOptions)
+          .then((response) => {
+            if (response.status == "200") {
+              this.getAllItineraries();
+              this.setState({
+                addItineraryOpen: false
+              });
+
+            } else if (response.status == "422") {
+              alert(
+                  "Please enter different itinerary name. This name has already been taken."
+              );
+            }
+          })
+          .catch((error) => {
+            alert(error);
+            console.error("There was an error!", error);
+          });
+
+    } else if (startDate && endDate) {
+      alert("Please enter an itinerary name.");
+    }
   };
 
   displayMap = (event) => {
@@ -232,44 +287,7 @@ class NewItinerary extends React.Component {
 
   addItinerary = (event) => {
     event.preventDefault();
-
-    const itineraryName = prompt(
-      "What do you want to call this new itinerary?"
-    );
-    if (itineraryName) {
-      const targetCreateUrl =
-        config.API_URL +
-        "/itinerary/" +
-        window.sessionStorage.getItem("username");
-      const requestOptions = {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: itineraryName,
-          //TODO: Will (me) make actual dates
-          startDate: "2020-12-21",
-          endDate: "2020-12-25",
-        }),
-      };
-
-      fetch(targetCreateUrl, requestOptions)
-        .then((response) => {
-          if (response.status == "200") {
-            this.getAllItineraries();
-          } else if (response.status == "422") {
-            alert(
-              "Ahh.. Please enter different itinerary name. This name has already been taken"
-            );
-          }
-        })
-        .catch((error) => {
-          alert(error);
-          console.error("There was an error!", error);
-        });
-
-      // window.location.href = "/search"
-    }
+    this.handleAddItineraryOpen();
   };
 
   useStyles = makeStyles((theme) => ({
@@ -486,6 +504,9 @@ class NewItinerary extends React.Component {
         <div>
           <Typography variant="h1" align="center">
             Itineraries
+          </Typography>
+          <Typography variant="h5" align="center">
+            You can manage your itineraries below. GoBike provides a bike upon arrival to your destination for the entire duration of your trip.
           </Typography>
 
           <br />
@@ -866,6 +887,74 @@ class NewItinerary extends React.Component {
           ) : null}
           {console.log("this.state.displayChat ", this.state.displayChat)}
           {this.state.displayChat === true ? <ChatApp /> : null}
+
+          {/*Add Itinerary Popup*/}
+          <Dialog open={this.state.addItineraryOpen} onClose={() => this.handleAddItineraryClose()} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Add Itinerary</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                To add an itinerary, please enter the name of the itinerary and the start/end dates below.
+              </DialogContentText>
+              <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Itinerary Name"
+                  type="text"
+                  fullWidth
+                  required={true}
+                  onChange={(event) => {
+                    this.setState({
+                      addItineraryName: event.target.value
+                    })
+                  }}
+              />
+              <MuiPickersUtilsProvider utils={MomentUtils}>
+                <KeyboardDatePicker
+                    style={{
+                      fontFamily:
+                          "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;",
+                    }}
+                    disableToolbar
+                    variant="inline"
+                    format="yyyy-MM-DD"
+                    size="small"
+                    id="date-picker-inline"
+                    label="Start Date"
+                    value={this.state.startDate}
+                    onChange={(date) => {
+                      this.setState({startDate: date});
+                    }}
+                />
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                  <KeyboardDatePicker
+                      style={{
+                        fontFamily:
+                            "BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;",
+                      }}
+                      disableToolbar
+                      variant="inline"
+                      format="yyyy-MM-DD"
+                      size="small"
+                      id="date-picker-inline"
+                      label="End Date"
+                      value={this.state.startDate}
+                      onChange={(date) => {
+                        this.setState({endDate: date});
+                      }}
+                  />
+                </MuiPickersUtilsProvider>
+              </MuiPickersUtilsProvider>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => this.handleAddItineraryClose()} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={() => this.handleAddItineraryClose(this.state.addItineraryName, this.state.startDate, this.state.endDate)} color="primary">
+                Add
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       );
     }
