@@ -89,12 +89,6 @@ export default function Menus() {
                     </ListItemIcon>
                     <ListItemText primary="Accommodation" />
                 </MenuItem>
-                <MenuItem onClick={(event) => handleSelectedMenu(event,'chat')}>
-                    <ListItemIcon>
-                        <ChatBubbleIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText primary="Chat" />
-                </MenuItem>
                 <MenuItem onClick={(event) => handleSelectedMenu(event,'review')}>
                     <ListItemIcon>
                         <RateReviewIcon fontSize="small" />

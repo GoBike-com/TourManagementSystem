@@ -14,4 +14,6 @@ public interface AccomodationService {
 
     void addAccommodation(AddAccommodationRequest request, String userName) throws ParseException;
 
+    void deletedAccommodation(Long id);
+
 }

@@ -14,4 +14,6 @@ public interface TravelService {
 
     void addFlight(AddTravelRequest request, String userName) throws ParseException;
 
+    void deleteFlight(Long id);
+
 }

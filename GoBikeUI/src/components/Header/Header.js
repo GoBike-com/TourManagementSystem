@@ -22,8 +22,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const shareChat = () => {
+    const user = window.sessionStorage.getItem("username");
+    var targetUrl = config.API_URL + "/userchat/" + user + "/false";
+    const requestOptions = {
+      method: "POST",
+      credentials: "include",
+}
+fetch(targetUrl, requestOptions)
+.then((response) => {
+    if (response.status == "200") {
+        console.log("success")
+    }
+})};
+
+
 const logout = (event) => {
     event.preventDefault();
+    shareChat();
     const targetUrl = config.API_URL + "/user/logout";
 
     fetch(targetUrl,
@@ -37,7 +53,7 @@ const logout = (event) => {
             // check for error response
             if (response.status == "200") {
                 console.log("redirecting to home page.....");
-                localStorage.clear();
+                sessionStorage.clear();
                 window.sessionStorage.clear();
                 window.location.href="/"
             }

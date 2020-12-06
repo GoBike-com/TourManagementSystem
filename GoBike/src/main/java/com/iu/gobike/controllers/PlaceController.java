@@ -63,4 +63,10 @@ public class PlaceController {
         return ResponseEntity.ok(places);
     }
 
+    @GetMapping(path = "/top", produces = "application/json")
+    public ResponseEntity<List<Place> > topPlaces() {
+        List<Place> places = placeService.topPlaces();
+        return ResponseEntity.ok(places);
+    }
+
 }

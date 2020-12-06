@@ -11,7 +11,9 @@ import Grid from "@material-ui/core/Grid";
 // import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 // import { makeStyles } from "@material-ui/core/styles";
+import GoogleLogin from "react-google-login";
 import image from "../../assets/img/Image3.jpg";
+import image1 from "../../assets/img/googlelogo.jpg";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import { withStyles } from "@material-ui/core/styles";
 import GitHubIcon from "@material-ui/icons/GitHub";
@@ -19,7 +21,7 @@ import firebase from "../Utility/firebase";
 import FormDialog from "./FormDialog";
 import FacebookLogin from "react-facebook-login";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { config } from '../Constants'
+import { config } from "../Constants";
 
 const CLIENT_ID = "194e95dcd20fa2f8e523";
 const REDIRECT_URI = "http://localhost:3000/traveller/success";
@@ -94,6 +96,7 @@ class MainLoginForm extends React.Component {
       this
     );
     this.responseFacebook = this.responseFacebook.bind(this);
+    this.loginGitHub = this.loginGitHub.bind(this);
   }
 
   handleUsernameChange = (event) => {
@@ -109,15 +112,15 @@ class MainLoginForm extends React.Component {
   };
 
   myalert = (props) => {
-    if(this.state.hasErr === true){
-      return(
+    if (this.state.hasErr === true) {
+      return (
         <Alert severity="error">
           <AlertTitle>Error</AlertTitle>
           <strong>{props}!</strong>
         </Alert>
       );
     }
-    
+
     return (
       <Alert severity="error">
         <AlertTitle>Error</AlertTitle>
@@ -126,53 +129,116 @@ class MainLoginForm extends React.Component {
     );
   };
 
+  loginGitHub = (res) => {
+    console.log(res);
+  };
 
   login = () => {
     console.log("login");
 
-    if(this.state.username === "" || this.state.password ===""){
-      return this.setState({ hasErr : true })
+    if (this.state.username === "" || this.state.password === "") {
+      return this.setState({ hasErr: true });
     }
 
-    if(this.state.username !== "" && this.state.password !== "" ){
-    var signUrl = config.API_URL + "/user/login";
+    if (this.state.username !== "" && this.state.password !== "") {
+      var signUrl = config.API_URL + "/user/login";
+      const requestOptions = {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          userName: this.state.username,
+          password: this.state.password,
+        }),
+      };
+
+      fetch(signUrl, requestOptions).then((data) => {
+        console.log(data.ok);
+        if (data.ok === true) {
+          this.setState({ isRegistered: true });
+          console.log("redirecting to home page.....");
+          window.sessionStorage.setItem("username", this.state.username);
+          // window.sessionStorage.setItem("itineraries",null)
+          this.props.history.push({
+            pathname: "/traveller/success",
+            state: {
+              username: this.state.username,
+            },
+          });
+        } else {
+          return this.setState({ isRegistered: false });
+        }
+      });
+    }
+  };
+
+  responseGoogle = (response) => {
+    // console.log(response.profileObj.givenName);
+    // console.log(response.profileObj)
+    this.setState({ isRegistered: true });
+    console.log("redirecting to home page.....");
+    window.sessionStorage.setItem("username", response.profileObj.givenName);
+    // window.sessionStorage.setItem("itineraries",null)
+
+    var targetUrl =
+      config.API_URL + "/user/register?password=" + response.profileObj.givenName;
     const requestOptions = {
       method: "POST",
       credentials: "include",
-      headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+      headers: {'Content-Type': 'application/json',Accept:'application/json'},
       body: JSON.stringify({
-        
-        userName: this.state.username,
-        password:this.state.password,
+        email: response.profileObj.email,
+        userName: response.profileObj.givenName,
+        firstName: response.profileObj.givenName,
+        lastName: response.profileObj.givenName,
       }),
     };
-
-    fetch(signUrl, requestOptions)
-      .then(data => {
-        console.log(data.ok);
-          if (data.ok === true) {
-            this.setState({isRegistered : true})
-            console.log("redirecting to home page.....");
-            window.sessionStorage.setItem("username",this.state.username)
-            // window.sessionStorage.setItem("itineraries",null)
-            this.props.history.push({pathname : '/traveller/success',state:{
-              username:this.state.username
-            }});
-          }
-        else {
-          return this.setState({isRegistered : false})
-        
+    fetch(targetUrl, requestOptions).then((response) => {
+      console.log(response);
+      // check for error response
+      if (response.status == "200") {
+        this.state.isRegistered = "True";
+        if (this.state.isRegistered == "True") {
+          console.log("redirecting to home page.....");
+          this.props.history.push({pathname:"/traveller/success", state: {
+            username: window.sessionStorage.getItem("username"),
+          }});
+          return this.setState({ isRegistered: true });
+          // <Redirect to={'/traveller/success'} />
         }
-  });
-}}
+        // get error message from body or default to response statusText
+      } else {
+        this.setState({ isRegistered: false });
+        // return (
+        //   <Alert severity="error">
+        //     <AlertTitle>Error</AlertTitle>
+        //     <strong>Already registered</strong>
+        //   </Alert>
+        // );
+      }
+      // this.setState({ totalReactPackages: data.total })
+    });
+    // this.props.history.push({
+    //   pathname: "/traveller/success",
+    //   state: {
+    //     username: response.profileObj.givenName,
+    //   },
+    // });
+  };
 
   responseFacebook = (response) => {
     this.setState({ username: response.email });
     this.setState({ password: "" });
     console.log(response);
-    this.props.history.push({pathname : '/traveller/success',state:{
-      username:this.state.username
-    }})
+    this.props.history.push({
+      pathname: "/traveller/success",
+      state: {
+        username: this.state.username,
+      },
+    });
 
     var firstName = "";
     var lastName = "";
@@ -224,6 +290,16 @@ class MainLoginForm extends React.Component {
 
   render() {
     const { classes, history } = this.props;
+    const inStyle = {
+      backgroundColor: "#3f51b5",
+      color: "white",
+      borderRadius: "6px",
+      marginTop: "6px",
+      width: "100%",
+      fontSize: "14px",
+      height: "125%",
+      fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+    };
     return (
       <div>
         <Grid container component="main" className={classes.root}>
@@ -253,9 +329,13 @@ class MainLoginForm extends React.Component {
                 </div>
               </Typography>
               <form className={classes.form} noValidate>
-              {this.state.hasErr === true ? this.myalert("username and password are mandatory") : null}
-              {this.state.isVerifiedUser === false ? this.myalert() : null}
-              {this.state.isRegistered === false ? this.myalert("entered credentials are not correct"):null}
+                {this.state.hasErr === true
+                  ? this.myalert("username and password are mandatory")
+                  : null}
+                {this.state.isVerifiedUser === false ? this.myalert() : null}
+                {this.state.isRegistered === false
+                  ? this.myalert("entered credentials are not correct")
+                  : null}
                 <TextField
                   variant="outlined"
                   margin="normal"
@@ -299,48 +379,74 @@ class MainLoginForm extends React.Component {
                 {/* </Link> */}
                 <Grid container>
                   <Grid item xs>
-                  <Link style={{textDecorationLine:"none",textAlign:'left'}} to={"/traveller/forgetpassword"}>
-                    Forgot password?
+                    <Link
+                      style={{ textDecorationLine: "none", textAlign: "left" }}
+                      to={"/traveller/forgetpassword"}
+                    >
+                      Forgot password?
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link to={"/traveller/register"} style={{textDecorationLine:"none",textAlign:'right'}}>
+                    <Link
+                      to={"/traveller/register"}
+                      style={{ textDecorationLine: "none", textAlign: "right" }}
+                    >
                       {"Don't have an account? Sign Up"}
                     </Link>
                   </Grid>
                 </Grid>
                 <Grid container>
                   <Grid item xs={12} xm={8}>
-                      <Button
-                          fullWidth
-                          variant="contained"
-                          color="primary"
-                          className={classes.submit}
-                          onClick={this.login}
-                          href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`}
-                      >
-                        Login with GitHub
-                        <GitHubIcon />
-                      </Button>
-                    <FacebookLogin
-                        appId="337521753991514"
-                        size="small"
-                        width="70px"
-                        autoLoad={false}
-                        fields="name,email,picture"
-                        callback={this.responseFacebook}
-                        buttonStyle={{borderRadius:"6px",marginTop:"6px",width:"100%",fontSize:"13px"}}
-                        render={(renderProps) => (
-                            <Button
-                                justIcon
-                                target="_blank"
-                                color="primary"
-                                onClick={renderProps.onClick}
-                            >
-
-                            </Button>
-                        )}
+                    <GoogleLogin
+                      style={{ backgroundColor: "lightblue" }}
+                      clientId="1033980153229-mr9b8ff7on1u0k38t3on5n0a2qjk4upj.apps.googleusercontent.com"
+                      buttonText="Login with Google"
+                      onSuccess={this.responseGoogle}
+                      onFailure={this.responseGoogle}
+                      render={(renderProps) => (
+                        <button
+                          onClick={renderProps.onClick}
+                          disabled={renderProps.disabled}
+                          style={inStyle}
+                        >
+                          LOGIN WITH GOOGLE
+                        </button>
+                      )}
+                      cookiePolicy={"single_host_origin"}
                     />
+                    {/* <Button
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      onClick={this.loginGitHub}
+                      href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`}
+                    >
+                      Login with GitHub
+                      <GitHubIcon />
+                    </Button>
+                    <FacebookLogin
+                      appId="337521753991514"
+                      size="small"
+                      width="70px"
+                      autoLoad={false}
+                      fields="name,email,picture"
+                      callback={this.responseFacebook}
+                      buttonStyle={{
+                        borderRadius: "6px",
+                        marginTop: "6px",
+                        width: "100%",
+                        fontSize: "13px",
+                      }}
+                      render={(renderProps) => (
+                        <Button
+                          justIcon
+                          target="_blank"
+                          color="primary"
+                          onClick={renderProps.onClick}
+                        ></Button>
+                      )} */}
+                    {/* /> */}
                   </Grid>
                 </Grid>
               </form>

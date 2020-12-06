@@ -59,4 +59,9 @@ public class TravelServiceImpl implements TravelService{
 
         flightRepository.save(flight);
     }
+
+    @Override
+    public void deleteFlight(Long id) {
+        flightRepository.deleteById(id);
+    }
 }

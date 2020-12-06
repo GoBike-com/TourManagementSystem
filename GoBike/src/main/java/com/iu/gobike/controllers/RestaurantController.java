@@ -56,7 +56,6 @@ public class RestaurantController {
 
     @PostMapping(path = "/city/hotels", produces = "application/json")
     public ResponseEntity<List<HotelInfo>> findByLocation(@RequestBody SearchHotelRequest req) {
-    	System.out.println("hellloooooooooooooooooo");
         List<HotelInfo> hn = restaurantService.searchHotels(req);
         if(hn == null) {
         	return ResponseEntity.ok(null);

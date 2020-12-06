@@ -1,176 +1,251 @@
 import React, { Component } from "react";
-// import Logo2 from "../../assets/img/logo2.png";
-import Button from "components/CustomButtons/Button.js";
-import { Grid, Paper, Typography } from "@material-ui/core";
+import ReactDOM from "react-dom";
+import "./ChatApp.css";
+import image from "../../assets/img/bg2.jpg";
+import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import TextField from "@material-ui/core/TextField";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import "./Store";
-import "./ChatApp.css";
-import { CTX } from "./Store";
-import { useStyles } from "@material-ui/pickers/views/Calendar/SlideTransition";
+import Typography from "@material-ui/core/Typography";
+import Input from "@material-ui/core/Input";
+import Paper from "@material-ui/core/Paper";
+import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
+import PubNubReact from "pubnub-react";
+import CardHeader from "assets/components/Card/CardHeader";
+import FaceIcon from '@material-ui/icons/Face';
 
-const style = {
-  link: {
-    color: "white",
+
+const now = new Date().getTime();
+
+let username = window.sessionStorage.getItem("username");
+if (username == null) {
+  username = "GoBikers";
+}
+
+const styles = {
+  card: {
+    maxWidth: 345,
+    margin: "0 auto" /* Added */,
+    float: "none" /* Added */,
+    marginbottom: "10px" /* Added */,
   },
-  bg: {
-    background: "linear-gradient(0deg, #e0e0e0 30%, #f5f5f5 90%)",
-    color: "black",
-    borderRadius: 5,
+  openCard: {
+    maxWidth: "10%",
+  },
+  openMedia: {
+    height: "109vh",
+  },
+  media: {
+    objectFit: "cover",
+  },
+  container: {
+    display: "flex",
+    flexWrap: "wrap",
   },
 };
 
-export default function ChatApp() {
-  const classes = useStyles();
+class Message extends Component {
+  render() {
+    return (
+      <div>
+        {" "}
+        {this.props.uuid}: {this.props.text}
+      </div>
+    );
+  }
+}
 
-  const { allChats, sendChatAction, user } = React.useContext(CTX);
+class ChatApp extends Component {
+  constructor(props) {
+    super(props);
+    this.pubnub = new PubNubReact({
+      publishKey: "pub-c-af9e408a-d4a8-473c-b591-81402cdf9aaf",
+      subscribeKey: "sub-c-7e76d5bc-2658-11e9-9508-c2e2c4d7488a",
+      uuid: username,
+    });
 
-  console.log(allChats);
+    this.state = {
+      messages: [],
+      chatInput: "",
+    };
+    this.pubnub.init(this);
+  }
 
-  const topics = Object.keys(allChats);
+  sendChat = () => {
+    if (this.state.chatInput) {
+      this.pubnub.publish({
+        message: {
+          text: this.state.chatInput,
+          uuid: username,
+        },
+        channel: "chatting",
+      });
+      this.setState({ chatInput: "" });
+    }
+  };
 
-  const [activeTopic, changeActiveTopic] = React.useState(topics[0]);
-  const [textValue, changeTextValue] = React.useState("");
+  setChatInput = (event) => {
+    this.setState({ chatInput: event.target.value });
+  };
 
-  return (
-    <div>
+  componentDidMount() {
+    this.pubnub.subscribe({
+      channels: ["chatting"],
+      withPresence: true,
+    });
+
+    this.pubnub.getMessage("chatting", (msg) => {
+      this.pubnub.hereNow(
+        {
+          channels: ["chatting"],
+          includeUUIDs: true,
+          includeState: true,
+        },
+        (status, response) => {
+          console.log(status);
+          console.log(response);
+        }
+      );
+      const { text, uuid } = msg.message;
+      let messages = this.state.messages;
+      messages.push(
+        <Message key={this.state.messages.length} uuid={uuid} text={text} />
+      );
+      this.setState({
+        messages: messages,
+      });
+    });
+  }
+
+  handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      this.sendChat();
+    }
+  };
+  componentWillUnmount() {
+    this.pubnub.unsubscribe({
+      channels: ["chatting"],
+    });
+  }
+
+  render() {
+    const { classes } = this.props;
+    return (
       <Card
-        raised="true"
         style={{
-          width: "80%",
-          marginLeft: "140px",
-          marginTop: "40px",
-          marginBottom: "20px",
+          maxWidth: "40%",
+          margin: "2%",
+          backgroundColor: "royalblue",
+          backgroundImage: "url(" + image + ")",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          minHeight: "100vh",
+          width: "60vh",
         }}
       >
-        {" "}
-        <Grid container style={{ marginLeft: "50px", marginTop: "20px" }}>
-          <Grid
-            item
-            style={{
-              backgroundColor: "#49274b",
-              width: "20%",
-              color: "white",
-              height: "50px",
-            }}
+        <CardHeader
+          style={{ backgroundColor: "purple", flex: "left", marginTop: "2%" }}
+        >
+          <Avatar style={{ backgroundColor: "royalblue", marginTop: "5%" }}>
+            {console.log(username)}
+            {username.substring(0, 1).toUpperCase()}
+          </Avatar>
+          <Typography
+            gutterBottom
+            variant="headline"
+            component="h1"
+            style={{ color: "white" }}
           >
-            View your buddies
-          </Grid>
-          <Grid
-            item
-            style={{
-              height: "20px",
-              width: "70%",
-              color: "white",
-              backgroundColor: "#49274b",
-              height: "50px",
-            }}
-          >
-            Welcome to GoBike ChatRoom
-            <div>Discussion Topic : {activeTopic}</div>
-          </Grid>
-        </Grid>
-        <Grid container style={{ marginLeft: "50px", marginBottom: "0px" }}>
-          <Grid
-            item
-            style={{
-              height: "500px",
-              backgroundColor: "#49274b",
-              width: "20%",
-              color: "white",
-            }}
-          >
-            <List>
-              {topics.map((topic) => (
-                <ListItem key={topic} style={{ cursor: "pointer" }}>
-                  {/* <ListItemAvatar> */}
-                  {/* <FaceIcon /> */}
-                  <ListItemText
-                    onClick={(e) => changeActiveTopic(e.target.innerText)}
-                    primary={topic}
-                  />
-                  {/* </ListItemAvatar> */}
-                </ListItem>
-              ))}
-            </List>
-          </Grid>
-          <Grid
-            item
-            style={{
-              height: "500px",
-              width: "70%",
-              color: "#49274b",
-            }}
-          >
-            <List style={{ padding: "10px" }}>
-              {allChats[activeTopic].map((chat, i) => (
-                <div key={i} style={{ display: "flex" }}>
-                  <Chip
-                    style={{ color: "center", alignItems: "center" }}
-                    label={chat.from}
-                  />
-                  <Typography
-                    style={{ padding: "5px", alignItems: "center" }}
-                    variant="body1"
+            GoBiker {username}
+          </Typography>
+        </CardHeader>
+        <CardContent>
+          <div className={classes.root}>
+            <Paper
+              style={{
+                height: "70vh",
+                overflow: "auto",
+                backgroundColor: "LightSkyBlue",
+              }}
+            >
+              {/* <Typography
+                    component="div"
+                    style={{
+                      color: "black",
+                      fontSize: "20px",
+                      borderRadius: "5px",
+                      display: "inline-block",
+                      backgroundColor: "white",
+                      marginBottom: "5%",
+                    }}
                   >
-                    {chat.msg}
-                  </Typography>
-                </div>
-              ))}
-            </List>
+                    {this.state.messages}
+                  </Typography> */}
 
-            {/* <MessageList messages={this.state.messages} /> */}
-          </Grid>
-        </Grid>
-        <Grid container style={{ marginLeft: "50px", marginBottom: "20px" }}>
-          {/* <Grid
-            item
+                  {console.log("otheruser is",window.sessionStorage.getItem("otheruser") )}
+                  {console.log("username is ", window.sessionStorage.getItem("username"))}
+              {window.sessionStorage.getItem("otheruser") !== null ? this.state.messages.map((p) => {
+                return (
+                
+                  <List component="nav">
+                    <ListItem>
+                     
+                      <Chip
+                        avatar={<Avatar style={{backgroundColor:"white"}}> {<FaceIcon />}</Avatar>}
+                        label={p}
+                        clickable
+                        style={{backgroundColor:"indigo",color:"white"}}
+                      />
+                    </ListItem>
+                  </List>
+                );
+              }): 
+              this.state.messages.map((p) => {
+                return (
+                
+                  <List component="nav">
+                    <ListItem>
+                     
+                      <Chip
+                        avatar={<Avatar style={{backgroundColor:"white"}}> {<FaceIcon />}</Avatar>}
+                        label={p}
+                        clickable
+                        style={{backgroundColor:"darkgreen",color:"white"}}
+                      />
+                    </ListItem>
+                  </List>
+                );
+              })
+              }
+            </Paper>
+          </div>
+        </CardContent>
+        <CardActions>
+          <Input
             style={{
-              width: "20%",
+              backgroundColor: "white",
+              width: "60vh",
+              height: "10vh",
+              borderRadius: "8px",
             }}
-          >
-            NewRoomForm +
-          </Grid> */}
-          <Grid
-            item
-            style={{
-              // marginTop: "2px",
-              marginLeft: "200px",
-              width: "70%",
+            placeholder=" Enter a message"
+            value={this.state.chatInput}
+            className={classes.input}
+            onKeyDown={this.handleKeyPress}
+            onChange={this.setChatInput}
+            inputProps={{
+              "aria-label": "Description",
             }}
-          >
-            <div style={{ display: "flex" }}>
-              <TextField
-                id="outlined-basic"
-                placeholder="Enter your text here..."
-                variant="outlined"
-                fullWidth="true"
-                value={textValue}
-                onChange={(e) => changeTextValue(e.target.value)}
-              />
-              <Button
-                style={{
-                  float: "right",
-                  height: "50px",
-                  width: "10%",
-                  backgroundColor: "#49274b",
-                }}
-                onClick={() => {
-                  sendChatAction({from: user, msg: textValue, topic:activeTopic});
-                  changeTextValue('');
-                }}
-              >
-                Send
-              </Button>
-            </div>
-          </Grid>
-          <Grid></Grid>
-        </Grid>
+          />
+        </CardActions>
       </Card>
-    </div>
-  );
+    );
+  }
 }
+
+export default withStyles(styles)(ChatApp);
+
+// ReactDOM.render(<ChatComponent />, document.getElementById('root'));
