@@ -240,7 +240,7 @@ class NewItinerary extends React.Component {
   shareChat = (usernames) => {
     this.setState({sharedWithUser: true})
     for(let i = 0 ; i < usernames.length; i++){
-      console.log(usernames[i].userName)
+      // console.log(usernames[i].userName)
       const url = config.API_URL + "/userchat/" + usernames[i] + "/true";
       const requestOptions = {
         method: "POST",
@@ -252,12 +252,27 @@ class NewItinerary extends React.Component {
         }
       });
     }
-    
   };
 
+
+  // shareChat1 = (user) => {
+  //   this.setState({sharedWithUser: true})
+    
+  //     // console.log(usernames[i].userName)
+  //   const url = config.API_URL + "/userchat/" + user + "/true";
+  //   const requestOptions = {
+  //       method: "POST",
+  //       credentials: "include",
+  //     };
+  //   fetch(url, requestOptions).then((response) => {
+  //       if (response.status == "200") {
+  //         console.log("success");
+  //       }
+  //     });
+  //   }
+
   share = () => {
-    this.shareChat(this.state.user[0].userName);
-    console.log(this.state.user);
+    // this.shareChat1(this.state.user[0].userName);
     var targetUrl = config.API_URL + "/itinerary/adduser";
     const requestOptions = {
       method: "POST",
