@@ -79,7 +79,73 @@ class NewItinerary extends React.Component {
     this.handleUserSearch = this.handleUserSearch.bind(this);
     this.toggleShowComment = this.toggleShowComment.bind(this);
     this.handleChat = this.handleChat.bind(this);
+    this.deletePlaceFromItinerary = this.deletePlaceFromItinerary.bind(this);
+    this.deleteAccommodationFromItinerary = this.deleteAccommodationFromItinerary.bind(this);
+    this.deleteFlightFromItinerary = this.deleteFlightFromItinerary.bind(this);
   }
+
+  deleteFlightFromItinerary = (flight) => {
+    const targetCreateUrl = config.API_URL + "/travel/flight/" + flight.id;
+    const requestOptions = {
+      method: "DELETE",
+      credentials: "include",
+      headers: {"Content-Type": "application/json"},
+    };
+
+    fetch(targetCreateUrl, requestOptions)
+        .then((response) => {
+          if (response.status == "200") {
+            this.getAllItineraries();
+            alert("\"" + flight.airline + "\"" + " was removed from itinerary.");
+          }
+        })
+        .catch((error) => {
+          alert("Error removing!");
+          console.error("There was an error!", error);
+        });
+  };
+
+  deleteAccommodationFromItinerary = (accommodation) => {
+    const targetCreateUrl = config.API_URL + "/accommodation/" + accommodation.id;
+    const requestOptions = {
+      method: "DELETE",
+      credentials: "include",
+      headers: {"Content-Type": "application/json"},
+    };
+
+    fetch(targetCreateUrl, requestOptions)
+        .then((response) => {
+          if (response.status == "200") {
+            this.getAllItineraries();
+            alert("\"" + accommodation.name + "\"" + " was removed from itinerary.");
+          }
+        })
+        .catch((error) => {
+          alert("Error removing!");
+          console.error("There was an error!", error);
+        });
+  };
+
+  deletePlaceFromItinerary = (place) => {
+    const targetCreateUrl = config.API_URL + "/place/" + place.id;
+    const requestOptions = {
+      method: "DELETE",
+      credentials: "include",
+      headers: {"Content-Type": "application/json"},
+    };
+
+    fetch(targetCreateUrl, requestOptions)
+        .then((response) => {
+          if (response.status == "200") {
+            this.getAllItineraries();
+            alert("\"" + place.place.name + "\"" + " was removed from itinerary.");
+          }
+        })
+        .catch((error) => {
+          alert("Error removing!");
+          console.error("There was an error!", error);
+        });
+  };
 
   handleCheckoutOpen = (itinerary) => {
     let booked = false;
@@ -110,9 +176,6 @@ class NewItinerary extends React.Component {
   };
 
   handleCheckoutClose = (save) => {
-    //TODO: Perform checks and book if booked or not
-    //@PutMapping(path = "/{itineraryname}/book/{username}",  produces = "application/json")
-
     // *name: itineraryData.itinerary.name,
     // *startDate: itineraryData.itinerary.startDate,
     // *endDate: itineraryData.itinerary.endDate,
@@ -593,6 +656,7 @@ class NewItinerary extends React.Component {
       showComment: !this.state.showComment,
     });
   };
+
   render() {
     const itineraries = this.state.itineraries;
     const classes = this.useStyles;
@@ -872,6 +936,14 @@ class NewItinerary extends React.Component {
                             ))}
                           </Grid>
                         </AccordionDetails>
+                        <AccordionDetails>
+                          <Button variant="contained" color="secondary" onClick={(e) => {
+                            e.preventDefault();
+                            this.deletePlaceFromItinerary(places);
+                          }}>
+                            Remove {places.place.name} from Itinerary
+                          </Button>
+                        </AccordionDetails>
                       </div>
                     ))}
                   </div>
@@ -932,6 +1004,14 @@ class NewItinerary extends React.Component {
                             <b>Duration: </b>
                             {flight.duration}
                           </Typography>
+                        </AccordionDetails>
+                        <AccordionDetails>
+                          <Button variant="contained" color="secondary" onClick={(e) => {
+                            e.preventDefault();
+                            this.deleteFlightFromItinerary(flight);
+                          }}>
+                            Remove {flight.airline} from Itinerary
+                          </Button>
                         </AccordionDetails>
                       </div>
                     ))}
@@ -1007,6 +1087,12 @@ class NewItinerary extends React.Component {
                             {accommodation.chainCode}
                           </Typography>
                         </AccordionDetails>
+                        <Button variant="contained" color="secondary" onClick={(e) => {
+                          e.preventDefault();
+                          this.deleteAccommodationFromItinerary(accommodation);
+                        }}>
+                          Remove {accommodation.name} from Itinerary
+                        </Button>
                       </div>
                     ))}
                   </div>
@@ -1043,9 +1129,6 @@ class NewItinerary extends React.Component {
                   </Button>
                   <Button size="small" onClick={this.displayChat}>
                     {this.state.displayChat ? "Hide Chat" : "Show Chat"}
-                  </Button>
-                  <Button size="small" color="primary">
-                    Edit
                   </Button>
                 </AccordionActions>
               </Accordion>
@@ -1242,6 +1325,7 @@ class NewItinerary extends React.Component {
               {/*CCV*/}
               <InputMask
                   mask="999"
+                  minLength={3}
                   value={this.state.creditCardCCV}
                   disabled={false}
                   maskChar=" "
