@@ -18,4 +18,6 @@ public interface PlaceService {
     List<Place> findAll();
 
     List<Place> topPlaces();
+
+    void deletePlace(Long id);
 }

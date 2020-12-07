@@ -1,6 +1,8 @@
 package com.iu.gobike.service;
 
+import com.iu.gobike.model.ItineraryPlace;
 import com.iu.gobike.model.Place;
+import com.iu.gobike.repository.ItineraryPlaceRepository;
 import com.iu.gobike.repository.PlaceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class PlaceServiceImpl implements PlaceService{
 
     @Autowired
     private PlaceRepository placeRepository;
+
+    @Autowired
+    private ItineraryPlaceRepository itineraryPlaceRepository;
 
     @Override
     public List<String> search(String searchStr) {
@@ -52,5 +57,10 @@ public class PlaceServiceImpl implements PlaceService{
     @Override
     public List<Place> topPlaces() {
         return placeRepository.findTop3ByOrderByRatingsDesc();
+    }
+
+    @Override
+    public void deletePlace(Long id) {
+        itineraryPlaceRepository.deleteById(id);
     }
 }
