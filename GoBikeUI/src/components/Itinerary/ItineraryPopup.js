@@ -27,30 +27,35 @@ export default function ItineraryPopup(props) {
     };
 
     React.useEffect(() => {
-        const targetGetUrl = config.API_URL + "/itinerary/" + window.sessionStorage.getItem("username");
-        fetch(targetGetUrl, {
-            method:'get',
-            headers: {Accept: 'application/json'},
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                let itinerariesToAdd = [];
-
-                for (let i = 0; i < data.itineraryDetails.length; i++) {
-                    const itineraryData = data.itineraryDetails[i];
-
-                    const itinerary = {
-                        name: itineraryData.itinerary.name,
-                    };
-
-                    itinerariesToAdd.push(itinerary);
-                }
-                setItineraries(itinerariesToAdd);
-
+        if(window.sessionStorage.getItem("username")){
+            const targetGetUrl = config.API_URL + "/itinerary/" + window.sessionStorage.getItem("username");
+            fetch(targetGetUrl, {
+                method:'get',
+                headers: {Accept: 'application/json'},
             })
-            .catch((error) => {
-                console.log(error);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    let itinerariesToAdd = [];
+    
+                    for (let i = 0; i < data.itineraryDetails.length; i++) {
+                        const itineraryData = data.itineraryDetails[i];
+    
+                        const itinerary = {
+                            name: itineraryData.itinerary.name,
+                        };
+    
+                        itinerariesToAdd.push(itinerary);
+                    }
+                    setItineraries(itinerariesToAdd);
+    
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else{
+            window.location.href="/traveller/signin"
+        }
+        
     }, []);
 
     return (
