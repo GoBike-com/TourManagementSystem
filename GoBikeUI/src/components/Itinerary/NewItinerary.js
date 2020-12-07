@@ -44,6 +44,12 @@ import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers"
 import DialogContentText from "@material-ui/core/DialogContentText";
 import MenuItem from "react-bootstrap-typeahead/lib/components/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
+import MapIcon from '@material-ui/icons/Map';
+import ChatIcon from '@material-ui/icons/Chat';
+import ShareIcon from '@material-ui/icons/Share';
+import BookIcon from '@material-ui/icons/Book';
+import DateRangeIcon from '@material-ui/icons/DateRange';
+import GroupIcon from '@material-ui/icons/Group';
 
 class NewItinerary extends React.Component {
   constructor(props) {
@@ -548,6 +554,10 @@ class NewItinerary extends React.Component {
       fontSize: theme.typography.pxToRem(15),
       fontWeight: theme.typography.fontWeightRegular,
     },
+    secondaryHeading: {
+      fontSize: theme.typography.pxToRem(15),
+      color: theme.palette.text.secondary,
+    },
     modal: {
       display: "flex",
       alignItems: "center",
@@ -880,37 +890,56 @@ class NewItinerary extends React.Component {
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
+                  style = {{backgroundColor:'#e0e0e0'}}
                 >
-                  <Typography className={classes.heading} variant="h3">
-                    {itinerary.name}
-                  </Typography>
+                  <div style = {{display:'inline-block'}}>
+                    <Typography className={classes.heading} variant="h4" style = {{color :'#01579b'}}>
+                      <b>{itinerary.name}</b>
+                    </Typography>
+                    <Typography className={classes.secondaryHeading}  style = {{paddingLeft :'10%'}}>
+                      <div style = {{display :'flex'}}>
+                        <DateRangeIcon color="primary"/>
+                        <div><b>{moment(itinerary.startDate).format("YYYY-MM-DD")} to {moment(itinerary.endDate).format("YYYY-MM-DD")}</b>
+                        </div>
+                      </div>
+                    </Typography>
+                    <Typography className={classes.secondaryHeading} style = {{paddingLeft :'10%'}}>
+                      <div style = {{display :'flex'}}>
+                        <GroupIcon color="primary"/> 
+                        <div>{itinerary.users}</div>
+                      </div>
+                    </Typography>
+                    <Typography className={classes.secondaryHeading} style = {{float :'right'}}>
+                        <i> Created by </i> {itinerary.createdBy}
+                    </Typography>
+                  </div>
                 </AccordionSummary>
-                <Divider />
-                <AccordionDetails>
+                <Divider style = {{height: '2px', backgroundColor:"#01579b" }}/>
+                {/* <AccordionDetails>
                   <Typography>
                     Created by {itinerary.createdBy} at {itinerary.createdDate}.
                   </Typography>
-                </AccordionDetails>
-                <AccordionDetails>
+                </AccordionDetails> */}
+                {/* <AccordionDetails>
                   <Typography>
                     <b>Start Date: </b>
-                    {itinerary.startDate}
+                    {moment(itinerary.startDate).format("YYYY-MM-DD")}
                   </Typography>
                 </AccordionDetails>
                 <AccordionDetails>
                   <Typography>
                     <b>End Date: </b>
-                    {itinerary.endDate}
+                    {moment(itinerary.endDate).format("YYYY-MM-DD")}
                   </Typography>
-                </AccordionDetails>
+                </AccordionDetails> */}
                 {/*Users*/}
-                <AccordionDetails>
+                {/* <AccordionDetails>
                   <Typography>
                     <b>Group Members: </b>
                     {console.log("itinerary.users", itinerary.users)}
                     {itinerary.users}
                   </Typography>
-                </AccordionDetails>
+                </AccordionDetails> */}
 
                 {itinerary.plans.length > 0 && (
                   <AccordionDetails>
@@ -939,7 +968,7 @@ class NewItinerary extends React.Component {
                 {/* <AccordionDetails>
                                     {this.commentComponent(itinerary.name)}
                                 </AccordionDetails> */}
-                <Divider />
+                <Divider style = {{height: '2px', backgroundColor:"#01579b" }}/>
 
                 {/*Places*/}
                 {itinerary.places.length == 0 ? (
@@ -1027,7 +1056,7 @@ class NewItinerary extends React.Component {
                 )}
 
                 {/*Flights*/}
-                <Divider />
+                <Divider style = {{height: '2px', backgroundColor:"#01579b" }}/>
 
                 {itinerary.flights.length == 0 ? (
                   <AccordionDetails>
@@ -1095,7 +1124,7 @@ class NewItinerary extends React.Component {
                   </div>
                 )}
                 {/*Accommodations*/}
-                <Divider />
+                <Divider style = {{height: '2px', backgroundColor:"#01579b"}}/>
 
                 {itinerary.accommodations.length == 0 ? (
                   <AccordionDetails>
@@ -1176,35 +1205,39 @@ class NewItinerary extends React.Component {
                 )}
 
                 {/*Map*/}
-                <Divider />
+                <Divider style = {{height: '2px', backgroundColor:"#01579b"}}/>
                 {this.state.showmap === true ? <DisplayMapClass /> : null}
                 {this.state.displayChat === true ? <ChatApp chats={ itinerary.users} topic={itinerary.name}/> : null}
 
                 {/*Actions*/}
-                <Divider />
-                <AccordionActions>
+                <Divider style = {{height: '2px', backgroundColor:"#01579b"}}/>
+                <AccordionActions style = {{backgroundColor:'#e0e0e0'}}>
                   <Button
-                    size="small"
+                    size="large"
+                    color="primary"
                     onClick={(e) => {
                       e.preventDefault();
                       this.handleOpen(itinerary.name);
                     }}
+                    startIcon={<ShareIcon/>}
                   >
                     Share
                   </Button>
                   <Button
-                    size="small"
+                    size="large"
+                    color="primary"
                     onClick={(e) => {
                       e.preventDefault();
                       this.handleCheckoutOpen(itinerary);
                     }}
+                    startIcon={<BookIcon/>}
                   >
                     Book
                   </Button>
-                  <Button size="small" onClick={this.displayMap}>
+                  <Button size="large" color="primary" onClick={this.displayMap} startIcon={<MapIcon/>}>
                     {this.state.showmap ? "Hide Map" : "Show Map"}
                   </Button>
-                  <Button size="small" onClick={this.displayChat}>
+                  <Button size="large" color="primary" onClick={this.displayChat} startIcon={<ChatIcon/>}>
                     {this.state.displayChat ? "Hide Chat" : "Show Chat"}
                   </Button>
                 </AccordionActions>
@@ -1348,22 +1381,6 @@ class NewItinerary extends React.Component {
               </Button>
             </DialogActions>
           </Dialog>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         {/*Checkout Popup*/}
           <Dialog open={this.state.checkoutOpen} onClose={() => this.handleCheckoutClose(false)} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Checkout</DialogTitle>
@@ -1465,7 +1482,7 @@ class NewItinerary extends React.Component {
                         </Typography>
                       </div>
                   ))}
-                  <Divider />
+                  <Divider/>
               {/*Total*/}
               <Typography><b>Total: </b>{this.state.currencySymbol}{(this.state.checkoutItinerary.totalCost * this.state.exchangeRate).toFixed(2)}</Typography>
             </DialogContent>
