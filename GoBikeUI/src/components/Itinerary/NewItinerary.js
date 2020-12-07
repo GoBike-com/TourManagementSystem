@@ -532,7 +532,12 @@ class NewItinerary extends React.Component {
 
   addItinerary = (event) => {
     event.preventDefault();
-    this.handleAddItineraryOpen();
+    if(window.sessionStorage.getItem("username")){
+      this.handleAddItineraryOpen();
+    } else {
+      window.location.href="/traveller/signin"
+    }
+    
   };
 
   useStyles = makeStyles((theme) => ({
