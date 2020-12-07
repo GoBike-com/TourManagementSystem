@@ -911,13 +911,33 @@ class NewItinerary extends React.Component {
                         </AccordionDetails>
                         <AccordionDetails>
                           <Typography>
-                            <b>Rating: </b>${accommodation.rating}
+                            <b>Price: </b>${accommodation.amount}
+                          </Typography>
+                        </AccordionDetails>
+                        <AccordionDetails>
+                          <Typography>
+                            <b>Rating: </b>{accommodation.ratings}
+                          </Typography>
+                        </AccordionDetails>
+                        <AccordionDetails>
+                          <Typography>
+                            <b>Check in: </b>{accommodation.checkIn}
+                          </Typography>
+                        </AccordionDetails>
+                        <AccordionDetails>
+                          <Typography>
+                            <b>Check Out: </b>{accommodation.checkOut}
+                          </Typography>
+                        </AccordionDetails>
+                        <AccordionDetails>
+                          <Typography>
+                            <b>Phone Number: </b>{accommodation.contact}
                           </Typography>
                         </AccordionDetails>
                         <AccordionDetails>
                           <Typography>
                             <b>Chain: </b>
-                            {accommodation.chaincode}
+                            {accommodation.chainCode}
                           </Typography>
                         </AccordionDetails>
                       </div>
