@@ -16,6 +16,7 @@ import Chip from "@material-ui/core/Chip";
 import PubNubReact from "pubnub-react";
 import CardHeader from "assets/components/Card/CardHeader";
 import FaceIcon from "@material-ui/icons/Face";
+import GroupIcon from "@material-ui/icons/Group";
 
 const now = new Date().getTime();
 
@@ -71,7 +72,6 @@ class ChatApp extends Component {
       chatInput: "",
     };
     this.pubnub.init(this);
-    this.displayUsers = this.displayUsers.bind(this);
   }
 
   sendChat = () => {
@@ -131,49 +131,50 @@ class ChatApp extends Component {
     });
   }
 
-  displayUsers = (users) => {
-    {
-      console.log(users.length);
-    }
-    users.map((disuser) => {
-      {
-        console.log(disuser);
-      }
-      return (
-        <div>
-          <Avatar style={{ backgroundColor: "royalblue", marginTop: "5%" }}>
-            {disuser.substring(0, 1).toUpperCase()}
-          </Avatar>
-          <Typography
-            gutterBottom
-            variant="headline"
-            component="h1"
-            style={{ color: "white", fontSize: "48px" }}
-          >
-            Let's plan our trip : {disuser}
-          </Typography>
-        </div>
-      );
-    });
-    // return(
-    //   for (let i = 0; i < users.length; i++){
+  // displayUsers = (users) => {
+  //   {
+  //     console.log(users.length);
+  //   }
+  //   users.map((disuser) => {
+  //     {
+  //       console.log(disuser);
+  //     }
+  //     return (
+  //       <div>
+  //         {/* <Avatar style={{ backgroundColor: "royalblue", marginTop: "5%" }}>
+  //           {disuser.substring(0, 1).toUpperCase()}
+  //         </Avatar> */}
 
-    //     <div>
-    //       <Avatar style={{ backgroundColor: "royalblue", marginTop: "5%" }}>{users[i].substring(0, 1).toUpperCase()}</Avatar>
-    //       <Typography
-    //         gutterBottom
-    //         variant="headline"
-    //         component="h1"
-    //         style={{ color: "white", fontSize:"48px" }}
-    //       >
-    //         Let's plan our trip :   {users[i]}
-    //       </Typography>
+  //         <Typography
+  //           gutterBottom
+  //           variant="headline"
+  //           component="h1"
+  //           style={{ color: "white", fontSize: "48px" }}
+  //         >
+  //           Let's pplan our trip : {disuser}
+  //         </Typography>
+  //       </div>
+  //     );
+  //   });
+  // return(
+  //   for (let i = 0; i < users.length; i++){
 
-    //     </div>
-    //   // );
-    // }
-    // )
-  };
+  //     <div>
+  //       <Avatar style={{ backgroundColor: "royalblue", marginTop: "5%" }}>{users[i].substring(0, 1).toUpperCase()}</Avatar>
+  //       <Typography
+  //         gutterBottom
+  //         variant="headline"
+  //         component="h1"
+  //         style={{ color: "white", fontSize:"48px" }}
+  //       >
+  //         Let's plan our trip :   {users[i]}
+  //       </Typography>
+
+  //     </div>
+  //   // );
+  // }
+  // )
+  // };
 
   render() {
     const { classes } = this.props;
@@ -236,7 +237,7 @@ class ChatApp extends Component {
           }}
         >
           <CardHeader
-            style={{ backgroundColor: "purple", flex: "left", marginTop: "2%" }}
+            style={{ backgroundColor: "purple", flex: "left", marginTop: "2%",height: "25vh" }}
           >
             <Typography
               gutterBottom
@@ -246,6 +247,12 @@ class ChatApp extends Component {
             >
               Let's plan our trip : {this.props.topic}
             </Typography>
+            <div style={{ float: "left" }}>
+              <GroupIcon style={{ color: "white", fontSize: "48px" }} />
+              <Typography style={{ color: "white", fontSize: "36px" }}>
+                {this.props.chats}
+              </Typography>
+            </div>
           </CardHeader>
 
           <CardContent>
@@ -277,7 +284,7 @@ class ChatApp extends Component {
                   ? this.state.messages.map((p) => {
                       return (
                         <List component="nav">
-                          <ListItem>
+                          <ListItem style={{fontSize: "48px"}}>
                             <Chip
                               avatar={
                                 <Avatar style={{ backgroundColor: "white" }}>
@@ -289,8 +296,9 @@ class ChatApp extends Component {
                               clickable
                               style={{
                                 backgroundColor: "indigo",
-                                color: "white",
+                                color: "white"
                               }}
+                              size="medium"
                             />
                           </ListItem>
                         </List>
