@@ -72,7 +72,8 @@ class NewItinerary extends React.Component {
       checkoutItinerary: {flights: [], accommodations: []},
 
       currency: "USD",
-      currencySymbol: "$"
+      currencySymbol: "$",
+      exchangeRate: 1,
     };
     this.addItinerary = this.addItinerary.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -95,29 +96,45 @@ class NewItinerary extends React.Component {
       currency: event.target.value,
       currencySymbol: (event.target.value === "USD" ? "$" : (event.target.value === "EUR") ? "€" : "£")
     });
+    //https://openexchangerates.org/api/latest.json?app_id=5856f739436e43f5bc9ab2a208cd9280
 
-    const targetCreateUrl = config.API_URL + "/currency/convert";
-    const requestOptions = {
-      method: "POST",
-      credentials: "include",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        baseCurrency: "USD",
-        targetCurrency: event.target.value,
-        amount: parseFloat(this.state.totalCost)
-      }),
-    };
+    const targetCreateUrl = "https://openexchangerates.org/api/latest.json?app_id=5856f739436e43f5bc9ab2a208cd9280";
 
-    fetch(targetCreateUrl, requestOptions)
-        .then((response) => {
-          if (response.status == "200") {
-            alert("Hello");
-          }
+    fetch(targetCreateUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({
+            exchangeRate: data.rates[event.target.value]
+          });
         })
         .catch((error) => {
           alert("Error!");
           console.error("There was an error!", error);
         });
+
+
+    // const targetCreateUrl = config.API_URL + "/currency/convert";
+    // const requestOptions = {
+    //   method: "POST",
+    //   credentials: "include",
+    //   headers: {"Content-Type": "application/json"},
+    //   body: JSON.stringify({
+    //     baseCurrency: "USD",
+    //     targetCurrency: event.target.value,
+    //     amount: parseFloat(this.state.totalCost)
+    //   }),
+    // };
+    //
+    // fetch(targetCreateUrl, requestOptions)
+    //     .then((response) => {
+    //       if (response.status == "200") {
+    //         alert("Hello");
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       alert("Error!");
+    //       console.error("There was an error!", error);
+    //     });
 
   };
 
@@ -189,25 +206,25 @@ class NewItinerary extends React.Component {
 
     let totalCost = 0;
     itinerary.flights.map((flight) => {
-      totalCost += flight.price
+      totalCost += parseFloat(flight.price);
       if (flight.booked) {
         booked = true;
       }
     });
     itinerary.accommodations.map((accommodation) => {
-      totalCost += accommodation.amount
+      totalCost += parseFloat(accommodation.amount);
       if (accommodation.booked) {
         booked = true;
       }
     });
-    itinerary.totalCost = totalCost;
+    itinerary.totalCost = parseFloat(totalCost);
 
     if (booked) {
       alert("You have already booked this itinerary.")
     } else {
       this.setState({
         checkoutOpen: true,
-        checkoutItinerary: itinerary
+        checkoutItinerary: itinerary,
       });
     }
   };
@@ -1424,7 +1441,7 @@ class NewItinerary extends React.Component {
                   this.state.checkoutItinerary.flights.map((flight) => (
                   <div>
                     <Typography>
-                      ${flight.price} - {flight.airline}
+                      {this.state.currencySymbol}{(flight.price * this.state.exchangeRate).toFixed(2)} - {flight.airline}
                     </Typography>
                   </div>
               ))}
@@ -1436,13 +1453,13 @@ class NewItinerary extends React.Component {
                   this.state.checkoutItinerary.accommodations.map((accommodation) => (
                       <div>
                         <Typography>
-                          ${accommodation.amount} - {accommodation.name}
+                          {this.state.currencySymbol}{(accommodation.amount * this.state.exchangeRate).toFixed(2)} - {accommodation.name}
                         </Typography>
                       </div>
                   ))}
                   <Divider />
               {/*Total*/}
-              <Typography><b>Total: </b>{this.state.currencySymbol}{this.state.checkoutItinerary.totalCost}</Typography>
+              <Typography><b>Total: </b>{this.state.currencySymbol}{(this.state.checkoutItinerary.totalCost * this.state.exchangeRate).toFixed(2)}</Typography>
             </DialogContent>
             <DialogActions>
               <Button onClick={() => this.handleCheckoutClose(false)} color="primary">
