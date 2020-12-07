@@ -352,29 +352,58 @@ class Travel extends React.Component {
 
   render() {
     return(
-        <div
-          style={{
+    
+           <Grid container style={{backgroundColor:"indigo", color:"white",
             backgroundImage: "url(" + image + ")",
-            backgroundRepeat: "no-repeat",
+            // backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             minHeight: "100vh",
-          }}
-        >
-           <Grid container justify="center">
-              <div style={{ display: "inline-block"}}>
-                <h1 style={{textAlign: "center"}}>Search your travel route</h1>
+          }}>
+             {/* <div style={{backgroundColor:"indigo", maxHeight:"10vh", backgroundColor:"indigo", marginLeft:"20%"}}>
+                <h1 style={{ fontSize:"48px"}}>Search your travel route</h1>
                 {this.state.error && 
                   <Alert severity="error">Please populate required fields for searching flights</Alert>
                 } 
-              </div>
-            </Grid>
-            <Grid container justify="center">
+             </div> */}
+
+             {/* <div>
+             <h1 style={{ fontSize:"48px"}}>Search your travel route</h1>
+                {this.state.error && 
+                  <Alert severity="error">Please populate required fields for searching flights</Alert>
+                }  */}
+             {/* </div> */}
+             <Card
+                raised="true"
+                style={{ color:"white", width:"80vh", marginLeft:"35%", height:"20vh", backgroundColor:"indigo",position:"absolute"}}
+              >
+             <h1 style={{ fontSize:"48px", marginLeft:"10%"}}>Search your travel route</h1>
+                {/* <div style={{marginTop:"15%"}}>
+                {this.state.error && 
+                  <Alert severity="error">Please populate required fields for searching flights</Alert>
+                }  */}
+                {/* </div> */}
+              </Card>
+
+                
+            
+                {this.state.error && 
+                <Card
+                raised="true"
+                style={{ color:"white", width:"80vh", marginLeft:"35%", position:"absolute", marginTop:"15%"}}
+              >
+                  <Alert severity="error">Please populate required fields for searching flights</Alert>
+                  </Card>
+
+                } 
+             
+                
+             
               <Card
                 raised="true"
-                style={{ width: "75%"}}
+                style={{  width:"30vh", marginTop:"15%", height:"60vh",marginLeft:"5%", float:"left"}}
               >
-                <div style={{ display: "flex"}}>
-                    <div style={{ paddingLeft: "4%",paddingTop: "5.5%",paddingRight: "4%" }}>
+                
+                    <div style={{ marginLeft: "20%", marginTop:"5%" }}>
                       <Autocomplete
                           id="combo-box-demo4"
                           options={this.travellerclass}
@@ -394,8 +423,8 @@ class Travel extends React.Component {
                             />
                         )}
                       />
-                    </div>
-                    <div style={{ paddingLeft: "4%",paddingTop: "5.5%",paddingRight: "12%" }}>
+                      </div>
+                    <div style={{ marginLeft: "20%", marginTop:"5%"}}>
                         <TextField 
                             id="count" 
                             label="Traveler" 
@@ -406,7 +435,7 @@ class Travel extends React.Component {
                             }}
                         />
                     </div>
-                    <div style={{ paddingLeft: "4%",paddingTop: "8%",paddingRight: "8%" }}>
+                    <div style={{ marginLeft: "20%", marginTop:"5%" }}>
                         <FormControlLabel
                           control={
                             <Switch
@@ -419,7 +448,7 @@ class Travel extends React.Component {
                           label="roundtrip"
                         />
                     </div>
-                    <div style={{ paddingLeft: "4%",paddingTop: "8%",paddingRight: "4%" }}>
+                    <div style={{ marginLeft: "20%", marginTop:"5%" }}>
                         <FormControlLabel
                           control={
                             <Switch
@@ -432,9 +461,7 @@ class Travel extends React.Component {
                           label="nonstop"
                         />
                     </div>
-                </div>
-                <div style={{ display: "flex"}}>  
-                    <div style={{ display: "inline-block", padding: "4%" }}>
+                    <div style={{  marginLeft: "20%", marginTop:"5%" }}>
                       <Typography> Source </Typography>
                       <AsyncTypeahead
                             id="source"
@@ -446,7 +473,7 @@ class Travel extends React.Component {
                             placeholder="Enter source"
                         />
                     </div>
-                    <div style={{ display: "inline-block", padding: "4%"  }}>
+                    <div style={{  marginLeft: "20%", marginTop:"5%" }}>
                         <Typography>Destination</Typography>
                         <AsyncTypeahead
                           id="destination"
@@ -463,7 +490,7 @@ class Travel extends React.Component {
                         )}
                         />
                     </div>
-                    <div style={{ padding: "4%"}}>
+                    <div style={{ marginLeft: "20%", marginTop:"5%"}}>
                         <TextField
                               id="date"
                               label="Departure Date"
@@ -475,7 +502,7 @@ class Travel extends React.Component {
                               onChange={this.handleDeptDate}
                           />
                     </div>
-                    <div style={{padding: "4%"}}>
+                    <div style={{marginLeft: "20%", marginTop:"5%"}}>
                         {this.state.roundtrip && (
                         <TextField
                               id="date"
@@ -490,25 +517,32 @@ class Travel extends React.Component {
                             />
                           )}
                     </div>
-                  </div>
-                <div style={{ paddingLeft: "43%",paddingBottom: "2%"}} >
-                    <Btn
-                      color="primary"
-                      variant="contained"
-                      onClick={this.handleFlightSearch}
-                      >
-                      Search
-                    </Btn>
-                </div> 
+                    <div style={{ marginLeft: "30%", marginTop:"5%", marginBottom:"5%"}} >
+                        <Btn
+                          color="primary"
+                          variant="contained"
+                          onClick={this.handleFlightSearch}
+                          >
+                          Search
+                        </Btn>
+                    </div> 
               </Card>
-           </Grid>
-           <Grid container justify="center">
-              <div style={{display: "inline-block"} }>
+              
+              {/* <div style={{ width:"40%", height:"20%", float:"center",backgroundColor:"white", marginLeft:"10%"}}>
+              <h1 style={{ fontSize:"48px"}}>Search your travel route</h1>
+                {this.state.error && 
+                  <Alert severity="error">Please populate required fields for searching flights</Alert>
+                } 
+              </div> */}
+
+              <div style={{ width:"40%", height:"20%", float:"center",marginTop:"15%",marginLeft:"20%"}}>
                 {this.state.flights && this.renderFlights(this.state.flights)}
                 {this.state.returnFlights &&this.renderFlights(this.state.returnFlights)}
               </div>
-           </Grid>
-        </div>
+            </Grid>
+              
+              
+       
 
     );
   }
