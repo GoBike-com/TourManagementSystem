@@ -22,7 +22,7 @@ import {
   Button,
   Typography,
   CardActionArea,
-  CardMedia,
+  CardMedia, InputLabel, Select,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -42,6 +42,8 @@ import InputMask from 'react-input-mask';
 import MomentUtils from "@date-io/moment";
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import MenuItem from "react-bootstrap-typeahead/lib/components/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
 
 class NewItinerary extends React.Component {
   constructor(props) {
@@ -64,10 +66,13 @@ class NewItinerary extends React.Component {
       chatusers: [],
 
       checkoutOpen: false,
-      creditCardNumber: undefined,
-      creditCardExpirationDate: undefined,
-      creditCardCCV: undefined,
-      checkoutItinerary: {flights: [], accommodations: []}
+      creditCardNumber: null,
+      creditCardExpirationDate: null,
+      creditCardCCV: null,
+      checkoutItinerary: {flights: [], accommodations: []},
+
+      currency: "USD",
+      currencySymbol: "$"
     };
     this.addItinerary = this.addItinerary.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -82,7 +87,39 @@ class NewItinerary extends React.Component {
     this.deletePlaceFromItinerary = this.deletePlaceFromItinerary.bind(this);
     this.deleteAccommodationFromItinerary = this.deleteAccommodationFromItinerary.bind(this);
     this.deleteFlightFromItinerary = this.deleteFlightFromItinerary.bind(this);
+    this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
   }
+
+  handleCurrencyChange = (event) => {
+    this.setState({
+      currency: event.target.value,
+      currencySymbol: (event.target.value === "USD" ? "$" : (event.target.value === "EUR") ? "€" : "£")
+    });
+
+    const targetCreateUrl = config.API_URL + "/currency/convert";
+    const requestOptions = {
+      method: "POST",
+      credentials: "include",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        baseCurrency: "USD",
+        targetCurrency: event.target.value,
+        amount: parseFloat(this.state.totalCost)
+      }),
+    };
+
+    fetch(targetCreateUrl, requestOptions)
+        .then((response) => {
+          if (response.status == "200") {
+            alert("Hello");
+          }
+        })
+        .catch((error) => {
+          alert("Error!");
+          console.error("There was an error!", error);
+        });
+
+  };
 
   deleteFlightFromItinerary = (flight) => {
     const targetCreateUrl = config.API_URL + "/travel/flight/" + flight.id;
@@ -188,6 +225,14 @@ class NewItinerary extends React.Component {
     // *users: itineraryData.users
 
     if (save) {
+      if (this.state.creditCardNumber.length !== 19) {
+        alert("Please enter a valid credit card.")
+      } else if (this.state.creditCardExpirationDate.length !== 5) {
+        alert("Please enter a valid credit card expiration date.")
+      } else if (this.state.creditCardCCV.length !== 3) {
+        alert("Please enter a valid CCV.")
+      }
+
       const targetCreateUrl = config.API_URL + "/itinerary/" + this.state.checkoutItinerary.name + "/book/" + window.sessionStorage.getItem("username");
       const requestOptions = {
         method: "PUT",
@@ -488,6 +533,13 @@ class NewItinerary extends React.Component {
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
     },
   }));
 
@@ -1291,6 +1343,21 @@ class NewItinerary extends React.Component {
           <Dialog open={this.state.checkoutOpen} onClose={() => this.handleCheckoutClose(false)} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Checkout</DialogTitle>
             <DialogContent>
+              <div>
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-label">Currency</InputLabel>
+                  <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={this.state.currency}
+                      onChange={(event) => this.handleCurrencyChange(event)}
+                  >
+                    <MenuItem value={"USD"}>USD</MenuItem>
+                    <MenuItem value={"EUR"}>Euro</MenuItem>
+                    <MenuItem value={"GBP"}>Pound Sterling</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
               <DialogContentText>
                 Confirm the details below to pay and book your itinerary.
               </DialogContentText>
@@ -1299,7 +1366,7 @@ class NewItinerary extends React.Component {
                   mask="9999 9999 9999 9999"
                   value={this.state.creditCardNumber}
                   disabled={false}
-                  maskChar=" "
+                  maskChar={null}
                   onChange={(event) => {
                     this.setState({
                       creditCardNumber: event.target.value
@@ -1313,7 +1380,7 @@ class NewItinerary extends React.Component {
                   mask="99/99"
                   value={this.state.creditCardExpirationDate}
                   disabled={false}
-                  maskChar=" "
+                  maskChar={null}
                   onChange={(event) => {
                     this.setState({
                       creditCardExpirationDate: event.target.value
@@ -1328,7 +1395,7 @@ class NewItinerary extends React.Component {
                   minLength={3}
                   value={this.state.creditCardCCV}
                   disabled={false}
-                  maskChar=" "
+                  maskChar={null}
                   onChange={(event) => {
                     this.setState({
                       creditCardCCV: event.target.value
@@ -1375,7 +1442,7 @@ class NewItinerary extends React.Component {
                   ))}
                   <Divider />
               {/*Total*/}
-              <Typography><b>Total: </b>${this.state.checkoutItinerary.totalCost}</Typography>
+              <Typography><b>Total: </b>{this.state.currencySymbol}{this.state.checkoutItinerary.totalCost}</Typography>
             </DialogContent>
             <DialogActions>
               <Button onClick={() => this.handleCheckoutClose(false)} color="primary">
