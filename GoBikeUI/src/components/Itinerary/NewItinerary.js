@@ -244,10 +244,13 @@ class NewItinerary extends React.Component {
     if (save) {
       if (this.state.creditCardNumber.length !== 19) {
         alert("Please enter a valid credit card.")
+        return;
       } else if (this.state.creditCardExpirationDate.length !== 5) {
         alert("Please enter a valid credit card expiration date.")
+        return;
       } else if (this.state.creditCardCCV.length !== 3) {
         alert("Please enter a valid CCV.")
+        return;
       }
 
       const targetCreateUrl = config.API_URL + "/itinerary/" + this.state.checkoutItinerary.name + "/book/" + window.sessionStorage.getItem("username");
