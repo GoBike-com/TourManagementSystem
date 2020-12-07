@@ -22,7 +22,7 @@ import {
   Button,
   Typography,
   CardActionArea,
-  CardMedia,
+  CardMedia, InputLabel, Select,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -38,10 +38,12 @@ import { indigo } from "@material-ui/core/colors";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import DisplayMapClass from "../Dashboard/Map";
 import ChatApp from "../Chat/ChatApp";
-import ChatIcon from "@material-ui/icons/Chat";
+import InputMask from 'react-input-mask';
 import MomentUtils from "@date-io/moment";
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import MenuItem from "react-bootstrap-typeahead/lib/components/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
 
 class NewItinerary extends React.Component {
   constructor(props) {
@@ -62,16 +64,219 @@ class NewItinerary extends React.Component {
       addItineraryOpen: false,
       addItineraryName: "",
       chatusers: [],
+
+      checkoutOpen: false,
+      creditCardNumber: null,
+      creditCardExpirationDate: null,
+      creditCardCCV: null,
+      checkoutItinerary: {flights: [], accommodations: []},
+
+      currency: "USD",
+      currencySymbol: "$",
+      exchangeRate: 1,
     };
     this.addItinerary = this.addItinerary.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleAddItineraryOpen = this.handleAddItineraryOpen.bind(this);
     this.handleAddItineraryClose = this.handleAddItineraryClose.bind(this);
+    this.handleCheckoutOpen = this.handleCheckoutOpen.bind(this);
+    this.handleCheckoutClose = this.handleCheckoutClose.bind(this);
     this.handleUserSearch = this.handleUserSearch.bind(this);
     this.toggleShowComment = this.toggleShowComment.bind(this);
     this.handleChat = this.handleChat.bind(this);
+    this.deletePlaceFromItinerary = this.deletePlaceFromItinerary.bind(this);
+    this.deleteAccommodationFromItinerary = this.deleteAccommodationFromItinerary.bind(this);
+    this.deleteFlightFromItinerary = this.deleteFlightFromItinerary.bind(this);
+    this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
   }
+
+  handleCurrencyChange = (event) => {
+    this.setState({
+      currency: event.target.value,
+      currencySymbol: (event.target.value === "USD" ? "$" : (event.target.value === "EUR") ? "€" : "£")
+    });
+    //https://openexchangerates.org/api/latest.json?app_id=5856f739436e43f5bc9ab2a208cd9280
+
+    const targetCreateUrl = "https://openexchangerates.org/api/latest.json?app_id=5856f739436e43f5bc9ab2a208cd9280";
+
+    fetch(targetCreateUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({
+            exchangeRate: data.rates[event.target.value]
+          });
+        })
+        .catch((error) => {
+          alert("Error!");
+          console.error("There was an error!", error);
+        });
+
+
+    // const targetCreateUrl = config.API_URL + "/currency/convert";
+    // const requestOptions = {
+    //   method: "POST",
+    //   credentials: "include",
+    //   headers: {"Content-Type": "application/json"},
+    //   body: JSON.stringify({
+    //     baseCurrency: "USD",
+    //     targetCurrency: event.target.value,
+    //     amount: parseFloat(this.state.totalCost)
+    //   }),
+    // };
+    //
+    // fetch(targetCreateUrl, requestOptions)
+    //     .then((response) => {
+    //       if (response.status == "200") {
+    //         alert("Hello");
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       alert("Error!");
+    //       console.error("There was an error!", error);
+    //     });
+
+  };
+
+  deleteFlightFromItinerary = (flight) => {
+    const targetCreateUrl = config.API_URL + "/travel/flight/" + flight.id;
+    const requestOptions = {
+      method: "DELETE",
+      credentials: "include",
+      headers: {"Content-Type": "application/json"},
+    };
+
+    fetch(targetCreateUrl, requestOptions)
+        .then((response) => {
+          if (response.status == "200") {
+            this.getAllItineraries();
+            alert("\"" + flight.airline + "\"" + " was removed from itinerary.");
+          }
+        })
+        .catch((error) => {
+          alert("Error removing!");
+          console.error("There was an error!", error);
+        });
+  };
+
+  deleteAccommodationFromItinerary = (accommodation) => {
+    const targetCreateUrl = config.API_URL + "/accommodation/" + accommodation.id;
+    const requestOptions = {
+      method: "DELETE",
+      credentials: "include",
+      headers: {"Content-Type": "application/json"},
+    };
+
+    fetch(targetCreateUrl, requestOptions)
+        .then((response) => {
+          if (response.status == "200") {
+            this.getAllItineraries();
+            alert("\"" + accommodation.name + "\"" + " was removed from itinerary.");
+          }
+        })
+        .catch((error) => {
+          alert("Error removing!");
+          console.error("There was an error!", error);
+        });
+  };
+
+  deletePlaceFromItinerary = (place) => {
+    const targetCreateUrl = config.API_URL + "/place/" + place.id;
+    const requestOptions = {
+      method: "DELETE",
+      credentials: "include",
+      headers: {"Content-Type": "application/json"},
+    };
+
+    fetch(targetCreateUrl, requestOptions)
+        .then((response) => {
+          if (response.status == "200") {
+            this.getAllItineraries();
+            alert("\"" + place.place.name + "\"" + " was removed from itinerary.");
+          }
+        })
+        .catch((error) => {
+          alert("Error removing!");
+          console.error("There was an error!", error);
+        });
+  };
+
+  handleCheckoutOpen = (itinerary) => {
+    let booked = false;
+
+    let totalCost = 0;
+    itinerary.flights.map((flight) => {
+      totalCost += parseFloat(flight.price);
+      if (flight.booked) {
+        booked = true;
+      }
+    });
+    itinerary.accommodations.map((accommodation) => {
+      totalCost += parseFloat(accommodation.amount);
+      if (accommodation.booked) {
+        booked = true;
+      }
+    });
+    itinerary.totalCost = parseFloat(totalCost);
+
+    if (booked) {
+      alert("You have already booked this itinerary.")
+    } else {
+      this.setState({
+        checkoutOpen: true,
+        checkoutItinerary: itinerary,
+      });
+    }
+  };
+
+  handleCheckoutClose = (save) => {
+    // *name: itineraryData.itinerary.name,
+    // *startDate: itineraryData.itinerary.startDate,
+    // *endDate: itineraryData.itinerary.endDate,
+    // *createdDate: itineraryData.itinerary.createdDate,
+    // *createdBy: itineraryData.itinerary.createdBy,
+    // *flights: itineraryData.flights,
+    // accommodations: itineraryData.accommodations,
+    // *plans: itineraryData.itinerary.plans,
+    // *places: itineraryData.itinerary.places,
+    // *users: itineraryData.users
+
+    if (save) {
+      if (this.state.creditCardNumber.length !== 19) {
+        alert("Please enter a valid credit card.")
+      } else if (this.state.creditCardExpirationDate.length !== 5) {
+        alert("Please enter a valid credit card expiration date.")
+      } else if (this.state.creditCardCCV.length !== 3) {
+        alert("Please enter a valid CCV.")
+      }
+
+      const targetCreateUrl = config.API_URL + "/itinerary/" + this.state.checkoutItinerary.name + "/book/" + window.sessionStorage.getItem("username");
+      const requestOptions = {
+        method: "PUT",
+        credentials: "include",
+        headers: {"Content-Type": "application/json"},
+      };
+
+      fetch(targetCreateUrl, requestOptions)
+          .then((response) => {
+            if (response.status == "200") {
+              this.getAllItineraries();
+              this.setState({
+                checkoutOpen: false
+              });
+              alert("\"" + this.state.checkoutItinerary.name + "\"" + " was booked.");
+            }
+          })
+          .catch((error) => {
+            alert("Error booking!");
+            console.error("There was an error!", error);
+          });
+    } else {
+      this.setState({
+        checkoutOpen: false
+      });
+    }
+  };
 
   componentDidMount() {
     this.getAllItineraries();
@@ -346,6 +551,13 @@ class NewItinerary extends React.Component {
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
     },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
   }));
 
   savePlan = (itineraryName) => {
@@ -513,6 +725,7 @@ class NewItinerary extends React.Component {
       showComment: !this.state.showComment,
     });
   };
+
   render() {
     const itineraries = this.state.itineraries;
     const classes = this.useStyles;
@@ -792,6 +1005,14 @@ class NewItinerary extends React.Component {
                             ))}
                           </Grid>
                         </AccordionDetails>
+                        <AccordionDetails>
+                          <Button variant="contained" color="secondary" onClick={(e) => {
+                            e.preventDefault();
+                            this.deletePlaceFromItinerary(places);
+                          }}>
+                            Remove {places.place.name} from Itinerary
+                          </Button>
+                        </AccordionDetails>
                       </div>
                     ))}
                   </div>
@@ -853,23 +1074,18 @@ class NewItinerary extends React.Component {
                             {flight.duration}
                           </Typography>
                         </AccordionDetails>
+                        <AccordionDetails>
+                          <Button variant="contained" color="secondary" onClick={(e) => {
+                            e.preventDefault();
+                            this.deleteFlightFromItinerary(flight);
+                          }}>
+                            Remove {flight.airline} from Itinerary
+                          </Button>
+                        </AccordionDetails>
                       </div>
                     ))}
                   </div>
                 )}
-
-                {/*
-                                *name: itineraryData.itinerary.name,
-                                *startDate: itineraryData.itinerary.startDate,
-                                *endDate: itineraryData.itinerary.endDate,
-                                *createdDate: itineraryData.itinerary.createdDate,
-                                *createdBy: itineraryData.itinerary.createdBy,
-                                *flights: itineraryData.flights,
-                                accommodations: itineraryData.accommodations,
-                                *plans: itineraryData.itinerary.plans,
-                                *places: itineraryData.itinerary.places,
-                                *users: itineraryData.users*/}
-
                 {/*Accommodations*/}
                 <Divider />
 
@@ -911,15 +1127,41 @@ class NewItinerary extends React.Component {
                         </AccordionDetails>
                         <AccordionDetails>
                           <Typography>
-                            <b>Rating: </b>${accommodation.rating}
+                            <b>Price: </b>${accommodation.amount}
+                          </Typography>
+                        </AccordionDetails>
+                        <AccordionDetails>
+                          <Typography>
+                            <b>Rating: </b>{accommodation.ratings}
+                          </Typography>
+                        </AccordionDetails>
+                        <AccordionDetails>
+                          <Typography>
+                            <b>Check in: </b>{accommodation.checkIn}
+                          </Typography>
+                        </AccordionDetails>
+                        <AccordionDetails>
+                          <Typography>
+                            <b>Check Out: </b>{accommodation.checkOut}
+                          </Typography>
+                        </AccordionDetails>
+                        <AccordionDetails>
+                          <Typography>
+                            <b>Phone Number: </b>{accommodation.contact}
                           </Typography>
                         </AccordionDetails>
                         <AccordionDetails>
                           <Typography>
                             <b>Chain: </b>
-                            {accommodation.chaincode}
+                            {accommodation.chainCode}
                           </Typography>
                         </AccordionDetails>
+                        <Button variant="contained" color="secondary" onClick={(e) => {
+                          e.preventDefault();
+                          this.deleteAccommodationFromItinerary(accommodation);
+                        }}>
+                          Remove {accommodation.name} from Itinerary
+                        </Button>
                       </div>
                     ))}
                   </div>
@@ -946,7 +1188,7 @@ class NewItinerary extends React.Component {
                     size="small"
                     onClick={(e) => {
                       e.preventDefault();
-                      alert("Itinerary has been booked.");
+                      this.handleCheckoutOpen(itinerary);
                     }}
                   >
                     Book
@@ -956,9 +1198,6 @@ class NewItinerary extends React.Component {
                   </Button>
                   <Button size="small" onClick={this.displayChat}>
                     {this.state.displayChat ? "Hide Chat" : "Show Chat"}
-                  </Button>
-                  <Button size="small" color="primary">
-                    Edit
                   </Button>
                 </AccordionActions>
               </Accordion>
@@ -1098,6 +1337,136 @@ class NewItinerary extends React.Component {
               </Button>
               <Button onClick={() => this.handleAddItineraryClose(true, this.state.addItineraryName, this.state.startDate, this.state.endDate)} color="primary">
                 Add
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        {/*Checkout Popup*/}
+          <Dialog open={this.state.checkoutOpen} onClose={() => this.handleCheckoutClose(false)} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Checkout</DialogTitle>
+            <DialogContent>
+              <div>
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-label">Currency</InputLabel>
+                  <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={this.state.currency}
+                      onChange={(event) => this.handleCurrencyChange(event)}
+                  >
+                    <MenuItem value={"USD"}>USD</MenuItem>
+                    <MenuItem value={"EUR"}>Euro</MenuItem>
+                    <MenuItem value={"GBP"}>Pound Sterling</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+              <DialogContentText>
+                Confirm the details below to pay and book your itinerary.
+              </DialogContentText>
+              {/*Credit Card Number*/}
+              <InputMask
+                  mask="9999 9999 9999 9999"
+                  value={this.state.creditCardNumber}
+                  disabled={false}
+                  maskChar={null}
+                  onChange={(event) => {
+                    this.setState({
+                      creditCardNumber: event.target.value
+                    })
+                  }}
+              >
+                {() => <TextField label="Credit Card Number" fullWidth autoFocus/>}
+              </InputMask>
+              {/*Expiration Date*/}
+              <InputMask
+                  mask="99/99"
+                  value={this.state.creditCardExpirationDate}
+                  disabled={false}
+                  maskChar={null}
+                  onChange={(event) => {
+                    this.setState({
+                      creditCardExpirationDate: event.target.value
+                    })
+                  }}
+              >
+                {() => <TextField label="MM/YY" fullWidth/>}
+              </InputMask>
+              {/*CCV*/}
+              <InputMask
+                  mask="999"
+                  minLength={3}
+                  value={this.state.creditCardCCV}
+                  disabled={false}
+                  maskChar={null}
+                  onChange={(event) => {
+                    this.setState({
+                      creditCardCCV: event.target.value
+                    })
+                  }}
+              >
+                {() => <TextField label="CCV" fullWidth/>}
+              </InputMask>
+              {/*
+              // *name: itineraryData.itinerary.name,
+              // *startDate: itineraryData.itinerary.startDate,
+              // *endDate: itineraryData.itinerary.endDate,
+              // *createdDate: itineraryData.itinerary.createdDate,
+              // *createdBy: itineraryData.itinerary.createdBy,
+              // *flights: itineraryData.flights,
+              // accommodations: itineraryData.accommodations,
+              // *plans: itineraryData.itinerary.plans,
+              // *places: itineraryData.itinerary.places,
+              // *users: itineraryData.users
+              */}
+              {/*Flights*/}
+              <Typography><b>Flights</b></Typography>
+              {this.state.checkoutItinerary.flights.length === 0 ?
+                  "None"
+                  :
+                  this.state.checkoutItinerary.flights.map((flight) => (
+                  <div>
+                    <Typography>
+                      {this.state.currencySymbol}{(flight.price * this.state.exchangeRate).toFixed(2)} - {flight.airline}
+                    </Typography>
+                  </div>
+              ))}
+              {/*Accommodations*/}
+              <Typography><b>Accommodations</b></Typography>
+              {this.state.checkoutItinerary.accommodations.length === 0 ?
+                  "None"
+                  :
+                  this.state.checkoutItinerary.accommodations.map((accommodation) => (
+                      <div>
+                        <Typography>
+                          {this.state.currencySymbol}{(accommodation.amount * this.state.exchangeRate).toFixed(2)} - {accommodation.name}
+                        </Typography>
+                      </div>
+                  ))}
+                  <Divider />
+              {/*Total*/}
+              <Typography><b>Total: </b>{this.state.currencySymbol}{(this.state.checkoutItinerary.totalCost * this.state.exchangeRate).toFixed(2)}</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => this.handleCheckoutClose(false)} color="primary">
+                Cancel
+              </Button>
+              <Button disabled={(this.state.checkoutItinerary.flights.length === 0 && this.state.checkoutItinerary.accommodations.length === 0)} onClick={() => this.handleCheckoutClose(true)} color="primary">
+                Pay and Book
               </Button>
             </DialogActions>
           </Dialog>

@@ -384,13 +384,6 @@ export default function ExploreComponent() {
                     actionIcon={
                         <IconButton aria-label={`info about ${tile.name}`} className={classes.icon} href={tile.websiteURL} target="_blank">
                             <InfoIcon/>
-                            <Rating
-                                name="simple-controlled"
-                                value={2}
-                                onChange={(event, newValue) => {
-                                    // setValue(newValue);
-                                    //TODO: Call API
-                                }}
                             />
                         </IconButton>
                     }
@@ -406,14 +399,6 @@ export default function ExploreComponent() {
                    <i> {rating.user.userName}</i>
                 </Typography>
                 <Typography style = {{display: 'flex'}}>
-                    <Rating
-                        name="read-only"
-                        value={rating.ratings+''}
-                        style = {{paddingRight :"1%"}}
-                        readOnly
-                        precision={0.5}
-                        size="small"
-                    />
                     <label style = {{paddingLeft: '1%'}}>{rating.ratings}</label>
                 </Typography>
                 <Divider/>
@@ -446,14 +431,6 @@ export default function ExploreComponent() {
                         <Button size="small" color="primary" href={tile.websiteURL} target="_blank">
                             Learn More
                         </Button>
-                        <Rating
-                            name="simple-controlled"
-                            value={2}
-                            onChange={(event, newValue) => {
-                                // setValue(newValue);
-                                //TODO: Call API
-                            }}
-                        />
                     </CardActions>
                 </Card>
             </Grid>
@@ -470,13 +447,6 @@ export default function ExploreComponent() {
                     actionIcon={
                         <IconButton aria-label={`info about ${tile.name}`} className={classes.icon} target="_blank" href={tile.websiteURL}>
                             <InfoIcon/>
-                            <Rating
-                                name="simple-controlled"
-                                value={2}
-                                onChange={(event, newValue) => {
-                                    //TODO: Call API
-                                }}
-                            />
                         </IconButton>
                     }
                 />
