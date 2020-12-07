@@ -14,6 +14,8 @@ import {Button, GridListTileBar, Link, Grid, Card, CardActionArea, CardMedia, Ca
 import InfoIcon from "@material-ui/icons/Info";
 import ItineraryPopup from "../Itinerary/ItineraryPopup";
 import Rating from "@material-ui/lab/Rating";
+import image1 from "../../assets/img/image70.jpg";
+
 
 export default function ExploreComponent() {
     const [open, setOpen] = React.useState(false);
@@ -136,7 +138,10 @@ export default function ExploreComponent() {
     }, []);
 
     return (
-        <div>
+        <div style={{backgroundImage: "url(" + image1 + ")",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        minHeight: "100vh",}}>
             <Autocomplete
                 clearOnBlur={false}
                 id="searchbar"
@@ -163,6 +168,7 @@ export default function ExploreComponent() {
                 loading={loading}
                 renderInput={(params) => (
                     <TextField
+                    style={{marginTop:"5%", backgroundColor:"white"}}
                         {...params}
                         label="Search places..."
                         variant="outlined"
