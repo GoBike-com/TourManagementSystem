@@ -15,7 +15,7 @@ import java.text.ParseException;
  */
 @RestController
 @RequestMapping(path = "/accommodation")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*", allowCredentials = "true")
 public class AccomodationController {
 
     @Autowired
@@ -46,7 +46,7 @@ public class AccomodationController {
     }
 
     /**
-     * This API is responsible for deleting flight from itinerary
+     * This API is responsible for deleting accommodation from itinerary
      */
     @DeleteMapping(path = "/{id}", produces = "application/json")
     public ResponseEntity<Boolean> removeAccommodation(@PathVariable("id") Long id) {

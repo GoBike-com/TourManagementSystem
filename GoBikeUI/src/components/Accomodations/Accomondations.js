@@ -176,7 +176,7 @@ class Accomondations extends React.Component {
       this.state.depatureDate === undefined ||
       this.state.roomqty === "" ||
       this.state.adults === "" ||
-      this.state.ratings === "" ||
+      //this.state.ratings === "" ||
       this.state.boardType === ""
     ) {
       console.log("hello");
@@ -273,6 +273,7 @@ class Accomondations extends React.Component {
   addToItinerary = (name, hotel) => {
     console.log("helere")
     console.log(name)
+    console.log("RATGHHJJ", hotel.rating)
     console.log("itineray name " , name)
     
     console.log("      checkInDate:", this.state.depatureDate)
@@ -281,7 +282,7 @@ class Accomondations extends React.Component {
 	  console.log("      adults: ",this.state.adults)
     console.log("      travelClass:", this.state.travelClass)
     console.log("      amount:", hotel.amount)
-    console.log("rating" , this.state.ratings)
+    console.log("rating" , hotel.rating)
     console.log("name", hotel.name)
     console.log("address:", hotel.address)
     console.log("         phonenumber:", hotel.phonenumber)
@@ -314,7 +315,7 @@ class Accomondations extends React.Component {
 	        adults: this.state.adults,
           hotel: {
               amount: hotel.amount,
-              rating: this.state.ratings,
+              rating: hotel.rating,
               name: hotel.name,
               address: hotel.address,
               phonenumber: ph,
@@ -592,7 +593,7 @@ class Accomondations extends React.Component {
                 <AsyncTypeahead
                   id="source"
                   labelKey="name"
-                  minLength={3}
+                  minLength={5}
                   onChange={(selected) =>
                     this.setState({ destination: selected })
                   }

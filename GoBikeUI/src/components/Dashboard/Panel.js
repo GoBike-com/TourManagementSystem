@@ -121,26 +121,6 @@ export default function Panel() {
         </Link>
       </ListItem>
       <ListItem>
-        <ListItemAvatar>
-          <Avatar style={{marginBottom:"35px"}}>
-            <RateReviewIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <Link
-          style={{
-            textDecorationLine: "none",
-            textAlign: "left",
-            color: "white",
-          }}
-          to={"/review"}
-        >
-          <ListItemText
-            primary="Review and Feedback"
-            secondary="rate your experience"
-          />
-        </Link>
-      </ListItem>
-      <ListItem>
         <ListItemAvatar></ListItemAvatar>
         <ListItemText />
       </ListItem>

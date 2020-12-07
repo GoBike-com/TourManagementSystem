@@ -1,6 +1,7 @@
 package com.iu.gobike.controllers;
 
 import com.iu.gobike.dto.RatingRequest;
+import com.iu.gobike.model.ItineraryPlace;
 import com.iu.gobike.model.Place;
 import com.iu.gobike.model.Rating;
 import com.iu.gobike.service.PlaceService;
@@ -67,6 +68,17 @@ public class PlaceController {
     public ResponseEntity<List<Place> > topPlaces() {
         List<Place> places = placeService.topPlaces();
         return ResponseEntity.ok(places);
+    }
+
+
+    /**
+     * This API is responsible for deleting place from itinerary
+     */
+    @DeleteMapping(path = "/{id}", produces = "application/json")
+    public ResponseEntity<Boolean> removePlace(@PathVariable("id") Long id) {
+        ResponseEntity<String> responseEntity = null;
+        placeService.deletePlace(id);
+        return ResponseEntity.ok(true);
     }
 
 }

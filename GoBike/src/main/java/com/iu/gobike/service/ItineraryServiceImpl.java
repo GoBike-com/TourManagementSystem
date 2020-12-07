@@ -101,7 +101,7 @@ public class ItineraryServiceImpl implements ItineraryService {
         UserItinerary userItinerary = userItineraryRepository.findByUserUserNameAndItineraryName(userName, request.getItineraryName());
         ArrayList<ItineraryPlace> itineraryPlaces = new ArrayList<ItineraryPlace>();
         ItineraryPlace itineraryPlace = ItineraryPlace.builder().itinerary(userItinerary.getItinerary())
-                .place(placeRepository.findByName(request.getPlaceName())).build();
+                .place(placeRepository.findByName(request.getPlaceName())).createdBy(userName).modifiedBy(userName).build();
         itineraryPlaces.add(itineraryPlace);
         itineraryPlaceRepository.save(itineraryPlace);
     }
