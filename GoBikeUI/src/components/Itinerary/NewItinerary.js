@@ -38,7 +38,7 @@ import { indigo } from "@material-ui/core/colors";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import DisplayMapClass from "../Dashboard/Map";
 import ChatApp from "../Chat/ChatApp";
-import ChatIcon from "@material-ui/icons/Chat";
+import InputMask from 'react-input-mask';
 import MomentUtils from "@date-io/moment";
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -62,16 +62,96 @@ class NewItinerary extends React.Component {
       addItineraryOpen: false,
       addItineraryName: "",
       chatusers: [],
+
+      checkoutOpen: false,
+      creditCardNumber: undefined,
+      creditCardExpirationDate: undefined,
+      creditCardCCV: undefined,
+      checkoutItinerary: {flights: [], accommodations: []}
     };
     this.addItinerary = this.addItinerary.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleAddItineraryOpen = this.handleAddItineraryOpen.bind(this);
     this.handleAddItineraryClose = this.handleAddItineraryClose.bind(this);
+    this.handleCheckoutOpen = this.handleCheckoutOpen.bind(this);
+    this.handleCheckoutClose = this.handleCheckoutClose.bind(this);
     this.handleUserSearch = this.handleUserSearch.bind(this);
     this.toggleShowComment = this.toggleShowComment.bind(this);
     this.handleChat = this.handleChat.bind(this);
   }
+
+  handleCheckoutOpen = (itinerary) => {
+    let booked = false;
+
+    let totalCost = 0;
+    itinerary.flights.map((flight) => {
+      totalCost += flight.price
+      if (flight.booked) {
+        booked = true;
+      }
+    });
+    itinerary.accommodations.map((accommodation) => {
+      totalCost += accommodation.amount
+      if (accommodation.booked) {
+        booked = true;
+      }
+    });
+    itinerary.totalCost = totalCost;
+
+    if (booked) {
+      alert("You have already booked this itinerary.")
+    } else {
+      this.setState({
+        checkoutOpen: true,
+        checkoutItinerary: itinerary
+      });
+    }
+  };
+
+  handleCheckoutClose = (save) => {
+    //TODO: Perform checks and book if booked or not
+    //@PutMapping(path = "/{itineraryname}/book/{username}",  produces = "application/json")
+
+    // *name: itineraryData.itinerary.name,
+    // *startDate: itineraryData.itinerary.startDate,
+    // *endDate: itineraryData.itinerary.endDate,
+    // *createdDate: itineraryData.itinerary.createdDate,
+    // *createdBy: itineraryData.itinerary.createdBy,
+    // *flights: itineraryData.flights,
+    // accommodations: itineraryData.accommodations,
+    // *plans: itineraryData.itinerary.plans,
+    // *places: itineraryData.itinerary.places,
+    // *users: itineraryData.users
+
+    if (save) {
+      const targetCreateUrl = config.API_URL + "/itinerary/" + this.state.checkoutItinerary.name + "/book/" + window.sessionStorage.getItem("username");
+      const requestOptions = {
+        method: "PUT",
+        credentials: "include",
+        headers: {"Content-Type": "application/json"},
+      };
+
+      fetch(targetCreateUrl, requestOptions)
+          .then((response) => {
+            if (response.status == "200") {
+              this.getAllItineraries();
+              this.setState({
+                checkoutOpen: false
+              });
+              alert("\"" + this.state.checkoutItinerary.name + "\"" + " was booked.");
+            }
+          })
+          .catch((error) => {
+            alert("Error booking!");
+            console.error("There was an error!", error);
+          });
+    } else {
+      this.setState({
+        checkoutOpen: false
+      });
+    }
+  };
 
   componentDidMount() {
     this.getAllItineraries();
@@ -857,19 +937,6 @@ class NewItinerary extends React.Component {
                     ))}
                   </div>
                 )}
-
-                {/*
-                                *name: itineraryData.itinerary.name,
-                                *startDate: itineraryData.itinerary.startDate,
-                                *endDate: itineraryData.itinerary.endDate,
-                                *createdDate: itineraryData.itinerary.createdDate,
-                                *createdBy: itineraryData.itinerary.createdBy,
-                                *flights: itineraryData.flights,
-                                accommodations: itineraryData.accommodations,
-                                *plans: itineraryData.itinerary.plans,
-                                *places: itineraryData.itinerary.places,
-                                *users: itineraryData.users*/}
-
                 {/*Accommodations*/}
                 <Divider />
 
@@ -966,7 +1033,7 @@ class NewItinerary extends React.Component {
                     size="small"
                     onClick={(e) => {
                       e.preventDefault();
-                      alert("Itinerary has been booked.");
+                      this.handleCheckoutOpen(itinerary);
                     }}
                   >
                     Book
@@ -1118,6 +1185,120 @@ class NewItinerary extends React.Component {
               </Button>
               <Button onClick={() => this.handleAddItineraryClose(true, this.state.addItineraryName, this.state.startDate, this.state.endDate)} color="primary">
                 Add
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        {/*Checkout Popup*/}
+          <Dialog open={this.state.checkoutOpen} onClose={() => this.handleCheckoutClose(false)} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Checkout</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Confirm the details below to pay and book your itinerary.
+              </DialogContentText>
+              {/*Credit Card Number*/}
+              <InputMask
+                  mask="9999 9999 9999 9999"
+                  value={this.state.creditCardNumber}
+                  disabled={false}
+                  maskChar=" "
+                  onChange={(event) => {
+                    this.setState({
+                      creditCardNumber: event.target.value
+                    })
+                  }}
+              >
+                {() => <TextField label="Credit Card Number" fullWidth autoFocus/>}
+              </InputMask>
+              {/*Expiration Date*/}
+              <InputMask
+                  mask="99/99"
+                  value={this.state.creditCardExpirationDate}
+                  disabled={false}
+                  maskChar=" "
+                  onChange={(event) => {
+                    this.setState({
+                      creditCardExpirationDate: event.target.value
+                    })
+                  }}
+              >
+                {() => <TextField label="MM/YY" fullWidth/>}
+              </InputMask>
+              {/*CCV*/}
+              <InputMask
+                  mask="999"
+                  value={this.state.creditCardCCV}
+                  disabled={false}
+                  maskChar=" "
+                  onChange={(event) => {
+                    this.setState({
+                      creditCardCCV: event.target.value
+                    })
+                  }}
+              >
+                {() => <TextField label="CCV" fullWidth/>}
+              </InputMask>
+              {/*
+              // *name: itineraryData.itinerary.name,
+              // *startDate: itineraryData.itinerary.startDate,
+              // *endDate: itineraryData.itinerary.endDate,
+              // *createdDate: itineraryData.itinerary.createdDate,
+              // *createdBy: itineraryData.itinerary.createdBy,
+              // *flights: itineraryData.flights,
+              // accommodations: itineraryData.accommodations,
+              // *plans: itineraryData.itinerary.plans,
+              // *places: itineraryData.itinerary.places,
+              // *users: itineraryData.users
+              */}
+              {/*Flights*/}
+              <Typography><b>Flights</b></Typography>
+              {this.state.checkoutItinerary.flights.length === 0 ?
+                  "None"
+                  :
+                  this.state.checkoutItinerary.flights.map((flight) => (
+                  <div>
+                    <Typography>
+                      ${flight.price} - {flight.airline}
+                    </Typography>
+                  </div>
+              ))}
+              {/*Accommodations*/}
+              <Typography><b>Accommodations</b></Typography>
+              {this.state.checkoutItinerary.accommodations.length === 0 ?
+                  "None"
+                  :
+                  this.state.checkoutItinerary.accommodations.map((accommodation) => (
+                      <div>
+                        <Typography>
+                          ${accommodation.amount} - {accommodation.name}
+                        </Typography>
+                      </div>
+                  ))}
+                  <Divider />
+              {/*Total*/}
+              <Typography><b>Total: </b>${this.state.checkoutItinerary.totalCost}</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => this.handleCheckoutClose(false)} color="primary">
+                Cancel
+              </Button>
+              <Button disabled={(this.state.checkoutItinerary.flights.length === 0 && this.state.checkoutItinerary.accommodations.length === 0)} onClick={() => this.handleCheckoutClose(true)} color="primary">
+                Pay and Book
               </Button>
             </DialogActions>
           </Dialog>
