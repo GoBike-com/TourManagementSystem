@@ -9,6 +9,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import image1 from "../../assets/img/image46.jpg";
 import {
+  Toolbar,
   DialogContent,
   Dialog,
   DialogTitle,
@@ -29,6 +30,7 @@ import Alert from "@material-ui/lab/Alert";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { config } from "../Constants";
 import fetch from "cross-fetch";
+import GobikeMap from '../Itinerary/GobikeMap';
 import Divider from "@material-ui/core/Divider";
 import AccordionActions from "@material-ui/core/AccordionActions";
 import SaveIcon from "@material-ui/icons/Save";
@@ -51,7 +53,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import BookIcon from '@material-ui/icons/Book';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import GroupIcon from '@material-ui/icons/Group';
-import NotesRounded from '@material-ui/icons/NotesRounded';
+import CloseIcon from '@material-ui/icons/Close';
 import FlightLandRounded from '@material-ui/icons/FlightLandRounded';
 import LocationOnRoundedIcon from '@material-ui/icons/LocationOnRounded';
 import HotelRoundedIcon from '@material-ui/icons/HotelRounded';
@@ -85,6 +87,7 @@ class NewItinerary extends React.Component {
       currency: "USD",
       currencySymbol: "$",
       exchangeRate: 1,
+      selectedItinerary:'',
     };
     this.addItinerary = this.addItinerary.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -240,6 +243,13 @@ class NewItinerary extends React.Component {
     }
   };
 
+  handleCloseMap = () => {
+    this.setState({
+      showmap: false,
+      selectedItinerary:''
+    });
+  };
+
   handleCheckoutClose = (save) => {
     // *name: itineraryData.itinerary.name,
     // *startDate: itineraryData.itinerary.startDate,
@@ -365,10 +375,12 @@ class NewItinerary extends React.Component {
     }
   };
 
-  displayMap = (event) => {
-    event.preventDefault();
+  displayMap = (itinerary) => {
+    //event.preventDefault();
+    console.log("show map clicked")
     this.setState({
       showmap: !this.state.showmap,
+      selectedItinerary:itinerary
     });
   };
 
@@ -1186,7 +1198,7 @@ class NewItinerary extends React.Component {
 
                 {/*Map*/}
                 <Divider style = {{height: '2px', backgroundColor:"#01579b"}}/>
-                {this.state.showmap === true ? <DisplayMapClass /> : null}
+                {/* {this.state.showmap === true ? <DisplayMapClass /> : null} */}
                 {this.state.displayChat === true ? <ChatApp chats={ itinerary.users} topic={itinerary.name}/> : null}
 
                 {/*Actions*/}
@@ -1214,7 +1226,10 @@ class NewItinerary extends React.Component {
                   >
                     Book
                   </Button>
-                  <Button size="large" color="primary" onClick={this.displayMap} startIcon={<MapIcon/>}>
+                  <Button size="large" color="primary"  onClick={(e) => {
+                      e.preventDefault();
+                      this.displayMap(itinerary);
+                    }} startIcon={<MapIcon/>}>
                     {this.state.showmap ? "Hide Map" : "Show Map"}
                   </Button>
                   <Button size="large" color="primary" onClick={this.displayChat} startIcon={<ChatIcon/>}>
@@ -1474,6 +1489,23 @@ class NewItinerary extends React.Component {
                 Pay and Book
               </Button>
             </DialogActions>
+          </Dialog>
+           {/* {Map popup} */}
+           <Dialog
+              open={this.state.showmap}
+              onClose={this.handleCloseMap} 
+              maxWidth = 'lg'
+              fullScreen 
+            >
+              <Toolbar>
+                <IconButton edge="start" color="primary" onClick={this.handleCloseMap} aria-label="close">
+                  <CloseIcon fontSize='large' color ='primary' />
+                </IconButton>
+                <Typography variant="h4" color ='primary' className={classes.title}>
+                    Places
+                </Typography>
+              </Toolbar>
+              <GobikeMap places={this.state.selectedItinerary.places} /> 
           </Dialog>
         </div>
       );
