@@ -49,10 +49,7 @@ const Recommendations = (props) => {
                 </CardContent>
               </CardActionArea>
               <CardActions>
-                <Button size="small" color="primary">
-                  <ShareIcon />
-                </Button>
-                <Button size="small" color="primary">
+                <Button size="small" color="primary" href="https://en.wikipedia.org/wiki/Colorado">
                   Learn More
                 </Button>
               </CardActions>
@@ -83,10 +80,7 @@ const Recommendations = (props) => {
                 </CardContent>
               </CardActionArea>
               <CardActions>
-                <Button size="small" color="primary">
-                  <ShareIcon />
-                </Button>
-                <Button size="small" color="primary">
+                <Button size="small" color="primary" href="https://en.wikipedia.org/wiki/Chicago">
                   Learn More
                 </Button>
               </CardActions>
@@ -117,10 +111,7 @@ const Recommendations = (props) => {
                 </CardContent>
               </CardActionArea>
               <CardActions>
-                <Button size="small" color="primary">
-                  <ShareIcon />
-                </Button>
-                <Button size="small" color="primary">
+                <Button size="small" color="primary" href="https://en.wikipedia.org/wiki/San_Francisco">
                   Learn More
                 </Button>
               </CardActions>
@@ -151,10 +142,7 @@ const Recommendations = (props) => {
                 </CardContent>
               </CardActionArea>
               <CardActions>
-                <Button size="small" color="primary">
-                  <ShareIcon />
-                </Button>
-                <Button size="small" color="primary">
+                <Button size="small" color="primary" href="https://en.wikipedia.org/wiki/New_York_City">
                   Learn More
                 </Button>
               </CardActions>
