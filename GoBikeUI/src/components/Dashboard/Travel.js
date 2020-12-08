@@ -344,7 +344,7 @@ class Travel extends React.Component {
                   {flight.takeOffTime} - {flight.arrivalTime}
                 </Typography>
                 <Typography paragraph>
-                  {flight.deptTerminal} - {flight.arrivalTerminal}
+                  Terminal : {flight.deptTerminal}
                 </Typography>
               </CardContent>
               <CardContent>
