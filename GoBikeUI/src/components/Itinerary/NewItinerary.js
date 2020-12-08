@@ -1,3 +1,4 @@
+
 import React from "react";
 import moment from "moment";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
@@ -50,6 +51,10 @@ import ShareIcon from '@material-ui/icons/Share';
 import BookIcon from '@material-ui/icons/Book';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import GroupIcon from '@material-ui/icons/Group';
+import NotesRounded from '@material-ui/icons/NotesRounded';
+import FlightLandRounded from '@material-ui/icons/FlightLandRounded';
+import LocationOnRoundedIcon from '@material-ui/icons/LocationOnRounded';
+import HotelRoundedIcon from '@material-ui/icons/HotelRounded';
 
 class NewItinerary extends React.Component {
   constructor(props) {
@@ -915,31 +920,6 @@ class NewItinerary extends React.Component {
                   </div>
                 </AccordionSummary>
                 <Divider style = {{height: '2px', backgroundColor:"#01579b" }}/>
-                {/* <AccordionDetails>
-                  <Typography>
-                    Created by {itinerary.createdBy} at {itinerary.createdDate}.
-                  </Typography>
-                </AccordionDetails> */}
-                {/* <AccordionDetails>
-                  <Typography>
-                    <b>Start Date: </b>
-                    {moment(itinerary.startDate).format("YYYY-MM-DD")}
-                  </Typography>
-                </AccordionDetails>
-                <AccordionDetails>
-                  <Typography>
-                    <b>End Date: </b>
-                    {moment(itinerary.endDate).format("YYYY-MM-DD")}
-                  </Typography>
-                </AccordionDetails> */}
-                {/*Users*/}
-                {/* <AccordionDetails>
-                  <Typography>
-                    <b>Group Members: </b>
-                    {console.log("itinerary.users", itinerary.users)}
-                    {itinerary.users}
-                  </Typography>
-                </AccordionDetails> */}
 
                 {itinerary.plans.length > 0 && (
                   <AccordionDetails>
@@ -986,7 +966,7 @@ class NewItinerary extends React.Component {
                 ) : (
                   <div>
                     <AccordionDetails>
-                      <Typography variant="h4">Places on Trip</Typography>
+                    <LocationOnRoundedIcon fontSize='large' color ='primary'/><Typography variant="h4" color ='primary'>Places on Trip</Typography>
                     </AccordionDetails>
                     {itinerary.places.map((places) => (
                       <div>
@@ -1073,7 +1053,7 @@ class NewItinerary extends React.Component {
                 ) : (
                   <div>
                     <AccordionDetails>
-                      <Typography variant="h4">Flights Added</Typography>
+                      <FlightLandRounded fontSize='large' color ='primary'/><Typography variant="h4" color ='primary'>Flights Added</Typography>
                     </AccordionDetails>
                     {itinerary.flights.map((flight) => (
                       <div>
@@ -1141,7 +1121,7 @@ class NewItinerary extends React.Component {
                 ) : (
                   <div>
                     <AccordionDetails>
-                      <Typography variant="h4">Accommodations</Typography>
+                    <HotelRoundedIcon fontSize='large' color ='primary'/><Typography variant="h4" color ='primary'>Accommodations</Typography>
                     </AccordionDetails>
                     {itinerary.accommodations.map((accommodation) => (
                       <div>
