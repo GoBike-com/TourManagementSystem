@@ -892,24 +892,24 @@ class NewItinerary extends React.Component {
                   id="panel1a-header"
                   style = {{backgroundColor:'#e0e0e0'}}
                 >
-                  <div style = {{display:'inline-block'}}>
+                  <div style = {{display:'inline-block', width:'100%'}}>
                     <Typography className={classes.heading} variant="h4" style = {{color :'#01579b'}}>
                       <b>{itinerary.name}</b>
                     </Typography>
-                    <Typography className={classes.secondaryHeading}  style = {{paddingLeft :'10%'}}>
+                    <Typography className={classes.secondaryHeading}  style = {{paddingLeft :'2%'}}>
                       <div style = {{display :'flex'}}>
                         <DateRangeIcon color="primary"/>
                         <div><b>{moment(itinerary.startDate).format("YYYY-MM-DD")} to {moment(itinerary.endDate).format("YYYY-MM-DD")}</b>
                         </div>
                       </div>
                     </Typography>
-                    <Typography className={classes.secondaryHeading} style = {{paddingLeft :'10%'}}>
+                    <Typography className={classes.secondaryHeading} style = {{paddingLeft :'2%'}}>
                       <div style = {{display :'flex'}}>
                         <GroupIcon color="primary"/> 
                         <div>{itinerary.users}</div>
                       </div>
                     </Typography>
-                    <Typography className={classes.secondaryHeading} style = {{float :'right'}}>
+                    <Typography className={classes.secondaryHeading}  style = {{paddingLeft :'2%'}}>
                         <i> Created by </i> {itinerary.createdBy}
                     </Typography>
                   </div>

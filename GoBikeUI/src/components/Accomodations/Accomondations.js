@@ -620,7 +620,7 @@ class Accomondations extends React.Component {
                     format="yyyy-MM-DD"
                     size="small"
                     id="date-picker-inline"
-                    label="Departure date"
+                    label="CheckIn date"
                     value={this.state.depatureDate}
                     onChange={this.handleDateChange1}
                   />
@@ -642,7 +642,7 @@ class Accomondations extends React.Component {
                     format="yyyy-MM-DD"
                     size="small"
                     id="date-picker-inline"
-                    label="Arival date"
+                    label="CheckOut date"
                     value={this.state.selectedDate}
                     onChange={this.handleDateChange}
                   />
