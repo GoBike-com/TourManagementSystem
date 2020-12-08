@@ -8,6 +8,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import image1 from "../../assets/img/image46.jpg";
 import {
+  Toolbar,
   DialogContent,
   Dialog,
   DialogTitle,
@@ -37,6 +38,7 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import { indigo } from "@material-ui/core/colors";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import DisplayMapClass from "../Dashboard/Map";
+import GobikeMap from '../Itinerary/GobikeMap';
 import ChatApp from "../Chat/ChatApp";
 import InputMask from 'react-input-mask';
 import MomentUtils from "@date-io/moment";
@@ -50,6 +52,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import BookIcon from '@material-ui/icons/Book';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import GroupIcon from '@material-ui/icons/Group';
+import CloseIcon from '@material-ui/icons/Close';
 
 class NewItinerary extends React.Component {
   constructor(props) {
@@ -80,6 +83,7 @@ class NewItinerary extends React.Component {
       currency: "USD",
       currencySymbol: "$",
       exchangeRate: 1,
+      selectedItinerary:''
     };
     this.addItinerary = this.addItinerary.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -95,6 +99,7 @@ class NewItinerary extends React.Component {
     this.deleteAccommodationFromItinerary = this.deleteAccommodationFromItinerary.bind(this);
     this.deleteFlightFromItinerary = this.deleteFlightFromItinerary.bind(this);
     this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
+    this.handleCloseMap = this.handleCloseMap.bind(this);
   }
 
   handleCurrencyChange = (event) => {
@@ -304,6 +309,13 @@ class NewItinerary extends React.Component {
     });
   };
 
+  handleCloseMap = () => {
+    this.setState({
+      showmap: false,
+      selectedItinerary:''
+    });
+  };
+
   handleAddItineraryOpen = () => {
     this.setState({
       addItineraryOpen: true
@@ -360,10 +372,11 @@ class NewItinerary extends React.Component {
     }
   };
 
-  displayMap = (event) => {
-    event.preventDefault();
+  displayMap = (itinerary) => {
+    // event.preventDefault();
     this.setState({
       showmap: !this.state.showmap,
+      selectedItinerary:itinerary
     });
   };
 
@@ -1203,12 +1216,7 @@ class NewItinerary extends React.Component {
                     ))}
                   </div>
                 )}
-
-                {/*Map*/}
-                <Divider style = {{height: '2px', backgroundColor:"#01579b"}}/>
-                {this.state.showmap === true ? <DisplayMapClass /> : null}
-                {this.state.displayChat === true ? <ChatApp chats={ itinerary.users} topic={itinerary.name}/> : null}
-
+              
                 {/*Actions*/}
                 <Divider style = {{height: '2px', backgroundColor:"#01579b"}}/>
                 <AccordionActions style = {{backgroundColor:'#e0e0e0'}}>
@@ -1234,7 +1242,12 @@ class NewItinerary extends React.Component {
                   >
                     Book
                   </Button>
-                  <Button size="large" color="primary" onClick={this.displayMap} startIcon={<MapIcon/>}>
+                  <Button size="large" color="primary" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.displayMap(itinerary);
+                    }}
+                    startIcon={<MapIcon/>}>
                     {this.state.showmap ? "Hide Map" : "Show Map"}
                   </Button>
                   <Button size="large" color="primary" onClick={this.displayChat} startIcon={<ChatIcon/>}>
@@ -1282,27 +1295,6 @@ class NewItinerary extends React.Component {
               </DialogActions>
             </DialogContent>
           </Dialog>
-          {/* {console.log("sharedwithuser ", this.state.sharedWithUser)}
-          {console.log(
-            "window.sessionStorage.getItem('shared') ",
-            window.localStorage.getItem("shared")
-          )}
-          {this.state.sharedWithUser === true ||
-          window.sessionStorage.getItem("shared") === "true" ? (
-            <div>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<ChatIcon />}
-                onClick={this.displayChat}
-              >
-                Chat
-              </Button>
-            </div>
-          ) : null}
-          {console.log("this.state.displayChat ", this.state.displayChat)}
-          {this.state.displayChat === true ? <ChatApp /> : null} */}
-
           {/*Add Itinerary Popup*/}
           <Dialog open={this.state.addItineraryOpen} onClose={() => this.handleAddItineraryClose(false)} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Add Itinerary</DialogTitle>
@@ -1380,6 +1372,23 @@ class NewItinerary extends React.Component {
                 Add
               </Button>
             </DialogActions>
+          </Dialog>
+          {/* {Map popup} */}
+          <Dialog
+              open={this.state.showMap}
+              onClose={this.handleCloseMap} 
+              maxWidth = 'lg'
+              fullScreen 
+            >
+              <Toolbar>
+                <IconButton edge="start" color="primary" onClick={this.handleCloseMap} aria-label="close">
+                  <CloseIcon />
+                </IconButton>
+                <Typography variant="h6" className={classes.title}>
+                    Places
+                </Typography>
+              </Toolbar>
+              <GobikeMap places={this.state.selectedItinerary.places} /> 
           </Dialog>
         {/*Checkout Popup*/}
           <Dialog open={this.state.checkoutOpen} onClose={() => this.handleCheckoutClose(false)} aria-labelledby="form-dialog-title">
