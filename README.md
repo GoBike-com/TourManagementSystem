@@ -2,6 +2,6 @@
 Database: mySQL.  
 Backend:  Springboot with Java 11.  
 Frontend: Thymeleaf/css/html/js.  
-Link: http://gobike.us-east-2.elasticbeanstalk.com  
+Link: http://gobike.xyz
 
 Running on AWS Beanstalk.
