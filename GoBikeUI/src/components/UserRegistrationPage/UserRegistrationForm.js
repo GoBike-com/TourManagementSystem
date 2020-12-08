@@ -309,7 +309,8 @@ class UserRegistrationForm extends React.Component {
               textAlign: "center",
               fontSize:"48px",
               fontWeight:"20px",
-              fontStretch:"expanded"
+              fontStretch:"expanded",
+              marginRight:"10vh"
               // margin: "auto",
             }}
           >
@@ -443,7 +444,7 @@ class UserRegistrationForm extends React.Component {
               <Button
                 style={{
                   marginTop: "20px",
-                  marginLeft: "500px",
+                  marginLeft: "53vh",
                   marginRight: "500px",
                   backgroundColor: "indigo",
                 }}
@@ -456,13 +457,13 @@ class UserRegistrationForm extends React.Component {
               </Button>
             </Link>
             <Grid>
-              <a
+              <Button
                 href="/traveller/signin"
                 variant="body2"
-                style={{ marginLeft: "500px" }}
+                style={{ marginLeft: "53vh", backgroundColor:"black", color:"white", marginTop:"1%" }}
               >
                 Already have an account? Sign in
-              </a>
+              </Button>
             </Grid>
           </Grid>
         </Grid>
