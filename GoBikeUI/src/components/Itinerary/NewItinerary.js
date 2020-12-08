@@ -9,6 +9,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import image1 from "../../assets/img/image46.jpg";
 import {
+  Link,
   Toolbar,
   DialogContent,
   Dialog,
@@ -39,7 +40,7 @@ import AddCommentIcon from "@material-ui/icons/AddComment";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { indigo } from "@material-ui/core/colors";
 import "react-bootstrap-typeahead/css/Typeahead.css";
-import DisplayMapClass from "../Dashboard/Map";
+import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import ChatApp from "../Chat/ChatApp";
 import InputMask from 'react-input-mask';
 import MomentUtils from "@date-io/moment";
@@ -57,6 +58,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import FlightLandRounded from '@material-ui/icons/FlightLandRounded';
 import LocationOnRoundedIcon from '@material-ui/icons/LocationOnRounded';
 import HotelRoundedIcon from '@material-ui/icons/HotelRounded';
+import NotesIcon from '@material-ui/icons/Notes';
 
 class NewItinerary extends React.Component {
   constructor(props) {
@@ -527,6 +529,7 @@ class NewItinerary extends React.Component {
           });
         }
         window.sessionStorage.setItem("shared", true);
+        this.refresh();
       })
       .catch((error) => {
         console.error("There was an error!", error);
@@ -554,6 +557,7 @@ class NewItinerary extends React.Component {
   };
 
   addItinerary = (event) => {
+    console.log("why")
     event.preventDefault();
     if(window.sessionStorage.getItem("username")){
       this.handleAddItineraryOpen();
@@ -777,9 +781,16 @@ class NewItinerary extends React.Component {
             Itineraries
           </Typography>
           <Typography variant="h5" align="center">
-            It appears you do not have any itineraries. Please select the create
-            an itinerary button to start planning your amazing journey with
-            GoBike.
+            <NotesIcon/> <b> Trip planning had become easy. Create, Plan, Manage, share your itinerary.</b>
+          </Typography>
+          <Typography variant="h5" align="center">
+             <DirectionsBikeIcon/> <b> Bike is on us. Unlimited access for entire trip. Enjoy!!</b>
+          </Typography>
+          <Typography variant="h5" align="center">
+            <b>Plan your trip now. </b>
+            <Link onClick={() => {
+              window.location.href = "/search"
+            }}>Explore here!!</Link>
           </Typography>
           <br />
           <Grid item xs={12} style={{ textAlign: "center" }}>
@@ -884,8 +895,12 @@ class NewItinerary extends React.Component {
             Itineraries
           </Typography>
           <Typography variant="h5" align="center">
-            You can manage your itineraries below. GoBike provides a bike upon arrival to your destination for the entire duration of your trip.
+            <NotesIcon/> <b> Trip planning had become easy. Create, Plan, Manage, share your itinerary.</b>
           </Typography>
+          <Typography variant="h5" align="center">
+             <DirectionsBikeIcon/> <b> Bike is on us. Unlimited access for entire trip. Enjoy!!</b>
+          </Typography>
+        
 
           <br />
           <Grid item xs={12} style={{ textAlign: "center" }}>
