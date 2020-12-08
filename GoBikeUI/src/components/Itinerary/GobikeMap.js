@@ -22,9 +22,10 @@ export class GobikeMap extends React.Component {
       return this.props.places && this.props.places.map((place, index) => {
         return <Marker key={index} id={index} position={{
          lat: place.place.latitude,
-         lng: place.place.longitude
+         lng: place.place.longitude,
        }}
-       onClick={() => console.log("You clicked me!")} />
+       text = {place.place.name}
+       onClick={() => window.open("https://en.wikipedia.org/wiki/"+place.place.name) }/>
       })
     }
   
