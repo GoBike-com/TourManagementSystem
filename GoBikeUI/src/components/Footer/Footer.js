@@ -12,7 +12,10 @@ function Copyright() {
                 GoBike
             </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {'.  - '}
+            <Link color="inherit" href="mailto:service.gobike4321@gmail.com?subject=Support">
+                Contact Us
+            </Link>
         </Typography>
     );
 }
