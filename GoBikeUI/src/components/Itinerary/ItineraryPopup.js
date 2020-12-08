@@ -11,7 +11,6 @@ import Grid from "@material-ui/core/Grid";
 
 export default function ItineraryPopup(props) {
     const [open, setOpen] = React.useState(false);
-    const [selectedValue, setSelectedValue] = React.useState("Cancel");
     const [itineraries, setItineraries] = React.useState([]);
 
     const handleClickOpen = () => {
@@ -19,11 +18,11 @@ export default function ItineraryPopup(props) {
     };
 
     const handleClose = (value) => {
-        setOpen(false);
-        setSelectedValue(value);
-        if (selectedValue !== "Cancel") {
-            props.addToItinerary(selectedValue);
+        if (value !== "Cancel") {
+            props.addToItinerary(value);
         }
+
+        setOpen(false);
     };
 
     React.useEffect(() => {
@@ -65,7 +64,7 @@ export default function ItineraryPopup(props) {
                     Add to Itinerary
                 </Button>
             </Grid>
-            <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+            <Dialog onClose={() => handleClose('Cancel')} aria-labelledby="simple-dialog-title" open={open}>
                 <DialogTitle id="simple-dialog-title">Itineraries</DialogTitle>
                 <List>
 
