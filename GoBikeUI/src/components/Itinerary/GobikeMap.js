@@ -19,10 +19,10 @@ export class GobikeMap extends React.Component {
     }
   
     displayMarkers = () => {
-      return this.state.stores.map((store, index) => {
+      return this.props.places && this.props.places.map((place, index) => {
         return <Marker key={index} id={index} position={{
-         lat: store.latitude,
-         lng: store.longitude
+         lat: place.place.latitude,
+         lng: place.place.longitude
        }}
        onClick={() => console.log("You clicked me!")} />
       })
