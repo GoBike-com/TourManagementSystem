@@ -952,276 +952,276 @@ class NewItinerary extends React.Component {
                     backgroundImage: "url(" + itinerary_bg + ")",
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
-                    minHeight: "100vh",
+                    height: "100%",
                   }}>
-                {itinerary.plans.length > 0 && (
-                  <AccordionDetails>
-                    {this.renderPlans(itinerary.plans)}
-                  </AccordionDetails>
-                )}
-                <AccordionDetails>
-                  {this.state.showComment ? (
-                    this.commentComponent(itinerary)
-                  ) : (
-                    <Button
-                      size="small"
-                      variant="contained"
-                      color="primary"
-                      style={{ margin: "0.5%" }}
-                      startIcon={<AddCommentIcon />}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        this.toggleShowComment();
-                      }}
-                    >
-                      Add Plan
-                    </Button>
-                  )}
-                </AccordionDetails>
-                {/* <AccordionDetails>
-                                    {this.commentComponent(itinerary.name)}
-                                </AccordionDetails> */}
-                <Divider style = {{height: '2px', backgroundColor:"#01579b" }}/>
-
-                {/*Places*/}
-                {itinerary.places.length == 0 ? (
-                  <AccordionDetails>
-                    <Button
-                      size="small"
-                      variant="contained"
-                      color="primary"
-                      style={{ margin: "0.5%" }}
-                      href="/search"
-                    >
-                      Add Place
-                    </Button>
-                  </AccordionDetails>
-                ) : (
-                  <div>
+                    {itinerary.plans.length > 0 && (
+                      <AccordionDetails>
+                        {this.renderPlans(itinerary.plans)}
+                      </AccordionDetails>
+                    )}
                     <AccordionDetails>
-                    <LocationOnRoundedIcon fontSize='large' color ='primary'/><Typography variant="h4" color ='primary'>Places on Trip</Typography>
-                    </AccordionDetails>
-                    {itinerary.places.map((places) => (
-                      <div>
-                        <AccordionDetails>
-                          <Typography variant="h5">
-                            {places.place.name}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>{places.place.description}</Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography variant="h6">Restaurants</Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Grid container spacing={1}>
-                            {places.place.restaurant.map((tile) => (
-                              <Grid item md={3}>
-                                <Card className={classes.root}>
-                                  <CardActionArea
-                                    href={tile.websiteURL}
-                                    target="_blank"
-                                  >
-                                    <CardMedia
-                                      component="img"
-                                      className={classes.media}
-                                      height="140"
-                                      image={tile.imageURL}
-                                      title={tile.name}
-                                    />
-                                    <CardContent>
-                                      <Typography
-                                        gutterBottom
-                                        variant="h5"
-                                        component="h2"
-                                      >
-                                        {tile.name}
-                                      </Typography>
-                                    </CardContent>
-                                  </CardActionArea>
-                                  <CardActions>
-                                    <Button
-                                      size="small"
-                                      color="primary"
-                                      href={tile.websiteURL}
-                                      target="_blank"
-                                    >
-                                      Learn More
-                                    </Button>
-                                  </CardActions>
-                                </Card>
-                              </Grid>
-                            ))}
-                          </Grid>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Button variant="contained" color="secondary" onClick={(e) => {
+                      {this.state.showComment ? (
+                        this.commentComponent(itinerary)
+                      ) : (
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="primary"
+                          style={{ margin: "0.5%" }}
+                          startIcon={<AddCommentIcon />}
+                          onClick={(e) => {
                             e.preventDefault();
-                            this.deletePlaceFromItinerary(places);
-                          }}>
-                            Remove {places.place.name} from Itinerary
-                          </Button>
-                        </AccordionDetails>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/*Flights*/}
-                <Divider style = {{height: '2px', backgroundColor:"#01579b" }}/>
-
-                {itinerary.flights.length == 0 ? (
-                  <AccordionDetails>
-                    <Button
-                      size="small"
-                      variant="contained"
-                      color="primary"
-                      style={{ margin: "0.5%" }}
-                      href="/travel"
-                    >
-                      Add Flight
-                    </Button>
-                  </AccordionDetails>
-                ) : (
-                  <div>
-                    <AccordionDetails>
-                      <FlightLandRounded fontSize='large' color ='primary'/><Typography variant="h4" color ='primary'>Flights Added</Typography>
-                    </AccordionDetails>
-                    {itinerary.flights.map((flight) => (
-                      <div>
-                        <AccordionDetails>
-                          <Typography variant="h5">{flight.airline}</Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Departs</b> from {flight.deptIataCode}, terminal{" "}
-                            {flight.deptTerminal}, at {moment(flight.deptTime).format("YYYY-MM-DD")} and{" "}
-                            <b>arrives</b> at {flight.arrivalIataCode} at{" "}
-                            {moment(flight.arrivalTime).format("YYYY-MM-DD")}.
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Date: </b>
-                            {flight.travelDate}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Class: </b>
-                            {flight.travelClass}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Price: </b>${flight.price}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Duration: </b>
-                            {flight.duration}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Button variant="contained" color="secondary" onClick={(e) => {
-                            e.preventDefault();
-                            this.deleteFlightFromItinerary(flight);
-                          }}>
-                            Remove {flight.airline} from Itinerary
-                          </Button>
-                        </AccordionDetails>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {/*Accommodations*/}
-                <Divider style = {{height: '2px', backgroundColor:"#01579b"}}/>
-
-                {itinerary.accommodations.length == 0 ? (
-                  <AccordionDetails>
-                    <Button
-                      size="small"
-                      variant="contained"
-                      color="primary"
-                      style={{ margin: "0.5%" }}
-                      href="/accomodation"
-                    >
-                      Add Accommodation
-                    </Button>
-                  </AccordionDetails>
-                ) : (
-                  <div>
-                    <AccordionDetails>
-                    <HotelRoundedIcon fontSize='large' color ='primary'/><Typography variant="h4" color ='primary'>Accommodations</Typography>
-                    </AccordionDetails>
-                    {itinerary.accommodations.map((accommodation) => (
-                      <div>
-                        <AccordionDetails>
-                          <Typography variant="h5">
-                            {accommodation.name}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Address: </b>
-                            {accommodation.address}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Zip Code: </b>
-                            {accommodation.postalCode}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Price: </b>${accommodation.amount}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Rating: </b>{accommodation.ratings}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Check in: </b>{moment(accommodation.checkIn).format("YYYY-MM-DD")}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Check Out: </b>{moment(accommodation.checkOut).format("YYYY-MM-DD")}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Phone Number: </b>{accommodation.contact}
-                          </Typography>
-                        </AccordionDetails>
-                        <AccordionDetails>
-                          <Typography>
-                            <b>Chain: </b>
-                            {accommodation.chainCode}
-                          </Typography>
-                        </AccordionDetails>
-                        <Button variant="contained" color="secondary" onClick={(e) => {
-                          e.preventDefault();
-                          this.deleteAccommodationFromItinerary(accommodation);
-                        }}>
-                          Remove {accommodation.name} from Itinerary
+                            this.toggleShowComment();
+                          }}
+                        >
+                          Add Plan
                         </Button>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                      )}
+                    </AccordionDetails>
+                    {/* <AccordionDetails>
+                                        {this.commentComponent(itinerary.name)}
+                                    </AccordionDetails> */}
+                    <Divider style = {{height: '2px', backgroundColor:"#01579b" }}/>
 
+                    {/*Places*/}
+                    {itinerary.places.length == 0 ? (
+                      <AccordionDetails>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="primary"
+                          style={{ margin: "0.5%" }}
+                          href="/search"
+                        >
+                          Add Place
+                        </Button>
+                      </AccordionDetails>
+                    ) : (
+                      <div>
+                        <AccordionDetails>
+                        <LocationOnRoundedIcon fontSize='large' color ='primary'/><Typography variant="h4" color ='primary'>Places on Trip</Typography>
+                        </AccordionDetails>
+                        {itinerary.places.map((places) => (
+                          <div>
+                            <AccordionDetails>
+                              <Typography variant="h5">
+                                {places.place.name}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>{places.place.description}</Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography variant="h6">Restaurants</Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Grid container spacing={1}>
+                                {places.place.restaurant.map((tile) => (
+                                  <Grid item md={3}>
+                                    <Card className={classes.root}>
+                                      <CardActionArea
+                                        href={tile.websiteURL}
+                                        target="_blank"
+                                      >
+                                        <CardMedia
+                                          component="img"
+                                          className={classes.media}
+                                          height="140"
+                                          image={tile.imageURL}
+                                          title={tile.name}
+                                        />
+                                        <CardContent>
+                                          <Typography
+                                            gutterBottom
+                                            variant="h5"
+                                            component="h2"
+                                          >
+                                            {tile.name}
+                                          </Typography>
+                                        </CardContent>
+                                      </CardActionArea>
+                                      <CardActions>
+                                        <Button
+                                          size="small"
+                                          color="primary"
+                                          href={tile.websiteURL}
+                                          target="_blank"
+                                        >
+                                          Learn More
+                                        </Button>
+                                      </CardActions>
+                                    </Card>
+                                  </Grid>
+                                ))}
+                              </Grid>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Button variant="contained" color="secondary" onClick={(e) => {
+                                e.preventDefault();
+                                this.deletePlaceFromItinerary(places);
+                              }}>
+                                Remove {places.place.name} from Itinerary
+                              </Button>
+                            </AccordionDetails>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/*Flights*/}
+                    <Divider style = {{height: '2px', backgroundColor:"#01579b" }}/>
+
+                    {itinerary.flights.length == 0 ? (
+                      <AccordionDetails>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="primary"
+                          style={{ margin: "0.5%" }}
+                          href="/travel"
+                        >
+                          Add Flight
+                        </Button>
+                      </AccordionDetails>
+                    ) : (
+                      <div>
+                        <AccordionDetails>
+                          <FlightLandRounded fontSize='large' color ='primary'/><Typography variant="h4" color ='primary'>Flights Added</Typography>
+                        </AccordionDetails>
+                        {itinerary.flights.map((flight) => (
+                          <div>
+                            <AccordionDetails>
+                              <Typography variant="h5">{flight.airline}</Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Departs</b> from {flight.deptIataCode}, terminal{" "}
+                                {flight.deptTerminal}, at {moment(flight.deptTime).format("YYYY-MM-DD")} and{" "}
+                                <b>arrives</b> at {flight.arrivalIataCode} at{" "}
+                                {moment(flight.arrivalTime).format("YYYY-MM-DD")}.
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Date: </b>
+                                {flight.travelDate}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Class: </b>
+                                {flight.travelClass}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Price: </b>${flight.price}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Duration: </b>
+                                {flight.duration}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Button variant="contained" color="secondary" onClick={(e) => {
+                                e.preventDefault();
+                                this.deleteFlightFromItinerary(flight);
+                              }}>
+                                Remove {flight.airline} from Itinerary
+                              </Button>
+                            </AccordionDetails>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {/*Accommodations*/}
+                    <Divider style = {{height: '2px', backgroundColor:"#01579b"}}/>
+
+                    {itinerary.accommodations.length == 0 ? (
+                      <AccordionDetails>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="primary"
+                          style={{ margin: "0.5%" }}
+                          href="/accomodation"
+                        >
+                          Add Accommodation
+                        </Button>
+                      </AccordionDetails>
+                    ) : (
+                      <div>
+                        <AccordionDetails>
+                        <HotelRoundedIcon fontSize='large' color ='primary'/><Typography variant="h4" color ='primary'>Accommodations</Typography>
+                        </AccordionDetails>
+                        {itinerary.accommodations.map((accommodation) => (
+                          <div>
+                            <AccordionDetails>
+                              <Typography variant="h5">
+                                {accommodation.name}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Address: </b>
+                                {accommodation.address}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Zip Code: </b>
+                                {accommodation.postalCode}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Price: </b>${accommodation.amount}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Rating: </b>{accommodation.ratings}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Check in: </b>{moment(accommodation.checkIn).format("YYYY-MM-DD")}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Check Out: </b>{moment(accommodation.checkOut).format("YYYY-MM-DD")}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Phone Number: </b>{accommodation.contact}
+                              </Typography>
+                            </AccordionDetails>
+                            <AccordionDetails>
+                              <Typography>
+                                <b>Chain: </b>
+                                {accommodation.chainCode}
+                              </Typography>
+                            </AccordionDetails>
+                            <Button variant="contained" color="secondary" onClick={(e) => {
+                              e.preventDefault();
+                              this.deleteAccommodationFromItinerary(accommodation);
+                            }}>
+                              Remove {accommodation.name} from Itinerary
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+              </div>
                 {/*Map*/}
                 <Divider style = {{height: '2px', backgroundColor:"#01579b"}}/>
                 {/* {this.state.showmap === true ? <DisplayMapClass /> : null} */}
                 {this.state.displayChat === true ? <ChatApp chats={ itinerary.users} topic={itinerary.name}/> : null}
-                </div>
+                
                 {/*Actions*/}
                 <Divider style = {{height: '2px', backgroundColor:"#01579b"}}/>
                 <AccordionActions style = {{backgroundColor:'#e0e0e0'}}>
