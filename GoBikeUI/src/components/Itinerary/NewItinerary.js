@@ -8,6 +8,7 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import image1 from "../../assets/img/image46.jpg";
+import itinerary_bg from "../../assets/img/itinerary_bg.jpg";
 import {
   Link,
   Toolbar,
@@ -781,7 +782,7 @@ class NewItinerary extends React.Component {
             Itineraries
           </Typography>
           <Typography variant="h5" align="center">
-            <NotesIcon/> <b> Trip planning had become easy. Create, Plan, Manage, share your itinerary.</b>
+            <NotesIcon/> <b> Trip planning has become easy. Create, Plan, Manage, share your itinerary.</b>
           </Typography>
           <Typography variant="h5" align="center">
              <DirectionsBikeIcon/> <b> Bike is on us. Unlimited access for entire trip. Enjoy!!</b>
@@ -915,7 +916,7 @@ class NewItinerary extends React.Component {
           <br />
 
           {this.state.itineraries.map((itinerary) => (
-            <div>
+             <div>
               <br />
               <Accordion>
                 <AccordionSummary
@@ -947,7 +948,12 @@ class NewItinerary extends React.Component {
                   </div>
                 </AccordionSummary>
                 <Divider style = {{height: '2px', backgroundColor:"#01579b" }}/>
-
+                <div style={{
+                    backgroundImage: "url(" + itinerary_bg + ")",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    minHeight: "100vh",
+                  }}>
                 {itinerary.plans.length > 0 && (
                   <AccordionDetails>
                     {this.renderPlans(itinerary.plans)}
@@ -1090,9 +1096,9 @@ class NewItinerary extends React.Component {
                         <AccordionDetails>
                           <Typography>
                             <b>Departs</b> from {flight.deptIataCode}, terminal{" "}
-                            {flight.deptTerminal}, at {flight.deptTime} and{" "}
+                            {flight.deptTerminal}, at {moment(flight.deptTime).format("YYYY-MM-DD")} and{" "}
                             <b>arrives</b> at {flight.arrivalIataCode} at{" "}
-                            {flight.arrivalTime}.
+                            {moment(flight.arrivalTime).format("YYYY-MM-DD")}.
                           </Typography>
                         </AccordionDetails>
                         <AccordionDetails>
@@ -1181,12 +1187,12 @@ class NewItinerary extends React.Component {
                         </AccordionDetails>
                         <AccordionDetails>
                           <Typography>
-                            <b>Check in: </b>{accommodation.checkIn}
+                            <b>Check in: </b>{moment(accommodation.checkIn).format("YYYY-MM-DD")}
                           </Typography>
                         </AccordionDetails>
                         <AccordionDetails>
                           <Typography>
-                            <b>Check Out: </b>{accommodation.checkOut}
+                            <b>Check Out: </b>{moment(accommodation.checkOut).format("YYYY-MM-DD")}
                           </Typography>
                         </AccordionDetails>
                         <AccordionDetails>
@@ -1215,7 +1221,7 @@ class NewItinerary extends React.Component {
                 <Divider style = {{height: '2px', backgroundColor:"#01579b"}}/>
                 {/* {this.state.showmap === true ? <DisplayMapClass /> : null} */}
                 {this.state.displayChat === true ? <ChatApp chats={ itinerary.users} topic={itinerary.name}/> : null}
-
+                </div>
                 {/*Actions*/}
                 <Divider style = {{height: '2px', backgroundColor:"#01579b"}}/>
                 <AccordionActions style = {{backgroundColor:'#e0e0e0'}}>
