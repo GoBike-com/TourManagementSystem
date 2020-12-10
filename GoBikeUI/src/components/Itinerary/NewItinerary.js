@@ -92,6 +92,7 @@ class NewItinerary extends React.Component {
       currencySymbol: "$",
       exchangeRate: 1,
       selectedItinerary:'',
+      day:''
     };
     this.addItinerary = this.addItinerary.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -648,7 +649,7 @@ class NewItinerary extends React.Component {
       <Box
         style={{ width: "100%" }}
         borderColor="primary.main"
-        border={1}
+        border={2}
         m={1}
         borderRadius="borderRadius"
       >
@@ -658,23 +659,22 @@ class NewItinerary extends React.Component {
         <div style={{ display: "flex", padding: "1%" }}>
           <TextField
             id="date"
-            label="Day"
+            label={<b>Day</b>}
             type="date"
-            color="primary"
             value={this.state.day}
-            // InputLabelProps={{
-            //   shrink: true,
-            // }}
+            InputLabelProps={{
+              shrink: true,
+            }}
             inputProps={{
               min: moment(itinerary.startDate).format("YYYY-MM-DD"),
               max: moment(itinerary.endDate).format("YYYY-MM-DD")
             }}
-            style={{ paddingRight: "2%" }}
+            style={{ paddingRight: "2%",width:'70%%' }}
             onChange={this.handleDay}
           />
           <TextField
             id="comment"
-            label="Enter your plan"
+            label={<b>Enter your plan</b>}
             fullWidth
             multiline
             value={this.state.plan}
@@ -1088,7 +1088,48 @@ class NewItinerary extends React.Component {
                         </AccordionDetails>
                         {itinerary.flights.map((flight) => (
                           <div>
-                            <AccordionDetails>
+                            <Card
+                              variant="outlined"
+                              style={{ width: "50%" }}
+                            >
+                               <CardHeader title={flight.airline} />
+                               <CardContent>
+                                <Typography>
+                                  <b>Departs</b> from {flight.deptIataCode}, terminal{" "}
+                                  {flight.deptTerminal}, at {flight.deptTime} and{" "}
+                                  <b>arrives</b> at {flight.arrivalIataCode} at{" "}
+                                  {flight.arrivalTime}
+                                </Typography>
+                               </CardContent>
+                               <CardContent>
+                                <Typography>
+                                    <b>Travel Date: </b>
+                                    {moment(flight.travelDate).format("YYYY-MM-DD")}
+                                </Typography>
+                                <Typography>
+                                    <b>Duration: </b>
+                                    {flight.duration}
+                                </Typography>
+                               </CardContent>
+                               <CardContent>
+                                  <Typography>
+                                      <b>Class: </b>
+                                      {flight.travelClass}
+                                  </Typography>
+                                  <Typography>
+                                    <b>Price: </b>${flight.price}
+                                  </Typography>
+                               </CardContent>
+                               <CardActions>
+                                  <Button size="small" color="secondary" onClick={(e) => {
+                                      e.preventDefault();
+                                      this.deleteFlightFromItinerary(flight);
+                                     }}>
+                                      Remove {flight.airline} from Itinerary
+                                  </Button>
+                               </CardActions>
+                            </Card>
+                            {/* <AccordionDetails>
                               <Typography variant="h5">{flight.airline}</Typography>
                             </AccordionDetails>
                             <AccordionDetails>
@@ -1102,7 +1143,7 @@ class NewItinerary extends React.Component {
                             <AccordionDetails>
                               <Typography>
                                 <b>Date: </b>
-                                {flight.travelDate}
+                                {moment(flight.travelDate).format("YYYY-MM-DD")}
                               </Typography>
                             </AccordionDetails>
                             <AccordionDetails>
@@ -1129,7 +1170,7 @@ class NewItinerary extends React.Component {
                               }}>
                                 Remove {flight.airline} from Itinerary
                               </Button>
-                            </AccordionDetails>
+                            </AccordionDetails> */}
                           </div>
                         ))}
                       </div>
