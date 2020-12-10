@@ -1087,10 +1087,10 @@ class NewItinerary extends React.Component {
                           <FlightLandRounded fontSize='large'/><Typography variant="h4"><b>Flights Added</b></Typography>
                         </AccordionDetails>
                         {itinerary.flights.map((flight) => (
-                          <div>
+                          <AccordionDetails>
                             <Card
                               variant="outlined"
-                              style={{ width: "50%" }}
+                              style={{ width: "50%",  margin: "0.5%"  }}
                             >
                                <CardHeader title={flight.airline} />
                                <CardContent>
@@ -1171,7 +1171,7 @@ class NewItinerary extends React.Component {
                                 Remove {flight.airline} from Itinerary
                               </Button>
                             </AccordionDetails> */}
-                          </div>
+                          </AccordionDetails>
                         ))}
                       </div>
                     )}
@@ -1196,10 +1196,10 @@ class NewItinerary extends React.Component {
                         <HotelRoundedIcon fontSize='large'/><Typography variant="h4"><b>Accommodations</b></Typography>
                         </AccordionDetails>
                         {itinerary.accommodations.map((accommodation) => (
-                          <div>
+                           <AccordionDetails>
                             <Card
                               variant="outlined"
-                              style={{ width: "50%" }}
+                              style={{ width: "50%", margin: "0.5%"  }}
                             >
                                <CardHeader title={accommodation.name} subheader= {
                                   <Rating
@@ -1300,9 +1300,9 @@ class NewItinerary extends React.Component {
                             }}>
                               Remove {accommodation.name} from Itinerary
                             </Button> */}
-                          </div>
+                          </AccordionDetails>
                         ))}
-                      </div>
+                       </div>
                     )}
               </div>
                 {/*Map*/}
