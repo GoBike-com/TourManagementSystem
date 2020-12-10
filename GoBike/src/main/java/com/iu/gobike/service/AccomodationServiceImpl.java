@@ -39,7 +39,7 @@ public class AccomodationServiceImpl implements AccomodationService{
         HotelInfo hotelInfo = request.getHotel();
         Accommodation accommodation = Accommodation.builder().user(userItinerary.getUser()).chainCode(hotelInfo.getChaincode())
                 .name(hotelInfo.getName()).amount(Float.parseFloat(hotelInfo.getAmount())).address(hotelInfo.getAddress())
-                .checkIn(GoBikeUtil.convert(request.getCheckInDate())).checkOut(GoBikeUtil.convert(request.getCheckInDate()))
+                .checkIn(GoBikeUtil.convert(request.getCheckInDate())).checkOut(GoBikeUtil.convert(request.getCheckOutDate()))
                 .contact(hotelInfo.getPhonenumber()).cityName(request.getCity()).numOfPerson(request.getAdults())
                 .postalCode(hotelInfo.getPostalCode()).ratings(Integer.parseInt(hotelInfo.getRating()))
                 .createdBy(userName).modifiedBy(userName).userItinerary(userItinerary).build();
