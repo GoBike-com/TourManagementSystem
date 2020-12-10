@@ -23,7 +23,7 @@ export default function ExploreComponent() {
     const loading = open && options.length === 0;
     const [searchText, setSearchText] = React.useState("");
     const [topPlaces, setTopPlaces] = React.useState([]);
-    const [place, setPlace] = React.useState("Chicago");
+    const [place, setPlace] = React.useState("New York City");
     const [placeData, setPlaceData] = React.useState([]);
     const [allDataLoaded, setAllDataLoaded] = React.useState(false);
     const [rating, setValue] = React.useState(0);
